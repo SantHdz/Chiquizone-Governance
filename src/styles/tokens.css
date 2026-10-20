@@ -1,0 +1,95 @@
+/*
+ * Chiquizone · Design tokens
+ * Fuente única de verdad para color, tipografía, espacio y forma.
+ * Los componentes solo deben usar estas variables, nunca valores sueltos.
+ */
+:root {
+  /* ---- Color: paleta base ---- */
+  --cz-oat: #F3EBE0;
+  --cz-shell: #FBF6F0;
+  --cz-sage: #8E9F7D;
+  --cz-sage-deep: #6F8160;
+  --cz-sage-tint: #DFE5D6;
+  --cz-honey: #C99652;
+  --cz-honey-deep: #A97A3A;
+  --cz-honey-tint: #F0E2CB;
+  --cz-clay: #B9806F;
+  --cz-clay-deep: #9A6454;
+  --cz-clay-tint: #EFDCD5;
+  --cz-sky: #8FAAB4;
+  --cz-sky-tint: #DCE7EA;
+  --cz-walnut: #463831;
+  --cz-soft: #7A6759;
+  --cz-line: #E3D7C8;
+  --cz-line-strong: #CFC0AE;
+
+  /* ---- Color: roles semánticos ---- */
+  --color-bg: var(--cz-oat);
+  --color-surface: var(--cz-shell);
+  --color-text: var(--cz-walnut);
+  --color-text-muted: var(--cz-soft);
+  --color-border: var(--cz-line);
+  --color-border-strong: var(--cz-line-strong);
+  --color-accent: var(--cz-sage-deep);
+  --color-on-accent: var(--cz-shell);
+  --color-focus: var(--cz-honey);
+
+  /* Familias de paquete */
+  --family-baby: var(--cz-sage);
+  --family-baby-tint: var(--cz-sage-tint);
+  --family-terreneitor: var(--cz-clay);
+  --family-terreneitor-tint: var(--cz-clay-tint);
+  --family-splash: var(--cz-sky);
+  --family-splash-tint: var(--cz-sky-tint);
+
+  /* ---- Tipografía ---- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Karla', system-ui, sans-serif;
+
+  --text-xs: 13.5px;
+  --text-sm: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 25px;
+  --text-2xl: clamp(27px, 4vw, 35px);
+  --text-3xl: clamp(38px, 7vw, 58px);
+  --text-price: 38px;
+
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  --leading-tight: 1.15;
+  --leading-body: 1.65;
+  --tracking-mark: .3em;
+  --tracking-label: .16em;
+
+  /* ---- Espacio (escala de 4) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 22px;
+  --space-6: 28px;
+  --space-7: 36px;
+  --space-8: 48px;
+  --space-9: 62px;
+  --space-10: 80px;
+
+  /* ---- Forma ---- */
+  --radius-sm: 12px;
+  --radius-md: 22px;
+  --radius-lg: 28px;
+  --radius-pill: 100px;
+  --radius-arch: 280px 280px 34px 34px;
+  --border-accent: 5px;
+
+  /* ---- Layout ---- */
+  --container: 1040px;
+  --container-narrow: 640px;
+  --gutter: 24px;
+
+  /* ---- Movimiento ---- */
+  --ease-out: cubic-bezier(.2, .7, .3, 1);
+  --duration: .9s;
+}

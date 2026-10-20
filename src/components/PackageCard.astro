@@ -1,0 +1,62 @@
+---
+import Button from './Button.astro';
+import { familias, type Paquete } from '../data/paquetes';
+import { mxn, whatsappLink } from '../data/site';
+
+interface Props { paquete: Paquete }
+const { paquete: p } = Astro.props;
+const familia = familias[p.familia];
+const tone = p.splash ? 'splash' : p.familia;
+const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen disponible la fecha ___?`;
+---
+<article class:list={['card', `tone-${tone}`, { pro: p.pro }]}>
+  <header>
+    <div class="age">{familia.edades}</div>
+    <h3>{p.nombre}</h3>
+    {p.pro && <span class="badge">Con supervisión</span>}
+  </header>
+
+  {p.pro ? (
+    <>
+      <p class="base">Todo lo de {p.splash ? `${familia.nombre} Splash` : familia.nombre}, más:</p>
+      <ul class="extras">{p.extras?.map((x) => <li>{x}</li>)}</ul>
+    </>
+  ) : (
+    <ul>{p.incluye.map((x) => <li>{x}</li>)}</ul>
+  )}
+
+  <footer>
+    <div class="amt">{mxn(p.precio)}<span>5 horas de servicio</span></div>
+    <Button href={whatsappLink(msg)} variant={p.pro ? 'primary' : 'secondary'} size="sm" external>Apartar fecha</Button>
+  </footer>
+</article>
+
+<style>
+  .card {
+    --accent: var(--family-baby);
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-top: var(--border-accent) solid var(--accent);
+    border-radius: var(--radius-lg); padding: var(--space-6) var(--space-6) var(--space-5);
+    display: flex; flex-direction: column; height: 100%;
+  }
+  .tone-terreneitor { --accent: var(--family-terreneitor); }
+  .tone-splash { --accent: var(--family-splash); }
+  .age { font-family: var(--font-display); font-size: var(--text-xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-1); }
+  h3 { font-size: var(--text-xl); font-weight: var(--weight-light); }
+  .badge {
+    display: inline-block; margin-top: var(--space-2); padding: 3px 12px; border-radius: var(--radius-pill);
+    background: var(--accent); color: var(--color-on-accent); font-size: var(--text-xs); font-weight: var(--weight-medium);
+  }
+  header { margin-bottom: var(--space-4); }
+  .base { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-2); }
+  ul { list-style: none; flex: 1; }
+  li { padding: 5px 0 5px 18px; position: relative; font-size: var(--text-sm); color: var(--color-text-muted); }
+  li::before { content: ''; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .7; }
+  .extras li { color: var(--color-text); }
+  footer {
+    margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--color-border);
+    display: flex; align-items: end; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
+  }
+  .amt { font-family: var(--font-display); font-size: var(--text-price); font-weight: var(--weight-light); line-height: 1; }
+  .amt span { display: block; font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-2); }
+</style>

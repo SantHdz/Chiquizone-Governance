@@ -1,0 +1,51 @@
+---
+import Button from './Button.astro';
+import { site, mxn, whatsappLink } from '../data/site';
+import { precioDesde } from '../data/paquetes';
+---
+<div class="hero">
+  <div class="wrap">
+    <div class="arch">
+      <div class="mark">CHIQUI ZONE</div>
+      <h1>La zona de juego <em>crece con</em> tus hijos</h1>
+      <p class="lede">Montamos, supervisamos y recogemos. Ustedes disfrutan la fiesta.</p>
+      <div class="ctas">
+        <Button href={whatsappLink()} external>Cotizar por WhatsApp</Button>
+        <Button href="#paquetes" variant="ghost">Ver paquetes</Button>
+      </div>
+    </div>
+    <dl class="meta">
+      <div><dt>{site.areas.join(' y ')}</dt><dd>Querétaro</dd></div>
+      <div><dt>{site.serviceHours} horas</dt><dd>de servicio</dd></div>
+      <div><dt>{site.spaceNeeded}</dt><dd>espacio necesario</dd></div>
+      <div><dt>Desde {mxn(precioDesde)}</dt><dd>montaje incluido</dd></div>
+    </dl>
+  </div>
+</div>
+<style>
+  .hero { padding: var(--space-9) 0 var(--space-8); text-align: center; }
+  .arch {
+    position: relative; max-width: 580px; margin: 0 auto; background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: var(--radius-arch);
+    padding: 74px 46px 46px;
+  }
+  .arch::before {
+    content: ''; position: absolute; inset: 14px; border: 1px solid #EDE2D5;
+    border-radius: 266px 266px 24px 24px; pointer-events: none;
+  }
+  .mark { font-family: var(--font-display); font-size: var(--text-sm); letter-spacing: var(--tracking-mark); color: var(--cz-sage); margin-bottom: var(--space-6); }
+  .lede { max-width: 36ch; margin: var(--space-5) auto 0; color: var(--color-text-muted); }
+  .ctas { position: relative; margin-top: var(--space-6); display: flex; gap: var(--space-5); justify-content: center; flex-wrap: wrap; }
+  .meta { margin-top: var(--space-7); display: flex; justify-content: center; gap: var(--space-7); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-muted); }
+  dt { font-weight: var(--weight-medium); color: var(--color-text); font-size: var(--text-md); }
+  @media (max-width: 640px) {
+    .arch { padding: 58px 26px 36px; border-radius: 200px 200px 28px 28px; }
+    .arch::before { border-radius: 186px 186px 20px 20px; }
+    .meta { gap: var(--space-5) var(--space-6); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .arch { animation: rise var(--duration) var(--ease-out) both; }
+    .meta { animation: rise var(--duration) .25s var(--ease-out) both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  }
+</style>

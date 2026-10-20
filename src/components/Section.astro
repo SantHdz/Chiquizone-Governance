@@ -1,0 +1,28 @@
+---
+interface Props {
+  id?: string;
+  tone?: 'default' | 'sage' | 'honey' | 'sky' | 'clay';
+  title?: string;
+  lead?: string;
+  align?: 'left' | 'center';
+}
+const { id, tone = 'default', title, lead, align = 'left' } = Astro.props;
+---
+<section id={id} class:list={['section', `tone-${tone}`, `align-${align}`]}>
+  <div class="wrap">
+    {title && <h2>{title}</h2>}
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .section { padding: var(--space-9) 0; scroll-margin-top: 64px; }
+  .tone-sage { background: var(--cz-sage-tint); }
+  .tone-honey { background: var(--cz-honey-tint); }
+  .tone-sky { background: var(--cz-sky-tint); }
+  .tone-clay { background: var(--cz-clay-tint); }
+  h2 { margin-bottom: var(--space-3); }
+  .lead { color: var(--color-text-muted); max-width: 58ch; margin-bottom: var(--space-7); }
+  .align-center { text-align: center; }
+  .align-center .lead { margin-inline: auto; }
+</style>
