@@ -18,8 +18,8 @@ const cls = ['btn', `btn--${variant}`, `btn--${size}`];
 <style>
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-    font-family: var(--font-body); font-weight: var(--weight-medium); text-decoration: none;
-    border-radius: var(--radius-pill); border: 1px solid transparent; cursor: pointer;
+    font-family: var(--font-display); font-weight: var(--weight-display); text-decoration: none;
+    border-radius: var(--radius-pill); border: 2px solid transparent; cursor: pointer; box-shadow: var(--shadow-pop);
     transition: background .2s, color .2s, border-color .2s, transform .2s;
     white-space: nowrap;
   }
@@ -27,8 +27,8 @@ const cls = ['btn', `btn--${variant}`, `btn--${size}`];
   .btn--md { padding: 13px 28px; font-size: var(--text-md); }
   .btn--sm { padding: 7px 18px; font-size: var(--text-sm); }
   .btn--primary { background: var(--color-accent); color: var(--color-on-accent); }
-  .btn--primary:hover { background: var(--cz-walnut); }
-  .btn--secondary { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border-strong); }
+  .btn--primary:hover { background: var(--color-accent-hover); }
+  .btn--secondary { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border-strong); box-shadow: none; }
   .btn--secondary:hover { border-color: var(--color-text); }
-  .btn--ghost { background: transparent; color: var(--color-text); text-decoration: underline; text-underline-offset: 4px; padding-inline: 0; }
+  .btn--ghost { background: transparent; box-shadow: none; color: var(--color-text); text-decoration: underline; text-underline-offset: 4px; padding-inline: 0; }
 </style>

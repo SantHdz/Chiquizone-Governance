@@ -1,7 +1,7 @@
 ---
 interface Props {
   id?: string;
-  tone?: 'default' | 'sage' | 'honey' | 'sky' | 'clay';
+  tone?: 'default' | 'salvia' | 'sol' | 'marino' | 'frambuesa';
   title?: string;
   lead?: string;
   align?: 'left' | 'center';
@@ -17,10 +17,10 @@ const { id, tone = 'default', title, lead, align = 'left' } = Astro.props;
 </section>
 <style>
   .section { padding: var(--space-9) 0; scroll-margin-top: 64px; }
-  .tone-sage { background: var(--cz-sage-tint); }
-  .tone-honey { background: var(--cz-honey-tint); }
-  .tone-sky { background: var(--cz-sky-tint); }
-  .tone-clay { background: var(--cz-clay-tint); }
+  .tone-salvia { background: var(--salvia-100); }
+  .tone-sol { background: var(--sol-100); }
+  .tone-marino { background: var(--marino-50); }
+  .tone-frambuesa { background: var(--frambuesa-50); }
   h2 { margin-bottom: var(--space-3); }
   .lead { color: var(--color-text-muted); max-width: 58ch; margin-bottom: var(--space-7); }
   .align-center { text-align: center; }

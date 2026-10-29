@@ -7,35 +7,49 @@ import Checks from '../components/Checks.astro';
 import Steps from '../components/Steps.astro';
 import { paquetes } from '../data/paquetes';
 
-const colores = [
-  ['oat', 'Fondo'], ['shell', 'Superficie'], ['walnut', 'Texto'], ['soft', 'Texto suave'], ['line', 'Bordes'],
-  ['sage', 'Baby baby'], ['sage-deep', 'Acento / botones'], ['sage-tint', 'Banda'],
-  ['honey', 'Foco / supervisión'], ['honey-tint', 'Banda'],
-  ['clay', 'Terreneitor'], ['clay-tint', 'Banda'],
-  ['sky', 'Splash'], ['sky-tint', 'Banda'],
+const escalas = ['frambuesa', 'marino', 'sol', 'salvia'];
+const pasos = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+const roles = [
+  ['surface', 'Fondo de página'], ['surface-raised', 'Tarjetas'], ['surface-alt', 'Bandas'], ['ink', 'Texto'], ['ink-muted', 'Texto secundario'],
+  ['accent', 'Botón primario'], ['secondary', 'Secundario'], ['highlight', 'Realce'],
+  ['family-baby', 'Baby baby'], ['family-terreneitor', 'Terreneitor'], ['family-splash', 'Splash'],
 ];
 const tipos = [
-  ['--text-3xl', 'Display · Fraunces 300', 'h1'],
-  ['--text-2xl', 'Título de sección · Fraunces 300', 'h2'],
-  ['--text-xl', 'Título de tarjeta · Fraunces 300', 'h3'],
-  ['--text-md', 'Cuerpo · Karla 300, 17px / 1.65', 'p'],
-  ['--text-sm', 'Secundario · Karla 300, 15px', 'p'],
+  ['--text-3xl', 'Display · Fredoka 600', 'h1'],
+  ['--text-2xl', 'Título de sección · Fredoka 600', 'h2'],
+  ['--text-xl', 'Título de tarjeta · Fredoka 600', 'h3'],
+  ['--text-md', 'Cuerpo · Nunito 400, 16px / 1.6', 'p'],
+  ['--text-sm', 'Secundario · Nunito 400, 14px', 'p'],
 ];
 const espacios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 ---
 <Base title="Design system · Chiquizone" noindex>
-  <Section title="Design system" lead="Tokens y componentes del sitio. Todo vive en src/styles/tokens.css y src/components. Esta página no se indexa.">
-    <h3 class="h">Color</h3>
+  <Section title="Design system" lead="Tokens y componentes del sitio, tomados del design system de Chiquizone. Todo vive en src/styles/tokens.css y src/components. Esta página no se indexa.">
+    <h3 class="h">Logo</h3>
+    <div class="logos">
+      <img src="/brand/chiquizone-horizontal.png" alt="Logo horizontal" />
+      <img src="/brand/chiquizone-vertical.png" alt="Logo vertical" />
+      <div class="dark"><img src="/brand/chiquizone-horizontal-blanco.png" alt="Logo horizontal blanco" /></div>
+    </div>
+
+    <h3 class="h">Color de marca</h3>
+    {escalas.map((n) => (
+      <div class="scale">
+        {pasos.map((k) => <div class="step" style={`background:var(--${n}-${k})`}><span>{n} {k}</span></div>)}
+      </div>
+    ))}
+
+    <h3 class="h">Roles</h3>
     <div class="swatches">
-      {colores.map(([k, uso]) => (
-        <div class="sw"><div class="chip" style={`background:var(--cz-${k})`}></div><b>--cz-{k}</b><span>{uso}</span></div>
+      {roles.map(([k, uso]) => (
+        <div class="sw"><div class="chip" style={`background:var(--${k})`}></div><b>--{k}</b><span>{uso}</span></div>
       ))}
     </div>
 
     <h3 class="h">Tipografía</h3>
     <div class="types">
       {tipos.map(([t, label]) => (
-        <div class="type"><span class="tk">{t} · {label}</span><div style={`font-size:var(${t});font-family:${t.includes('md') || t.includes('sm') ? 'var(--font-body)' : 'var(--font-display)'};font-weight:300;line-height:1.2`}>La zona de juego crece con tus hijos</div></div>
+        <div class="type"><span class="tk">{t} · {label}</span><div style={`font-size:var(${t});font-family:${t.includes('md') || t.includes('sm') ? 'var(--font-body)' : 'var(--font-display)'};font-weight:${t.includes('md') || t.includes('sm') ? 400 : 600};line-height:1.2`}>La zona de juego crece con tus hijos</div></div>
       ))}
     </div>
 
@@ -53,7 +67,7 @@ const espacios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     <div class="cards">
       <PackageCard paquete={paquetes[0]} />
       <PackageCard paquete={paquetes[3]} />
-      <PackageCard paquete={paquetes[5]} />
+      <PackageCard paquete={paquetes[4]} />
     </div>
 
     <h3 class="h">Lista de requisitos</h3>
@@ -64,7 +78,7 @@ const espacios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   </Section>
 </Base>
 <style>
-  .h { font-size: var(--text-xl); font-weight: var(--weight-light); margin: var(--space-8) 0 var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
+  .h { font-size: var(--text-xl); margin: var(--space-8) 0 var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
   .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }
   .sw { font-size: var(--text-xs); display: flex; flex-direction: column; gap: 2px; }
   .sw b { font-family: ui-monospace, monospace; font-weight: 400; }
@@ -74,7 +88,14 @@ const espacios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   .tk, .sp span { font-size: var(--text-xs); color: var(--color-text-muted); font-family: ui-monospace, monospace; }
   .spaces { display: grid; gap: var(--space-2); }
   .sp { display: flex; align-items: center; gap: var(--space-4); }
-  .bar { height: 14px; background: var(--cz-honey); border-radius: 3px; }
+  .bar { height: 14px; background: var(--sol-500); border-radius: var(--radius-pill); }
+  .logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); align-items: center; }
+  .logos img { max-height: 120px; width: auto; margin: 0 auto; }
+  .logos > * { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+  .logos .dark { background: var(--marino-500); }
+  .scale { display: grid; grid-template-columns: repeat(10, 1fr); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-3); }
+  .step { height: 56px; display: flex; align-items: flex-end; padding: 4px; }
+  .step span { font-size: 10px; background: #FFFFFFcc; color: var(--marino-700); padding: 0 4px; border-radius: 4px; white-space: nowrap; }
   .row { display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); }
 </style>

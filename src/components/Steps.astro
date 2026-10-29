@@ -7,13 +7,17 @@ const { items } = Astro.props;
 </ol>
 <style>
   .steps { list-style: none; counter-reset: s; max-width: var(--container-narrow); }
-  li { counter-increment: s; padding: 0 0 26px 58px; position: relative; }
-  li:not(:last-child)::after { content: ''; position: absolute; left: 17px; top: 36px; bottom: 2px; width: 1px; background: var(--color-border-strong); }
+  li { counter-increment: s; padding: 8px 0 var(--space-5) 64px; position: relative; }
+  li:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 48px; bottom: 4px; border-left: 2px dashed var(--color-border-strong); }
   li::before {
-    content: counter(s); position: absolute; left: 0; top: 0; width: 35px; height: 35px; border-radius: 50%;
-    border: 1px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-display);
-    display: grid; place-items: center; background: var(--color-bg);
+    content: counter(s); position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%;
+    font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-lg);
+    display: grid; place-items: center; background: var(--highlight); color: var(--on-highlight);
   }
+  /* Los círculos rotan como las letras del logo: sol, salvia, frambuesa, marino. */
+  li:nth-child(4n+2)::before { background: var(--family-baby); }
+  li:nth-child(4n+3)::before { background: var(--accent); color: var(--on-accent); }
+  li:nth-child(4n+4)::before { background: var(--secondary); color: var(--on-secondary); }
   h3 { font-size: var(--text-lg); margin-bottom: 2px; }
   p { font-size: var(--text-sm); color: var(--color-text-muted); }
 </style>

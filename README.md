@@ -24,7 +24,11 @@ npm run build    # genera dist/
 
 ## Design system
 
-- **Tokens** en `src/styles/tokens.css`: paleta (oat, shell, sage, honey, clay, sky, walnut), roles semánticos (`--color-*`), familias de paquete (`--family-*`), escala tipográfica Fraunces/Karla, espacios `--space-1…10` y radios.
+La fuente de verdad de la marca es el **design system de Chiquizone** (artifact en claude.ai: https://claude.ai/artifact/A31paMUEPLJDYTHqE8SByR). Este sitio usa los mismos nombres de token.
+
+- **Color**: escalas `--frambuesa-*`, `--marino-*`, `--sol-*`, `--salvia-*` (50 a 900; los 500 son exactos del logo) y roles semánticos (`--surface`, `--ink`, `--accent`, `--family-*`…). Los alias `--color-*` que usan los componentes apuntan a esos roles.
+- **Tipografía**: Fredoka (títulos, botones, precios) y Nunito (texto).
+- **Logos** en `public/brand/`; favicon con el pin de la "o".
 - **Componentes** solo consumen tokens, nunca colores sueltos.
 - **Guía viva** en `/design-system` (no indexada).
 

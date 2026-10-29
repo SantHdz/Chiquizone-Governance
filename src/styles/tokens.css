@@ -1,88 +1,143 @@
 /*
  * Chiquizone · Design tokens
- * Fuente única de verdad para color, tipografía, espacio y forma.
+ * Fuente única de verdad: el design system de Chiquizone (artifact "Chiquizone").
+ * Los valores 500 de cada color son exactos del logo oficial.
  * Los componentes solo deben usar estas variables, nunca valores sueltos.
  */
 :root {
-  /* ---- Color: paleta base ---- */
-  --cz-oat: #F3EBE0;
-  --cz-shell: #FBF6F0;
-  --cz-sage: #8E9F7D;
-  --cz-sage-deep: #6F8160;
-  --cz-sage-tint: #DFE5D6;
-  --cz-honey: #C99652;
-  --cz-honey-deep: #A97A3A;
-  --cz-honey-tint: #F0E2CB;
-  --cz-clay: #B9806F;
-  --cz-clay-deep: #9A6454;
-  --cz-clay-tint: #EFDCD5;
-  --cz-sky: #8FAAB4;
-  --cz-sky-tint: #DCE7EA;
-  --cz-walnut: #463831;
-  --cz-soft: #7A6759;
-  --cz-line: #E3D7C8;
-  --cz-line-strong: #CFC0AE;
+  /* ---- Color: escalas de marca (frambuesa, marino, sol, salvia) ---- */
+  /* frambuesa */
+  --frambuesa-50: #F9F0F3;
+  --frambuesa-100: #F2DEE5;
+  --frambuesa-200: #E4BCCB;
+  --frambuesa-300: #D493AB;
+  --frambuesa-400: #C46A8C;
+  --frambuesa-500: #B5456F;
+  --frambuesa-600: #97365A;
+  --frambuesa-700: #792C49;
+  --frambuesa-800: #5C2137;
+  --frambuesa-900: #421828;
+  /* marino */
+  --marino-50: #EEEFF4;
+  --marino-100: #D8DCE7;
+  --marino-200: #B1B9CE;
+  --marino-300: #818EB1;
+  --marino-400: #516493;
+  --marino-500: #253D78;
+  --marino-600: #1D3164;
+  --marino-700: #172851;
+  --marino-800: #111E3D;
+  --marino-900: #0D162C;
+  /* sol */
+  --sol-50: #FFFBEF;
+  --sol-100: #FFF7DB;
+  --sol-200: #FFEFB6;
+  --sol-300: #FFE58A;
+  --sol-400: #FFDB5D;
+  --sol-500: #FFD235;
+  --sol-600: #FDC400;
+  --sol-700: #CB9E00;
+  --sol-800: #9A7800;
+  --sol-900: #6F5600;
+  /* salvia */
+  --salvia-50: #F8FAF7;
+  --salvia-100: #EEF4EC;
+  --salvia-200: #DEE9DA;
+  --salvia-300: #C9DCC3;
+  --salvia-400: #B5CEAD;
+  --salvia-500: #A2C298;
+  --salvia-600: #7EAC6F;
+  --salvia-700: #629153;
+  --salvia-800: #4A6E3F;
+  --salvia-900: #364F2E;
 
-  /* ---- Color: roles semánticos ---- */
-  --color-bg: var(--cz-oat);
-  --color-surface: var(--cz-shell);
-  --color-text: var(--cz-walnut);
-  --color-text-muted: var(--cz-soft);
-  --color-border: var(--cz-line);
-  --color-border-strong: var(--cz-line-strong);
-  --color-accent: var(--cz-sage-deep);
-  --color-on-accent: var(--cz-shell);
-  --color-focus: var(--cz-honey);
+  /* ---- Color: roles semánticos (tema claro) ---- */
+  --surface: #FFF9F1;
+  --surface-raised: #FFFFFF;
+  --surface-alt: #F7EEE1;
+  --ink: var(--marino-700);
+  --ink-muted: #545E7C;
+  --line: #EADFD0;
+  --line-strong: #868FAA;
+  --accent: var(--frambuesa-500);
+  --accent-hover: var(--frambuesa-600);
+  --on-accent: #FFFFFF;
+  --link: var(--frambuesa-600);
+  --highlight: var(--sol-500);
+  --on-highlight: var(--marino-700);
+  --secondary: var(--marino-500);
+  --on-secondary: #FFFFFF;
+  --focus-ring: var(--marino-500);
+  --family-baby: var(--salvia-500);
+  --family-baby-tint: var(--salvia-100);
+  --family-baby-ink: var(--salvia-800);
+  --family-terreneitor: var(--frambuesa-500);
+  --family-terreneitor-tint: var(--frambuesa-100);
+  --family-terreneitor-ink: var(--frambuesa-600);
+  --family-splash: var(--marino-300);
+  --family-splash-tint: var(--marino-50);
+  --family-splash-ink: var(--marino-500);
+  --success: var(--salvia-800);
+  --warning: var(--sol-900);
+  --danger: #B42318;
 
-  /* Familias de paquete */
-  --family-baby: var(--cz-sage);
-  --family-baby-tint: var(--cz-sage-tint);
-  --family-terreneitor: var(--cz-clay);
-  --family-terreneitor-tint: var(--cz-clay-tint);
-  --family-splash: var(--cz-sky);
-  --family-splash-tint: var(--cz-sky-tint);
+  /* ---- Alias del sitio (los usan los componentes) ---- */
+  --color-bg: var(--surface);
+  --color-surface: var(--surface-raised);
+  --color-surface-alt: var(--surface-alt);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-muted);
+  --color-border: var(--line);
+  --color-border-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-focus: var(--focus-ring);
 
   /* ---- Tipografía ---- */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Karla', system-ui, sans-serif;
+  --font-display: 'Fredoka', 'Baloo 2', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --font-body: 'Nunito', 'Avenir Next', system-ui, sans-serif;
 
-  --text-xs: 13.5px;
-  --text-sm: 15px;
-  --text-md: 17px;
-  --text-lg: 20px;
-  --text-xl: 25px;
-  --text-2xl: clamp(27px, 4vw, 35px);
-  --text-3xl: clamp(38px, 7vw, 58px);
-  --text-price: 38px;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 28px;
+  --text-2xl: clamp(30px, 4.5vw, 40px);
+  --text-3xl: clamp(36px, 7vw, 56px);
+  --text-price: 36px;
 
-  --weight-light: 300;
   --weight-regular: 400;
-  --weight-medium: 500;
+  --weight-medium: 600;
+  --weight-bold: 800;
+  --weight-display: 600;
 
-  --leading-tight: 1.15;
-  --leading-body: 1.65;
-  --tracking-mark: .3em;
-  --tracking-label: .16em;
+  --leading-tight: 1.1;
+  --leading-body: 1.6;
+  --tracking-label: .08em;
 
   /* ---- Espacio (escala de 4) ---- */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
-  --space-5: 22px;
-  --space-6: 28px;
-  --space-7: 36px;
-  --space-8: 48px;
-  --space-9: 62px;
-  --space-10: 80px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
 
   /* ---- Forma ---- */
-  --radius-sm: 12px;
-  --radius-md: 22px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
   --radius-lg: 28px;
-  --radius-pill: 100px;
-  --radius-arch: 280px 280px 34px 34px;
-  --border-accent: 5px;
+  --radius-xl: 44px;
+  --radius-pill: 999px;
+  --radius-arch: 280px 280px 44px 44px;
+
+  /* ---- Sombra: planas, como globo apoyado en el piso ---- */
+  --shadow-pop: 0 4px 0 0 #17285126;
+  --shadow-card: 0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133;
 
   /* ---- Layout ---- */
   --container: 1040px;

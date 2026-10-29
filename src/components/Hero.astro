@@ -6,7 +6,7 @@ import { precioDesde } from '../data/paquetes';
 <div class="hero">
   <div class="wrap">
     <div class="arch">
-      <div class="mark">CHIQUI ZONE</div>
+      <img class="mark" src="/brand/chiquizone-vertical.png" alt="Chiquizone" width="220" height="150" />
       <h1>La zona de juego <em>crece con</em> tus hijos</h1>
       <p class="lede">Montamos, supervisamos y recogemos. Ustedes disfrutan la fiesta.</p>
       <div class="ctas">
@@ -26,18 +26,18 @@ import { precioDesde } from '../data/paquetes';
   .hero { padding: var(--space-9) 0 var(--space-8); text-align: center; }
   .arch {
     position: relative; max-width: 580px; margin: 0 auto; background: var(--color-surface);
-    border: 1px solid var(--color-border); border-radius: var(--radius-arch);
+    border: 1px solid var(--color-border); border-radius: var(--radius-arch); box-shadow: var(--shadow-card);
     padding: 74px 46px 46px;
   }
   .arch::before {
-    content: ''; position: absolute; inset: 14px; border: 1px solid #EDE2D5;
+    content: ''; position: absolute; inset: 14px; border: 2px dashed var(--color-border);
     border-radius: 266px 266px 24px 24px; pointer-events: none;
   }
-  .mark { font-family: var(--font-display); font-size: var(--text-sm); letter-spacing: var(--tracking-mark); color: var(--cz-sage); margin-bottom: var(--space-6); }
+  .mark { position: relative; width: 220px; height: auto; margin: 0 auto var(--space-5); }
   .lede { max-width: 36ch; margin: var(--space-5) auto 0; color: var(--color-text-muted); }
   .ctas { position: relative; margin-top: var(--space-6); display: flex; gap: var(--space-5); justify-content: center; flex-wrap: wrap; }
   .meta { margin-top: var(--space-7); display: flex; justify-content: center; gap: var(--space-7); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-muted); }
-  dt { font-weight: var(--weight-medium); color: var(--color-text); font-size: var(--text-md); }
+  dt { font-family: var(--font-display); font-weight: var(--weight-display); color: var(--color-text); font-size: var(--text-lg); }
   @media (max-width: 640px) {
     .arch { padding: 58px 26px 36px; border-radius: 200px 200px 28px 28px; }
     .arch::before { border-radius: 186px 186px 20px 20px; }
