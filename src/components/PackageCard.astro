@@ -11,7 +11,7 @@ const tone = p.splash ? 'splash' : p.familia;
 const familyIcon = p.splash ? 'agua' : p.familia === 'baby' ? 'bebe' : 'ninos';
 const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen disponible la fecha ___?`;
 ---
-<article class:list={['card', `tone-${tone}`, { pro: p.pro }]}>
+<article id={p.id} class:list={['card', `tone-${tone}`, { pro: p.pro }]}>
   <header>
     <h3>{p.nombre}</h3>
     <div class="meta">
