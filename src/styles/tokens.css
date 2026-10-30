@@ -1,12 +1,11 @@
 /*
- * Chiquizone · Design tokens
- * Fuente única de verdad: el design system de Chiquizone (artifact "Chiquizone").
- * Los valores 500 de cada color son exactos del logo oficial.
- * Los componentes solo deben usar estas variables, nunca valores sueltos.
+ * Chiquizone · Design tokens — GENERADO por scripts/build-tokens.mjs. No editar a mano.
+ * Fuente: tokens/1-primitivos → 2-semanticos → 3-componentes (+ 4-compat-web).
+ * Los componentes usan la capa 3; un cambio en la capa 1 o 2 se propaga solo.
  */
 :root {
-  /* ---- Color: escalas de marca (frambuesa, marino, sol, salvia) ---- */
-  /* frambuesa */
+  /* ===== 1 · Primitivos ===== */
+  /* color */
   --frambuesa-50: #F9F0F3;
   --frambuesa-100: #F2DEE5;
   --frambuesa-200: #E4BCCB;
@@ -17,7 +16,6 @@
   --frambuesa-700: #792C49;
   --frambuesa-800: #5C2137;
   --frambuesa-900: #421828;
-  /* marino */
   --marino-50: #EEEFF4;
   --marino-100: #D8DCE7;
   --marino-200: #B1B9CE;
@@ -28,7 +26,6 @@
   --marino-700: #172851;
   --marino-800: #111E3D;
   --marino-900: #0D162C;
-  /* sol */
   --sol-50: #FFFBEF;
   --sol-100: #FFF7DB;
   --sol-200: #FFEFB6;
@@ -39,7 +36,6 @@
   --sol-700: #CB9E00;
   --sol-800: #9A7800;
   --sol-900: #6F5600;
-  /* salvia */
   --salvia-50: #F8FAF7;
   --salvia-100: #EEF4EC;
   --salvia-200: #DEE9DA;
@@ -50,23 +46,93 @@
   --salvia-700: #629153;
   --salvia-800: #4A6E3F;
   --salvia-900: #364F2E;
+  --blanco: #FFFFFF;
+  --crema: #FFF9F1;
+  --crema-200: #F7EEE1;
+  --arena: #EADFD0;
+  --pizarra-500: #545E7C;
+  --pizarra-400: #868FAA;
+  --pizarra-200: #B8C0D4;
+  --pizarra-noche: #6B7BA6;
+  --linea-noche: #25365F;
+  --rojo-600: #B42318;
+  --rojo-300: #FF9C8F;
+  --salvia-noche: #314251;
+  --frambuesa-noche: #3F294B;
+  --marino-noche: #2D3A5A;
+  /* space */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  /* radius */
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-xl: 44px;
+  --radius-pill: 999px;
+  /* size */
+  --size-24: 24px;
+  --size-32: 32px;
+  --size-40: 40px;
+  --size-44: 44px;
+  --size-48: 48px;
+  --size-56: 56px;
+  /* font */
+  --font-display: "Fredoka", "Baloo 2", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-body: "Nunito", "Avenir Next", system-ui, sans-serif;
+  /* font-size */
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-28: 28px;
+  --fs-36: 36px;
+  --fs-40: 40px;
+  --fs-56: 56px;
+  /* font-weight */
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-800: 800;
+  /* shadow */
+  --sombra-pop: 0 4px 0 0 #17285126;
+  --sombra-pop-noche: 0 4px 0 0 #00000059;
+  --sombra-tarjeta: 0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133;
+  --sombra-tarjeta-noche: 0 8px 0 -2px #00000040, 0 18px 36px -18px #00000080;
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .3, 1);
+  --dur-rapida: .15s;
+  --dur-entrada: .9s;
+}
 
-  /* ---- Color: roles semánticos (tema claro) ---- */
-  --surface: #FFF9F1;
-  --surface-raised: #FFFFFF;
-  --surface-alt: #F7EEE1;
+/* ===== 2 · Semánticos (por tema) ===== */
+:root, [data-theme="claro"] {
+  /* color */
+  --surface: var(--crema);
+  --surface-raised: var(--blanco);
+  --surface-alt: var(--crema-200);
   --ink: var(--marino-700);
-  --ink-muted: #545E7C;
-  --line: #EADFD0;
-  --line-strong: #868FAA;
+  --ink-muted: var(--pizarra-500);
+  --line: var(--arena);
+  --line-strong: var(--pizarra-400);
   --accent: var(--frambuesa-500);
   --accent-hover: var(--frambuesa-600);
-  --on-accent: #FFFFFF;
+  --on-accent: var(--blanco);
   --link: var(--frambuesa-600);
   --highlight: var(--sol-500);
   --on-highlight: var(--marino-700);
   --secondary: var(--marino-500);
-  --on-secondary: #FFFFFF;
+  --on-secondary: var(--blanco);
   --focus-ring: var(--marino-500);
   --family-baby: var(--salvia-500);
   --family-baby-tint: var(--salvia-100);
@@ -79,9 +145,136 @@
   --family-splash-ink: var(--marino-500);
   --success: var(--salvia-800);
   --warning: var(--sol-900);
-  --danger: #B42318;
+  --danger: var(--rojo-600);
+  /* shadow */
+  --shadow-pop: var(--sombra-pop);
+  --shadow-card: var(--sombra-tarjeta);
+  /* tipo */
+  --text-display-xl: var(--fs-56);
+  --text-display-l: var(--fs-40);
+  --text-title: var(--fs-28);
+  --text-subtitle: var(--fs-20);
+  --text-price: var(--fs-36);
+  --text-body-l: var(--fs-18);
+  --text-body: var(--fs-16);
+  --text-small: var(--fs-14);
+  --text-label: var(--fs-13);
+  --weight-regular: var(--fw-400);
+  --weight-medium: var(--fw-600);
+  --weight-bold: var(--fw-800);
+  --weight-display: var(--fw-600);
+  /* layout */
+  --container: 1040px;
+  --container-narrow: 640px;
+  --gutter: var(--space-5);
+  --page-margin: var(--space-4);
+  --section-gap: var(--space-9);
+  --section-gap-mobile: var(--space-8);
+}
+[data-theme="marino"] {
+  /* color */
+  --surface: var(--marino-800);
+  --surface-raised: var(--marino-700);
+  --surface-alt: var(--marino-900);
+  --ink: var(--crema);
+  --ink-muted: var(--pizarra-200);
+  --line: var(--linea-noche);
+  --line-strong: var(--pizarra-noche);
+  --accent: var(--frambuesa-300);
+  --accent-hover: var(--frambuesa-200);
+  --on-accent: var(--marino-900);
+  --link: var(--frambuesa-200);
+  --on-highlight: var(--marino-800);
+  --secondary: var(--sol-500);
+  --on-secondary: var(--marino-800);
+  --focus-ring: var(--sol-500);
+  --family-baby-tint: var(--salvia-noche);
+  --family-baby-ink: var(--salvia-300);
+  --family-terreneitor: var(--frambuesa-400);
+  --family-terreneitor-tint: var(--frambuesa-noche);
+  --family-terreneitor-ink: var(--frambuesa-200);
+  --family-splash-tint: var(--marino-noche);
+  --family-splash-ink: var(--marino-200);
+  --success: var(--salvia-400);
+  --warning: var(--sol-400);
+  --danger: var(--rojo-300);
+  /* shadow */
+  --shadow-pop: var(--sombra-pop-noche);
+  --shadow-card: var(--sombra-tarjeta-noche);
+}
 
-  /* ---- Alias del sitio (los usan los componentes) ---- */
+/* ===== 3 · Componentes =====
+ * Se declaran también en cada [data-theme] para que una sección con otro tema
+ * recalcule sus componentes. */
+:root, [data-theme] {
+  /* button */
+  --button-radius: var(--radius-pill);
+  --button-font: var(--font-display);
+  --button-weight: var(--weight-display);
+  --button-height-sm: var(--size-40);
+  --button-height-md: var(--size-48);
+  --button-height-lg: var(--size-56);
+  --button-pad-x-sm: var(--space-4);
+  --button-pad-x-md: var(--space-5);
+  --button-pad-x-lg: var(--space-6);
+  --button-text-sm: var(--fs-15);
+  --button-text-md: var(--fs-17);
+  --button-text-lg: var(--fs-20);
+  --button-gap: var(--space-2);
+  --button-shadow: var(--shadow-pop);
+  --button-primary-bg: var(--accent);
+  --button-primary-bg-hover: var(--accent-hover);
+  --button-primary-fg: var(--on-accent);
+  --button-secondary-bg: var(--secondary);
+  --button-secondary-fg: var(--on-secondary);
+  --button-outline-bg: var(--surface-raised);
+  --button-outline-fg: var(--ink);
+  --button-outline-border: var(--line-strong);
+  --button-outline-border-hover: var(--ink);
+  --button-focus: var(--focus-ring);
+  --button-disabled-opacity: .45;
+  /* badge */
+  --badge-radius: var(--radius-pill);
+  --badge-height: var(--size-24);
+  --badge-pad-x: var(--space-3);
+  --badge-text: var(--fs-12);
+  --badge-weight: var(--weight-bold);
+  --badge-promo-bg: var(--highlight);
+  --badge-promo-fg: var(--on-highlight);
+  --badge-brand-bg: var(--accent);
+  --badge-brand-fg: var(--on-accent);
+  /* card */
+  --card-bg: var(--surface-raised);
+  --card-border: var(--line);
+  --card-radius: var(--radius-lg);
+  --card-pad: var(--space-5);
+  --card-shadow: var(--shadow-card);
+  --card-gap: var(--space-5);
+  /* input */
+  --input-bg: var(--surface-raised);
+  --input-fg: var(--ink);
+  --input-placeholder: var(--ink-muted);
+  --input-border: var(--line-strong);
+  --input-border-focus: var(--focus-ring);
+  --input-border-error: var(--danger);
+  --input-radius: var(--radius-sm);
+  --input-height: var(--size-48);
+  --input-pad-x: var(--space-4);
+  --input-text: var(--fs-16);
+  /* step */
+  --step-size: var(--size-44);
+  --step-1-bg: var(--highlight);
+  --step-1-fg: var(--on-highlight);
+  --step-2-bg: var(--family-baby);
+  --step-2-fg: var(--on-highlight);
+  --step-3-bg: var(--accent);
+  --step-3-fg: var(--on-accent);
+  --step-4-bg: var(--secondary);
+  --step-4-fg: var(--on-secondary);
+  --step-line: var(--line-strong);
+
+  /* ===== Compat (temporal) ===== */
+  /* web */
   --color-bg: var(--surface);
   --color-surface: var(--surface-raised);
   --color-surface-alt: var(--surface-alt);
@@ -93,58 +286,16 @@
   --color-accent-hover: var(--accent-hover);
   --color-on-accent: var(--on-accent);
   --color-focus: var(--focus-ring);
-
-  /* ---- Tipografía ---- */
-  --font-display: 'Fredoka', 'Baloo 2', 'Arial Rounded MT Bold', system-ui, sans-serif;
-  --font-body: 'Nunito', 'Avenir Next', system-ui, sans-serif;
-
-  --text-xs: 13px;
-  --text-sm: 14px;
-  --text-md: 16px;
-  --text-lg: 18px;
-  --text-xl: 28px;
+  --text-xs: var(--fs-13);
+  --text-sm: var(--fs-14);
+  --text-md: var(--fs-16);
+  --text-lg: var(--fs-18);
+  --text-xl: var(--fs-28);
   --text-2xl: clamp(30px, 4.5vw, 40px);
   --text-3xl: clamp(36px, 7vw, 56px);
-  --text-price: 36px;
-
-  --weight-regular: 400;
-  --weight-medium: 600;
-  --weight-bold: 800;
-  --weight-display: 600;
-
   --leading-tight: 1.1;
   --leading-body: 1.6;
   --tracking-label: .08em;
-
-  /* ---- Espacio (escala de 4) ---- */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --space-8: 64px;
-  --space-9: 96px;
-
-  /* ---- Forma ---- */
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 28px;
-  --radius-xl: 44px;
-  --radius-pill: 999px;
   --radius-arch: 280px 280px 44px 44px;
-
-  /* ---- Sombra: planas, como globo apoyado en el piso ---- */
-  --shadow-pop: 0 4px 0 0 #17285126;
-  --shadow-card: 0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133;
-
-  /* ---- Layout ---- */
-  --container: 1040px;
-  --container-narrow: 640px;
-  --gutter: 24px;
-
-  /* ---- Movimiento ---- */
-  --ease-out: cubic-bezier(.2, .7, .3, 1);
-  --duration: .9s;
+  --duration: var(--dur-entrada);
 }

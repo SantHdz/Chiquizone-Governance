@@ -4,8 +4,9 @@
   "type": "module",
   "version": "0.1.0",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "tokens": "node scripts/build-tokens.mjs",
+    "dev": "npm run tokens && astro dev",
+    "build": "npm run tokens && astro build",
     "preview": "astro preview"
   },
   "dependencies": {

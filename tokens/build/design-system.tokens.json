@@ -1,0 +1,1169 @@
+{
+ "name": "Chiquizone",
+ "version": 2,
+ "meta": {
+  "source": "chiquizone-web/tokens (scripts/build-tokens.mjs)"
+ },
+ "color": {
+  "themes": [
+   {
+    "id": "claro",
+    "name": "Claro"
+   },
+   {
+    "id": "marino",
+    "name": "Noche (marino)"
+   }
+  ],
+  "tokens": [
+   {
+    "name": "frambuesa-50",
+    "value": "#F9F0F3",
+    "usage": "[primitivos] Tinte de frambuesa para fondos suaves y bandas."
+   },
+   {
+    "name": "frambuesa-100",
+    "value": "#F2DEE5",
+    "usage": "[primitivos] Tinte de frambuesa para fondos suaves y bandas."
+   },
+   {
+    "name": "frambuesa-200",
+    "value": "#E4BCCB",
+    "usage": "[primitivos] Tinte de frambuesa para fondos suaves y bandas."
+   },
+   {
+    "name": "frambuesa-300",
+    "value": "#D493AB",
+    "usage": "[primitivos] Paso intermedio de frambuesa; rellenos y bordes decorativos."
+   },
+   {
+    "name": "frambuesa-400",
+    "value": "#C46A8C",
+    "usage": "[primitivos] Paso intermedio de frambuesa; rellenos y bordes decorativos."
+   },
+   {
+    "name": "frambuesa-500",
+    "value": "#B5456F",
+    "usage": "[primitivos] Frambuesa: la niña, la C y el pin de la \"o\". Color de acción y calidez. Valor exacto del logo."
+   },
+   {
+    "name": "frambuesa-600",
+    "value": "#97365A",
+    "usage": "[primitivos] Sombra de frambuesa; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "frambuesa-700",
+    "value": "#792C49",
+    "usage": "[primitivos] Sombra de frambuesa; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "frambuesa-800",
+    "value": "#5C2137",
+    "usage": "[primitivos] Sombra de frambuesa; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "frambuesa-900",
+    "value": "#421828",
+    "usage": "[primitivos] Sombra de frambuesa; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "marino-50",
+    "value": "#EEEFF4",
+    "usage": "[primitivos] Tinte de marino para fondos suaves y bandas."
+   },
+   {
+    "name": "marino-100",
+    "value": "#D8DCE7",
+    "usage": "[primitivos] Tinte de marino para fondos suaves y bandas."
+   },
+   {
+    "name": "marino-200",
+    "value": "#B1B9CE",
+    "usage": "[primitivos] Tinte de marino para fondos suaves y bandas."
+   },
+   {
+    "name": "marino-300",
+    "value": "#818EB1",
+    "usage": "[primitivos] Paso intermedio de marino; rellenos y bordes decorativos."
+   },
+   {
+    "name": "marino-400",
+    "value": "#516493",
+    "usage": "[primitivos] Paso intermedio de marino; rellenos y bordes decorativos."
+   },
+   {
+    "name": "marino-500",
+    "value": "#253D78",
+    "usage": "[primitivos] Marino: el niño, la q y la z. Color de texto y de confianza. Valor exacto del logo."
+   },
+   {
+    "name": "marino-600",
+    "value": "#1D3164",
+    "usage": "[primitivos] Sombra de marino; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "marino-700",
+    "value": "#172851",
+    "usage": "[primitivos] Sombra de marino; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "marino-800",
+    "value": "#111E3D",
+    "usage": "[primitivos] Sombra de marino; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "marino-900",
+    "value": "#0D162C",
+    "usage": "[primitivos] Sombra de marino; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "sol-50",
+    "value": "#FFFBEF",
+    "usage": "[primitivos] Tinte de sol para fondos suaves y bandas."
+   },
+   {
+    "name": "sol-100",
+    "value": "#FFF7DB",
+    "usage": "[primitivos] Tinte de sol para fondos suaves y bandas."
+   },
+   {
+    "name": "sol-200",
+    "value": "#FFEFB6",
+    "usage": "[primitivos] Tinte de sol para fondos suaves y bandas."
+   },
+   {
+    "name": "sol-300",
+    "value": "#FFE58A",
+    "usage": "[primitivos] Paso intermedio de sol; rellenos y bordes decorativos."
+   },
+   {
+    "name": "sol-400",
+    "value": "#FFDB5D",
+    "usage": "[primitivos] Paso intermedio de sol; rellenos y bordes decorativos."
+   },
+   {
+    "name": "sol-500",
+    "value": "#FFD235",
+    "usage": "[primitivos] Sol: la h, la u y la n. Alegría; fondos de realce, nunca texto sobre claro. Valor exacto del logo."
+   },
+   {
+    "name": "sol-600",
+    "value": "#FDC400",
+    "usage": "[primitivos] Sombra de sol; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "sol-700",
+    "value": "#CB9E00",
+    "usage": "[primitivos] Sombra de sol; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "sol-800",
+    "value": "#9A7800",
+    "usage": "[primitivos] Sombra de sol; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "sol-900",
+    "value": "#6F5600",
+    "usage": "[primitivos] Sombra de sol; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "salvia-50",
+    "value": "#F8FAF7",
+    "usage": "[primitivos] Tinte de salvia para fondos suaves y bandas."
+   },
+   {
+    "name": "salvia-100",
+    "value": "#EEF4EC",
+    "usage": "[primitivos] Tinte de salvia para fondos suaves y bandas."
+   },
+   {
+    "name": "salvia-200",
+    "value": "#DEE9DA",
+    "usage": "[primitivos] Tinte de salvia para fondos suaves y bandas."
+   },
+   {
+    "name": "salvia-300",
+    "value": "#C9DCC3",
+    "usage": "[primitivos] Paso intermedio de salvia; rellenos y bordes decorativos."
+   },
+   {
+    "name": "salvia-400",
+    "value": "#B5CEAD",
+    "usage": "[primitivos] Paso intermedio de salvia; rellenos y bordes decorativos."
+   },
+   {
+    "name": "salvia-500",
+    "value": "#A2C298",
+    "usage": "[primitivos] Salvia: la i y la e. Calma y lo baby; fondos y rellenos, nunca texto sobre claro. Valor exacto del logo."
+   },
+   {
+    "name": "salvia-600",
+    "value": "#7EAC6F",
+    "usage": "[primitivos] Sombra de salvia; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "salvia-700",
+    "value": "#629153",
+    "usage": "[primitivos] Sombra de salvia; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "salvia-800",
+    "value": "#4A6E3F",
+    "usage": "[primitivos] Sombra de salvia; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "salvia-900",
+    "value": "#364F2E",
+    "usage": "[primitivos] Sombra de salvia; texto e íconos sobre fondos claros."
+   },
+   {
+    "name": "blanco",
+    "value": "#FFFFFF",
+    "usage": "[primitivos] Blanco puro."
+   },
+   {
+    "name": "crema",
+    "value": "#FFF9F1",
+    "usage": "[primitivos] Crema cálido, fondo de la marca."
+   },
+   {
+    "name": "crema-200",
+    "value": "#F7EEE1",
+    "usage": "[primitivos] Crema más tostado para bandas."
+   },
+   {
+    "name": "arena",
+    "value": "#EADFD0",
+    "usage": "[primitivos] Línea suave sobre crema."
+   },
+   {
+    "name": "pizarra-500",
+    "value": "#545E7C",
+    "usage": "[primitivos] Gris azulado para texto secundario."
+   },
+   {
+    "name": "pizarra-400",
+    "value": "#868FAA",
+    "usage": "[primitivos] Gris azulado para bordes de control."
+   },
+   {
+    "name": "pizarra-200",
+    "value": "#B8C0D4",
+    "usage": "[primitivos] Gris azulado claro (texto secundario en noche)."
+   },
+   {
+    "name": "pizarra-noche",
+    "value": "#6B7BA6",
+    "usage": "[primitivos] Borde de control en noche."
+   },
+   {
+    "name": "linea-noche",
+    "value": "#25365F",
+    "usage": "[primitivos] Línea suave en noche."
+   },
+   {
+    "name": "rojo-600",
+    "value": "#B42318",
+    "usage": "[primitivos] Rojo de error (distinto de frambuesa)."
+   },
+   {
+    "name": "rojo-300",
+    "value": "#FF9C8F",
+    "usage": "[primitivos] Rojo de error para noche."
+   },
+   {
+    "name": "salvia-noche",
+    "value": "#314251",
+    "usage": "[primitivos] Tinte salvia sobre marino."
+   },
+   {
+    "name": "frambuesa-noche",
+    "value": "#3F294B",
+    "usage": "[primitivos] Tinte frambuesa sobre marino."
+   },
+   {
+    "name": "marino-noche",
+    "value": "#2D3A5A",
+    "usage": "[primitivos] Tinte marino claro sobre marino."
+   },
+   {
+    "name": "surface",
+    "value": {
+     "claro": "{crema}",
+     "marino": "{marino-800}"
+    },
+    "usage": "[semanticos] Fondo de página. Crema cálido en claro; marino profundo en noche."
+   },
+   {
+    "name": "surface-raised",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-700}"
+    },
+    "usage": "[semanticos] Tarjetas, formularios y paneles sobre `surface`."
+   },
+   {
+    "name": "surface-alt",
+    "value": {
+     "claro": "{crema-200}",
+     "marino": "{marino-900}"
+    },
+    "usage": "[semanticos] Bandas alternas de sección y pies de página."
+   },
+   {
+    "name": "ink",
+    "value": {
+     "claro": "{marino-700}",
+     "marino": "{crema}"
+    },
+    "usage": "[semanticos] Texto principal y títulos sobre `surface`, `surface-raised` y `surface-alt` (≥12.5:1 en ambos temas)."
+   },
+   {
+    "name": "ink-muted",
+    "value": {
+     "claro": "{pizarra-500}",
+     "marino": "{pizarra-200}"
+    },
+    "usage": "[semanticos] Texto secundario, notas y leyendas sobre cualquier superficie (≥5.5:1)."
+   },
+   {
+    "name": "line",
+    "value": {
+     "claro": "{arena}",
+     "marino": "{linea-noche}"
+    },
+    "usage": "[semanticos] Divisores y bordes de tarjeta (decorativos, no llevan significado)."
+   },
+   {
+    "name": "line-strong",
+    "value": {
+     "claro": "{pizarra-400}",
+     "marino": "{pizarra-noche}"
+    },
+    "usage": "[semanticos] Borde de campos de formulario y controles (≥3:1 sobre superficies)."
+   },
+   {
+    "name": "accent",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-300}"
+    },
+    "usage": "[semanticos] Botón primario y llamadas a la acción. Siempre con `on-accent` encima."
+   },
+   {
+    "name": "accent-hover",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "[semanticos] Estado hover/presionado del botón primario."
+   },
+   {
+    "name": "on-accent",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-900}"
+    },
+    "usage": "[semanticos] Texto sobre `accent` y `accent-hover` (5.2:1 claro, 7.3:1 noche)."
+   },
+   {
+    "name": "link",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "[semanticos] Enlaces y texto de acento sobre superficies (≥6:1)."
+   },
+   {
+    "name": "highlight",
+    "value": {
+     "claro": "{sol-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "[semanticos] Realces de alegría: etiquetas \"Nuevo\", promociones, subrayados. Texto encima: `on-highlight`."
+   },
+   {
+    "name": "on-highlight",
+    "value": {
+     "claro": "{marino-700}",
+     "marino": "{marino-800}"
+    },
+    "usage": "[semanticos] Texto sobre `highlight` y cualquier relleno sol o salvia (≥7:1)."
+   },
+   {
+    "name": "secondary",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "[semanticos] Botón secundario sólido y bloques de marca. Texto encima: `on-secondary`."
+   },
+   {
+    "name": "on-secondary",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-800}"
+    },
+    "usage": "[semanticos] Texto sobre `secondary`."
+   },
+   {
+    "name": "focus-ring",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "[semanticos] Anillo de foco de teclado, 2px sólido con 2px de separación (≥9:1)."
+   },
+   {
+    "name": "family-baby",
+    "value": {
+     "claro": "{salvia-500}",
+     "marino": "{salvia-500}"
+    },
+    "usage": "[semanticos] Relleno de la familia Baby baby (4 meses a 3 años)."
+   },
+   {
+    "name": "family-baby-tint",
+    "value": {
+     "claro": "{salvia-100}",
+     "marino": "{salvia-noche}"
+    },
+    "usage": "[semanticos] Fondo suave de Baby baby."
+   },
+   {
+    "name": "family-baby-ink",
+    "value": {
+     "claro": "{salvia-800}",
+     "marino": "{salvia-300}"
+    },
+    "usage": "[semanticos] Texto de Baby baby sobre superficies (≥5:1)."
+   },
+   {
+    "name": "family-terreneitor",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-400}"
+    },
+    "usage": "[semanticos] Relleno de la familia Terreneitor."
+   },
+   {
+    "name": "family-terreneitor-tint",
+    "value": {
+     "claro": "{frambuesa-100}",
+     "marino": "{frambuesa-noche}"
+    },
+    "usage": "[semanticos] Fondo suave de Terreneitor."
+   },
+   {
+    "name": "family-terreneitor-ink",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "[semanticos] Texto de Terreneitor sobre superficies (≥6:1)."
+   },
+   {
+    "name": "family-splash",
+    "value": {
+     "claro": "{marino-300}",
+     "marino": "{marino-300}"
+    },
+    "usage": "[semanticos] Relleno de la línea Splash (juego con agua)."
+   },
+   {
+    "name": "family-splash-tint",
+    "value": {
+     "claro": "{marino-50}",
+     "marino": "{marino-noche}"
+    },
+    "usage": "[semanticos] Fondo suave de Splash."
+   },
+   {
+    "name": "family-splash-ink",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{marino-200}"
+    },
+    "usage": "[semanticos] Texto de Splash sobre superficies (≥7:1)."
+   },
+   {
+    "name": "success",
+    "value": {
+     "claro": "{salvia-800}",
+     "marino": "{salvia-400}"
+    },
+    "usage": "[semanticos] Confirmaciones (\"Fecha apartada\"). Siempre con palabra o ícono."
+   },
+   {
+    "name": "warning",
+    "value": {
+     "claro": "{sol-900}",
+     "marino": "{sol-400}"
+    },
+    "usage": "[semanticos] Avisos (\"Quedan 2 fechas\"). Siempre con palabra o ícono."
+   },
+   {
+    "name": "danger",
+    "value": {
+     "claro": "{rojo-600}",
+     "marino": "{rojo-300}"
+    },
+    "usage": "[semanticos] Errores de formulario. Rojo distinto de frambuesa para no confundir con la marca."
+   },
+   {
+    "name": "button-primary-bg",
+    "value": {
+     "claro": "{accent}",
+     "marino": "{accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-primary-bg-hover",
+    "value": {
+     "claro": "{accent-hover}",
+     "marino": "{accent-hover}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-primary-fg",
+    "value": {
+     "claro": "{on-accent}",
+     "marino": "{on-accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-secondary-bg",
+    "value": {
+     "claro": "{secondary}",
+     "marino": "{secondary}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-secondary-fg",
+    "value": {
+     "claro": "{on-secondary}",
+     "marino": "{on-secondary}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-outline-bg",
+    "value": {
+     "claro": "{surface-raised}",
+     "marino": "{surface-raised}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-outline-fg",
+    "value": {
+     "claro": "{ink}",
+     "marino": "{ink}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-outline-border",
+    "value": {
+     "claro": "{line-strong}",
+     "marino": "{line-strong}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-outline-border-hover",
+    "value": {
+     "claro": "{ink}",
+     "marino": "{ink}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "button-focus",
+    "value": {
+     "claro": "{focus-ring}",
+     "marino": "{focus-ring}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "badge-promo-bg",
+    "value": {
+     "claro": "{highlight}",
+     "marino": "{highlight}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "badge-promo-fg",
+    "value": {
+     "claro": "{on-highlight}",
+     "marino": "{on-highlight}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "badge-brand-bg",
+    "value": {
+     "claro": "{accent}",
+     "marino": "{accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "badge-brand-fg",
+    "value": {
+     "claro": "{on-accent}",
+     "marino": "{on-accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "card-bg",
+    "value": {
+     "claro": "{surface-raised}",
+     "marino": "{surface-raised}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "card-border",
+    "value": {
+     "claro": "{line}",
+     "marino": "{line}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-bg",
+    "value": {
+     "claro": "{surface-raised}",
+     "marino": "{surface-raised}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-fg",
+    "value": {
+     "claro": "{ink}",
+     "marino": "{ink}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-placeholder",
+    "value": {
+     "claro": "{ink-muted}",
+     "marino": "{ink-muted}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-border",
+    "value": {
+     "claro": "{line-strong}",
+     "marino": "{line-strong}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-border-focus",
+    "value": {
+     "claro": "{focus-ring}",
+     "marino": "{focus-ring}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "input-border-error",
+    "value": {
+     "claro": "{danger}",
+     "marino": "{danger}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-1-bg",
+    "value": {
+     "claro": "{highlight}",
+     "marino": "{highlight}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-1-fg",
+    "value": {
+     "claro": "{on-highlight}",
+     "marino": "{on-highlight}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-2-bg",
+    "value": {
+     "claro": "{family-baby}",
+     "marino": "{family-baby}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-2-fg",
+    "value": {
+     "claro": "{on-highlight}",
+     "marino": "{on-highlight}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-3-bg",
+    "value": {
+     "claro": "{accent}",
+     "marino": "{accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-3-fg",
+    "value": {
+     "claro": "{on-accent}",
+     "marino": "{on-accent}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-4-bg",
+    "value": {
+     "claro": "{secondary}",
+     "marino": "{secondary}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-4-fg",
+    "value": {
+     "claro": "{on-secondary}",
+     "marino": "{on-secondary}"
+    },
+    "usage": "[componentes]"
+   },
+   {
+    "name": "step-line",
+    "value": {
+     "claro": "{line-strong}",
+     "marino": "{line-strong}"
+    },
+    "usage": "[componentes]"
+   }
+  ]
+ },
+ "type": {
+  "fonts": [],
+  "families": {
+   "display": "\"Fredoka\", \"Baloo 2\", \"Arial Rounded MT Bold\", system-ui, sans-serif",
+   "body": "\"Nunito\", \"Avenir Next\", system-ui, sans-serif"
+  },
+  "groups": [
+   {
+    "name": "Display",
+    "family": "display",
+    "styles": [
+     {
+      "name": "display-xl",
+      "fontSize": "56px",
+      "lineHeight": 1.05,
+      "fontWeight": 600,
+      "letterSpacing": "-0.01em",
+      "sample": "¡La fiesta llega a tu casa!",
+      "usage": "Portadas, hero del sitio y posts de lanzamiento. Una vez por pieza."
+     },
+     {
+      "name": "display-l",
+      "fontSize": "40px",
+      "lineHeight": 1.1,
+      "fontWeight": 600,
+      "sample": "Elige tu zona de juego",
+      "usage": "Títulos de sección y titulares de post."
+     },
+     {
+      "name": "title",
+      "fontSize": "28px",
+      "lineHeight": 1.2,
+      "fontWeight": 600,
+      "sample": "Baby baby Pro",
+      "usage": "Títulos de tarjeta y de bloque."
+     },
+     {
+      "name": "subtitle",
+      "fontSize": "20px",
+      "lineHeight": 1.3,
+      "fontWeight": 500,
+      "sample": "Montamos, supervisamos y recogemos",
+      "usage": "Subtítulos y entradillas cortas."
+     },
+     {
+      "name": "price",
+      "fontSize": "36px",
+      "lineHeight": 1,
+      "fontWeight": 600,
+      "sample": "$2,900",
+      "usage": "Precios. Cifras tabulares."
+     }
+    ]
+   },
+   {
+    "name": "Texto",
+    "family": "body",
+    "styles": [
+     {
+      "name": "body-l",
+      "fontSize": "18px",
+      "lineHeight": "28px",
+      "fontWeight": 400,
+      "sample": "Llegamos una hora antes, sanitizamos pieza por pieza y recogemos al final.",
+      "usage": "Párrafos de introducción."
+     },
+     {
+      "name": "body",
+      "fontSize": "16px",
+      "lineHeight": "26px",
+      "fontWeight": 400,
+      "sample": "Tatami acolchado, corral, alberca de pelotas, resbaladilla y mecedoras.",
+      "usage": "Texto corrido. Máximo 65 caracteres por línea."
+     },
+     {
+      "name": "small",
+      "fontSize": "14px",
+      "lineHeight": "20px",
+      "fontWeight": 600,
+      "sample": "5 horas de servicio",
+      "usage": "Notas, leyendas y metadatos."
+     },
+     {
+      "name": "label",
+      "fontSize": "13px",
+      "lineHeight": "16px",
+      "fontWeight": 800,
+      "letterSpacing": "0.08em",
+      "sample": "4 MESES A 3 AÑOS",
+      "usage": "Etiquetas en mayúsculas: edades, categorías, botones chicos."
+     }
+    ]
+   }
+  ]
+ },
+ "spacing": {
+  "tokens": [
+   {
+    "name": "space-1",
+    "value": "4px",
+    "usage": "Separación mínima entre ícono y texto."
+   },
+   {
+    "name": "space-2",
+    "value": "8px",
+    "usage": "Entre elementos de una misma línea; chips."
+   },
+   {
+    "name": "space-3",
+    "value": "12px",
+    "usage": "Interlineado de listas."
+   },
+   {
+    "name": "space-4",
+    "value": "16px",
+    "usage": "Relleno de botón chico; margen lateral mínimo en móvil."
+   },
+   {
+    "name": "space-5",
+    "value": "24px",
+    "usage": "Relleno de tarjeta; espacio entre tarjetas."
+   },
+   {
+    "name": "space-6",
+    "value": "32px",
+    "usage": "Entre bloques dentro de una sección."
+   },
+   {
+    "name": "space-7",
+    "value": "48px",
+    "usage": "Entre título de sección y contenido en escritorio."
+   },
+   {
+    "name": "space-8",
+    "value": "64px",
+    "usage": "Entre secciones en móvil."
+   },
+   {
+    "name": "space-9",
+    "value": "96px",
+    "usage": "Entre secciones en escritorio."
+   }
+  ]
+ },
+ "radius": {
+  "tokens": [
+   {
+    "name": "radius-sm",
+    "value": "10px",
+    "usage": "Campos de formulario, chips cuadrados."
+   },
+   {
+    "name": "radius-md",
+    "value": "18px",
+    "usage": "Imágenes y paneles chicos."
+   },
+   {
+    "name": "radius-lg",
+    "value": "28px",
+    "usage": "Tarjetas de paquete y posts."
+   },
+   {
+    "name": "radius-xl",
+    "value": "44px",
+    "usage": "Bloques hero y bandas destacadas."
+   },
+   {
+    "name": "radius-pill",
+    "value": "999px",
+    "usage": "Botones, etiquetas y la forma \"burbuja\"."
+   }
+  ]
+ },
+ "shadow": {
+  "note": "Sombras planas desplazadas, como un globo apoyado en el piso.",
+  "tokens": [
+   {
+    "name": "shadow-pop",
+    "value": {
+     "claro": "0 4px 0 0 #17285126",
+     "marino": "0 4px 0 0 #00000059"
+    },
+    "usage": "Botones y etiquetas."
+   },
+   {
+    "name": "shadow-card",
+    "value": {
+     "claro": "0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133",
+     "marino": "0 8px 0 -2px #00000040, 0 18px 36px -18px #00000080"
+    },
+    "usage": "Tarjetas sobre surface."
+   }
+  ]
+ },
+ "size": {
+  "tokens": [
+   {
+    "name": "size-24",
+    "value": "24px",
+    "usage": "Ícono chico / etiqueta."
+   },
+   {
+    "name": "size-32",
+    "value": "32px",
+    "usage": "Control mini."
+   },
+   {
+    "name": "size-40",
+    "value": "40px",
+    "usage": "Control chico."
+   },
+   {
+    "name": "size-44",
+    "value": "44px",
+    "usage": "Mínimo táctil recomendado."
+   },
+   {
+    "name": "size-48",
+    "value": "48px",
+    "usage": "Control mediano."
+   },
+   {
+    "name": "size-56",
+    "value": "56px",
+    "usage": "Control grande."
+   }
+  ]
+ },
+ "layout": {
+  "tokens": [
+   {
+    "name": "container",
+    "value": "1040px",
+    "usage": "Ancho máximo de contenido."
+   },
+   {
+    "name": "container-narrow",
+    "value": "640px",
+    "usage": "Texto y formularios."
+   },
+   {
+    "name": "gutter",
+    "value": "24px",
+    "usage": "Separación entre columnas."
+   },
+   {
+    "name": "page-margin",
+    "value": "16px",
+    "usage": "Margen lateral mínimo en móvil."
+   },
+   {
+    "name": "section-gap",
+    "value": "96px",
+    "usage": "Entre secciones en escritorio."
+   },
+   {
+    "name": "section-gap-mobile",
+    "value": "64px",
+    "usage": "Entre secciones en móvil."
+   }
+  ]
+ },
+ "componentes": {
+  "tokens": [
+   {
+    "name": "button-radius",
+    "value": "999px",
+    "usage": "[componentes] = {radius-pill} Forma burbuja."
+   },
+   {
+    "name": "button-weight",
+    "value": "600",
+    "usage": "[componentes] = {weight-display}"
+   },
+   {
+    "name": "button-height-sm",
+    "value": "40px",
+    "usage": "[componentes] = {size-40}"
+   },
+   {
+    "name": "button-height-md",
+    "value": "48px",
+    "usage": "[componentes] = {size-48}"
+   },
+   {
+    "name": "button-height-lg",
+    "value": "56px",
+    "usage": "[componentes] = {size-56}"
+   },
+   {
+    "name": "button-pad-x-sm",
+    "value": "16px",
+    "usage": "[componentes] = {space-4}"
+   },
+   {
+    "name": "button-pad-x-md",
+    "value": "24px",
+    "usage": "[componentes] = {space-5}"
+   },
+   {
+    "name": "button-pad-x-lg",
+    "value": "32px",
+    "usage": "[componentes] = {space-6}"
+   },
+   {
+    "name": "button-text-sm",
+    "value": "15px",
+    "usage": "[componentes] = {fs-15}"
+   },
+   {
+    "name": "button-text-md",
+    "value": "17px",
+    "usage": "[componentes] = {fs-17}"
+   },
+   {
+    "name": "button-text-lg",
+    "value": "20px",
+    "usage": "[componentes] = {fs-20}"
+   },
+   {
+    "name": "button-gap",
+    "value": "8px",
+    "usage": "[componentes] = {space-2} Entre ícono y texto."
+   },
+   {
+    "name": "button-shadow",
+    "value": "0 4px 0 0 #17285126",
+    "usage": "[componentes] = {shadow-pop}"
+   },
+   {
+    "name": "button-disabled-opacity",
+    "value": ".45",
+    "usage": "[componentes]"
+   },
+   {
+    "name": "badge-radius",
+    "value": "999px",
+    "usage": "[componentes] = {radius-pill}"
+   },
+   {
+    "name": "badge-height",
+    "value": "24px",
+    "usage": "[componentes] = {size-24}"
+   },
+   {
+    "name": "badge-pad-x",
+    "value": "12px",
+    "usage": "[componentes] = {space-3}"
+   },
+   {
+    "name": "badge-text",
+    "value": "12px",
+    "usage": "[componentes] = {fs-12}"
+   },
+   {
+    "name": "badge-weight",
+    "value": "800",
+    "usage": "[componentes] = {weight-bold}"
+   },
+   {
+    "name": "card-radius",
+    "value": "28px",
+    "usage": "[componentes] = {radius-lg}"
+   },
+   {
+    "name": "card-pad",
+    "value": "24px",
+    "usage": "[componentes] = {space-5}"
+   },
+   {
+    "name": "card-shadow",
+    "value": "0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133",
+    "usage": "[componentes] = {shadow-card}"
+   },
+   {
+    "name": "card-gap",
+    "value": "24px",
+    "usage": "[componentes] = {space-5} Entre tarjetas."
+   },
+   {
+    "name": "input-radius",
+    "value": "10px",
+    "usage": "[componentes] = {radius-sm}"
+   },
+   {
+    "name": "input-height",
+    "value": "48px",
+    "usage": "[componentes] = {size-48}"
+   },
+   {
+    "name": "input-pad-x",
+    "value": "16px",
+    "usage": "[componentes] = {space-4}"
+   },
+   {
+    "name": "input-text",
+    "value": "16px",
+    "usage": "[componentes] = {fs-16} 16px evita el zoom en iPhone."
+   },
+   {
+    "name": "step-size",
+    "value": "44px",
+    "usage": "[componentes] = {size-44}"
+   }
+  ]
+ }
+}

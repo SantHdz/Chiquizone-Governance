@@ -1,0 +1,441 @@
+{
+ "capa": "semanticos",
+ "descripcion": "Roles: qué significa cada color o medida. Solo apuntan a primitivos. Cambian por tema (claro / marino).",
+ "temas": [
+  "claro",
+  "marino"
+ ],
+ "grupos": {
+  "color": [
+   {
+    "name": "surface",
+    "value": {
+     "claro": "{crema}",
+     "marino": "{marino-800}"
+    },
+    "usage": "Fondo de página. Crema cálido en claro; marino profundo en noche."
+   },
+   {
+    "name": "surface-raised",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-700}"
+    },
+    "usage": "Tarjetas, formularios y paneles sobre `surface`."
+   },
+   {
+    "name": "surface-alt",
+    "value": {
+     "claro": "{crema-200}",
+     "marino": "{marino-900}"
+    },
+    "usage": "Bandas alternas de sección y pies de página."
+   },
+   {
+    "name": "ink",
+    "value": {
+     "claro": "{marino-700}",
+     "marino": "{crema}"
+    },
+    "usage": "Texto principal y títulos sobre `surface`, `surface-raised` y `surface-alt` (≥12.5:1 en ambos temas)."
+   },
+   {
+    "name": "ink-muted",
+    "value": {
+     "claro": "{pizarra-500}",
+     "marino": "{pizarra-200}"
+    },
+    "usage": "Texto secundario, notas y leyendas sobre cualquier superficie (≥5.5:1)."
+   },
+   {
+    "name": "line",
+    "value": {
+     "claro": "{arena}",
+     "marino": "{linea-noche}"
+    },
+    "usage": "Divisores y bordes de tarjeta (decorativos, no llevan significado)."
+   },
+   {
+    "name": "line-strong",
+    "value": {
+     "claro": "{pizarra-400}",
+     "marino": "{pizarra-noche}"
+    },
+    "usage": "Borde de campos de formulario y controles (≥3:1 sobre superficies)."
+   },
+   {
+    "name": "accent",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-300}"
+    },
+    "usage": "Botón primario y llamadas a la acción. Siempre con `on-accent` encima."
+   },
+   {
+    "name": "accent-hover",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "Estado hover/presionado del botón primario."
+   },
+   {
+    "name": "on-accent",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-900}"
+    },
+    "usage": "Texto sobre `accent` y `accent-hover` (5.2:1 claro, 7.3:1 noche)."
+   },
+   {
+    "name": "link",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "Enlaces y texto de acento sobre superficies (≥6:1)."
+   },
+   {
+    "name": "highlight",
+    "value": {
+     "claro": "{sol-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "Realces de alegría: etiquetas \"Nuevo\", promociones, subrayados. Texto encima: `on-highlight`."
+   },
+   {
+    "name": "on-highlight",
+    "value": {
+     "claro": "{marino-700}",
+     "marino": "{marino-800}"
+    },
+    "usage": "Texto sobre `highlight` y cualquier relleno sol o salvia (≥7:1)."
+   },
+   {
+    "name": "secondary",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "Botón secundario sólido y bloques de marca. Texto encima: `on-secondary`."
+   },
+   {
+    "name": "on-secondary",
+    "value": {
+     "claro": "{blanco}",
+     "marino": "{marino-800}"
+    },
+    "usage": "Texto sobre `secondary`."
+   },
+   {
+    "name": "focus-ring",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "Anillo de foco de teclado, 2px sólido con 2px de separación (≥9:1)."
+   },
+   {
+    "name": "family-baby",
+    "value": {
+     "claro": "{salvia-500}",
+     "marino": "{salvia-500}"
+    },
+    "usage": "Relleno de la familia Baby baby (4 meses a 3 años)."
+   },
+   {
+    "name": "family-baby-tint",
+    "value": {
+     "claro": "{salvia-100}",
+     "marino": "{salvia-noche}"
+    },
+    "usage": "Fondo suave de Baby baby."
+   },
+   {
+    "name": "family-baby-ink",
+    "value": {
+     "claro": "{salvia-800}",
+     "marino": "{salvia-300}"
+    },
+    "usage": "Texto de Baby baby sobre superficies (≥5:1)."
+   },
+   {
+    "name": "family-terreneitor",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-400}"
+    },
+    "usage": "Relleno de la familia Terreneitor."
+   },
+   {
+    "name": "family-terreneitor-tint",
+    "value": {
+     "claro": "{frambuesa-100}",
+     "marino": "{frambuesa-noche}"
+    },
+    "usage": "Fondo suave de Terreneitor."
+   },
+   {
+    "name": "family-terreneitor-ink",
+    "value": {
+     "claro": "{frambuesa-600}",
+     "marino": "{frambuesa-200}"
+    },
+    "usage": "Texto de Terreneitor sobre superficies (≥6:1)."
+   },
+   {
+    "name": "family-splash",
+    "value": {
+     "claro": "{marino-300}",
+     "marino": "{marino-300}"
+    },
+    "usage": "Relleno de la línea Splash (juego con agua)."
+   },
+   {
+    "name": "family-splash-tint",
+    "value": {
+     "claro": "{marino-50}",
+     "marino": "{marino-noche}"
+    },
+    "usage": "Fondo suave de Splash."
+   },
+   {
+    "name": "family-splash-ink",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{marino-200}"
+    },
+    "usage": "Texto de Splash sobre superficies (≥7:1)."
+   },
+   {
+    "name": "success",
+    "value": {
+     "claro": "{salvia-800}",
+     "marino": "{salvia-400}"
+    },
+    "usage": "Confirmaciones (\"Fecha apartada\"). Siempre con palabra o ícono."
+   },
+   {
+    "name": "warning",
+    "value": {
+     "claro": "{sol-900}",
+     "marino": "{sol-400}"
+    },
+    "usage": "Avisos (\"Quedan 2 fechas\"). Siempre con palabra o ícono."
+   },
+   {
+    "name": "danger",
+    "value": {
+     "claro": "{rojo-600}",
+     "marino": "{rojo-300}"
+    },
+    "usage": "Errores de formulario. Rojo distinto de frambuesa para no confundir con la marca."
+   }
+  ],
+  "shadow": [
+   {
+    "name": "shadow-pop",
+    "value": {
+     "claro": "{sombra-pop}",
+     "marino": "{sombra-pop-noche}"
+    },
+    "usage": "Botones y etiquetas."
+   },
+   {
+    "name": "shadow-card",
+    "value": {
+     "claro": "{sombra-tarjeta}",
+     "marino": "{sombra-tarjeta-noche}"
+    },
+    "usage": "Tarjetas sobre surface."
+   }
+  ],
+  "tipo": [
+   {
+    "name": "text-display-xl",
+    "value": "{fs-56}",
+    "usage": "Hero, portadas."
+   },
+   {
+    "name": "text-display-l",
+    "value": "{fs-40}",
+    "usage": "Títulos de sección."
+   },
+   {
+    "name": "text-title",
+    "value": "{fs-28}",
+    "usage": "Títulos de tarjeta."
+   },
+   {
+    "name": "text-subtitle",
+    "value": "{fs-20}",
+    "usage": "Subtítulos."
+   },
+   {
+    "name": "text-price",
+    "value": "{fs-36}",
+    "usage": "Precios."
+   },
+   {
+    "name": "text-body-l",
+    "value": "{fs-18}",
+    "usage": "Intro."
+   },
+   {
+    "name": "text-body",
+    "value": "{fs-16}",
+    "usage": "Texto."
+   },
+   {
+    "name": "text-small",
+    "value": "{fs-14}",
+    "usage": "Notas."
+   },
+   {
+    "name": "text-label",
+    "value": "{fs-13}",
+    "usage": "Etiquetas."
+   },
+   {
+    "name": "weight-regular",
+    "value": "{fw-400}",
+    "usage": ""
+   },
+   {
+    "name": "weight-medium",
+    "value": "{fw-600}",
+    "usage": ""
+   },
+   {
+    "name": "weight-bold",
+    "value": "{fw-800}",
+    "usage": ""
+   },
+   {
+    "name": "weight-display",
+    "value": "{fw-600}",
+    "usage": ""
+   }
+  ],
+  "layout": [
+   {
+    "name": "container",
+    "value": "1040px",
+    "usage": "Ancho máximo de contenido."
+   },
+   {
+    "name": "container-narrow",
+    "value": "640px",
+    "usage": "Texto y formularios."
+   },
+   {
+    "name": "gutter",
+    "value": "{space-5}",
+    "usage": "Separación entre columnas."
+   },
+   {
+    "name": "page-margin",
+    "value": "{space-4}",
+    "usage": "Margen lateral mínimo en móvil."
+   },
+   {
+    "name": "section-gap",
+    "value": "{space-9}",
+    "usage": "Entre secciones en escritorio."
+   },
+   {
+    "name": "section-gap-mobile",
+    "value": "{space-8}",
+    "usage": "Entre secciones en móvil."
+   }
+  ]
+ },
+ "estilos-texto": [
+  {
+   "name": "Display",
+   "family": "display",
+   "styles": [
+    {
+     "name": "display-xl",
+     "fontSize": "56px",
+     "lineHeight": 1.05,
+     "fontWeight": 600,
+     "letterSpacing": "-0.01em",
+     "sample": "¡La fiesta llega a tu casa!",
+     "usage": "Portadas, hero del sitio y posts de lanzamiento. Una vez por pieza."
+    },
+    {
+     "name": "display-l",
+     "fontSize": "40px",
+     "lineHeight": 1.1,
+     "fontWeight": 600,
+     "sample": "Elige tu zona de juego",
+     "usage": "Títulos de sección y titulares de post."
+    },
+    {
+     "name": "title",
+     "fontSize": "28px",
+     "lineHeight": 1.2,
+     "fontWeight": 600,
+     "sample": "Baby baby Pro",
+     "usage": "Títulos de tarjeta y de bloque."
+    },
+    {
+     "name": "subtitle",
+     "fontSize": "20px",
+     "lineHeight": 1.3,
+     "fontWeight": 500,
+     "sample": "Montamos, supervisamos y recogemos",
+     "usage": "Subtítulos y entradillas cortas."
+    },
+    {
+     "name": "price",
+     "fontSize": "36px",
+     "lineHeight": 1,
+     "fontWeight": 600,
+     "sample": "$2,900",
+     "usage": "Precios. Cifras tabulares."
+    }
+   ]
+  },
+  {
+   "name": "Texto",
+   "family": "body",
+   "styles": [
+    {
+     "name": "body-l",
+     "fontSize": "18px",
+     "lineHeight": "28px",
+     "fontWeight": 400,
+     "sample": "Llegamos una hora antes, sanitizamos pieza por pieza y recogemos al final.",
+     "usage": "Párrafos de introducción."
+    },
+    {
+     "name": "body",
+     "fontSize": "16px",
+     "lineHeight": "26px",
+     "fontWeight": 400,
+     "sample": "Tatami acolchado, corral, alberca de pelotas, resbaladilla y mecedoras.",
+     "usage": "Texto corrido. Máximo 65 caracteres por línea."
+    },
+    {
+     "name": "small",
+     "fontSize": "14px",
+     "lineHeight": "20px",
+     "fontWeight": 600,
+     "sample": "5 horas de servicio",
+     "usage": "Notas, leyendas y metadatos."
+    },
+    {
+     "name": "label",
+     "fontSize": "13px",
+     "lineHeight": "16px",
+     "fontWeight": 800,
+     "letterSpacing": "0.08em",
+     "sample": "4 MESES A 3 AÑOS",
+     "usage": "Etiquetas en mayúsculas: edades, categorías, botones chicos."
+    }
+   ]
+  }
+ ]
+}
