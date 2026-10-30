@@ -105,14 +105,22 @@
   --fw-600: 600;
   --fw-800: 800;
   /* shadow */
-  --sombra-pop: 0 4px 0 0 #17285126;
-  --sombra-pop-noche: 0 4px 0 0 #00000059;
-  --sombra-tarjeta: 0 8px 0 -2px #1728511a, 0 18px 36px -18px #17285133;
-  --sombra-tarjeta-noche: 0 8px 0 -2px #00000040, 0 18px 36px -18px #00000080;
+  --sombra-pop: 0 1px 2px #1728511f, 0 4px 10px -2px #17285129;
+  --sombra-pop-noche: 0 1px 2px #00000052, 0 4px 10px -2px #0000006b;
+  --sombra-tarjeta: 0 1px 2px #1728510f, 0 14px 32px -14px #17285138;
+  --sombra-tarjeta-noche: 0 1px 2px #00000040, 0 14px 32px -14px #0000008c;
+  --sombra-elevada: 0 2px 4px #17285114, 0 22px 44px -16px #17285147;
+  --sombra-elevada-noche: 0 2px 4px #00000052, 0 22px 44px -16px #000000a6;
   /* motion */
-  --ease-out: cubic-bezier(.2, .7, .3, 1);
-  --dur-rapida: .15s;
-  --dur-entrada: .9s;
+  --dur-instant: 100ms;
+  --dur-rapida: 160ms;
+  --dur-base: 240ms;
+  --dur-lenta: 400ms;
+  --dur-focal: 700ms;
+  --dur-entrada: 900ms;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-rebote: cubic-bezier(.34, 1.56, .64, 1);
 }
 
 /* ===== 2 · Semánticos (por tema) ===== */
@@ -149,6 +157,7 @@
   /* shadow */
   --shadow-pop: var(--sombra-pop);
   --shadow-card: var(--sombra-tarjeta);
+  --shadow-raised: var(--sombra-elevada);
   /* tipo */
   --text-display-xl: var(--fs-56);
   --text-display-l: var(--fs-40);
@@ -170,6 +179,15 @@
   --page-margin: var(--space-4);
   --section-gap: var(--space-9);
   --section-gap-mobile: var(--space-8);
+  /* motion */
+  --motion-feedback: var(--dur-instant);
+  --motion-hover: var(--dur-rapida);
+  --motion-state: var(--dur-base);
+  --motion-enter: var(--dur-lenta);
+  --motion-focal: var(--dur-focal);
+  --ease-standard: var(--ease-out);
+  --ease-loop: var(--ease-in-out);
+  --ease-playful: var(--ease-rebote);
 }
 [data-theme="marino"] {
   /* color */
@@ -201,6 +219,7 @@
   /* shadow */
   --shadow-pop: var(--sombra-pop-noche);
   --shadow-card: var(--sombra-tarjeta-noche);
+  --shadow-raised: var(--sombra-elevada-noche);
 }
 
 /* ===== 3 · Componentes =====
@@ -233,6 +252,10 @@
   --button-outline-border-hover: var(--ink);
   --button-focus: var(--focus-ring);
   --button-disabled-opacity: .45;
+  --button-variant-text-fg: var(--link);
+  --button-press-duration: var(--motion-feedback);
+  --button-hover-duration: var(--motion-hover);
+  --button-ease: var(--ease-standard);
   /* badge */
   --badge-radius: var(--radius-pill);
   --badge-height: var(--size-24);
@@ -250,6 +273,8 @@
   --card-pad: var(--space-5);
   --card-shadow: var(--shadow-card);
   --card-gap: var(--space-5);
+  --card-shadow-hover: var(--shadow-raised);
+  --card-hover-duration: var(--motion-state);
   /* input */
   --input-bg: var(--surface-raised);
   --input-fg: var(--ink);
@@ -261,6 +286,9 @@
   --input-height: var(--size-48);
   --input-pad-x: var(--space-4);
   --input-text: var(--fs-16);
+  --input-label: var(--ink);
+  --input-hint: var(--ink-muted);
+  --input-disabled-bg: var(--surface-alt);
   /* step */
   --step-size: var(--size-44);
   --step-1-bg: var(--highlight);
@@ -272,6 +300,11 @@
   --step-4-bg: var(--secondary);
   --step-4-fg: var(--on-secondary);
   --step-line: var(--line-strong);
+  /* loader */
+  --loader-pin: var(--accent);
+  --loader-shadow: var(--line-strong);
+  --loader-duration: var(--motion-focal);
+  --loader-ease: var(--ease-playful);
 
   /* ===== Compat (temporal) ===== */
   /* web */

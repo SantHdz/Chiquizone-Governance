@@ -5,6 +5,7 @@ import Button from '../components/Button.astro';
 import PackageCard from '../components/PackageCard.astro';
 import Checks from '../components/Checks.astro';
 import Steps from '../components/Steps.astro';
+import Loader from '../components/Loader.astro';
 import { paquetes } from '../data/paquetes';
 
 const escalas = ['frambuesa', 'marino', 'sol', 'salvia'];
@@ -60,7 +61,15 @@ const espacios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     <h3 class="h">Botones</h3>
     <div class="row">
-      <Button>Primario</Button><Button variant="secondary">Secundario</Button><Button variant="ghost">Texto</Button><Button size="sm">Chico</Button>
+      <Button icon="whatsapp">Primario</Button><Button variant="secondary">Secundario</Button><Button variant="outline">Contorno</Button><Button variant="text">Texto</Button>
+    </div>
+    <div class="row">
+      <Button size="lg" iconRight="siguiente">Grande</Button><Button size="sm">Chico</Button><Button loading>Enviando</Button><Button disabled>Sin fechas</Button>
+    </div>
+
+    <h3 class="h">Pin que cae</h3>
+    <div class="row">
+      <Loader /><Loader mode="land" label="Fecha apartada" />
     </div>
 
     <h3 class="h">Tarjeta de paquete</h3>

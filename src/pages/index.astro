@@ -85,9 +85,9 @@ const pasos = [
   <Section id="cotiza" title="¿Apartamos tu fecha?" lead="Llena estos datos y te llega el mensaje listo en WhatsApp. También puedes escribirnos directo.">
     <QuoteForm />
     <p class="alt">
-      <Button href={whatsappLink()} variant="ghost" external>WhatsApp {site.phoneDisplay}</Button>
+      <Button href={whatsappLink()} variant="text" icon="whatsapp" external>WhatsApp {site.phoneDisplay}</Button>
       <span aria-hidden="true">·</span>
-      <Button href={`mailto:${site.email}`} variant="ghost">{site.email}</Button>
+      <Button href={`mailto:${site.email}`} variant="text" icon="correo">{site.email}</Button>
     </p>
   </Section>
 </Base>

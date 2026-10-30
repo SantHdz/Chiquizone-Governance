@@ -15,7 +15,7 @@ import { site } from '../data/site';
     </select>
   </label>
   <div class="full actions">
-    <Button type="submit">Enviar por WhatsApp</Button>
+    <Button type="submit" icon="whatsapp">Enviar por WhatsApp</Button>
     <small>Se abre WhatsApp con tu mensaje listo. Te confirmamos disponibilidad el mismo día.</small>
   </div>
 </form>
@@ -42,23 +42,30 @@ import { site } from '../data/site';
     a.target = '_blank';
     a.rel = 'noopener';
     a.click();
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+    btn?.setAttribute('aria-busy', 'true');
+    setTimeout(() => btn?.removeAttribute('aria-busy'), 1200);
   });
 </script>
 
 <style>
   .quote {
     display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4) var(--space-5);
-    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
     padding: var(--space-6); max-width: 720px;
   }
-  label { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); font-weight: var(--weight-medium); }
+  label { display: flex; flex-direction: column; gap: 6px; font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--input-label); }
   .full { grid-column: 1 / -1; }
   input, select {
-    font: inherit; font-weight: var(--weight-regular); font-size: var(--text-md); color: var(--color-text);
-    background: var(--color-bg); border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm);
-    padding: 10px 14px; min-height: 46px; width: 100%;
+    font: inherit; font-weight: var(--weight-regular); font-size: var(--input-text); color: var(--input-fg);
+    background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: var(--input-radius);
+    padding: 0 var(--input-pad-x); height: var(--input-height); width: 100%;
+    transition: border-color var(--motion-hover) var(--ease-standard), box-shadow var(--motion-hover) var(--ease-standard);
   }
-  input:focus, select:focus { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+  input::placeholder { color: var(--input-placeholder); }
+  input:hover, select:hover { border-color: var(--ink-muted); }
+  input:focus, select:focus { outline: none; border-color: var(--input-border-focus); box-shadow: 0 0 0 3px var(--marino-100); }
+  input:user-invalid { border-color: var(--input-border-error); }
   .actions { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-2); }
   small { color: var(--color-text-muted); font-size: var(--text-xs); max-width: 36ch; }
   @media (max-width: 640px) { .quote { grid-template-columns: 1fr; padding: var(--space-5); } }

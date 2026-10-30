@@ -23,7 +23,7 @@ const ref = (v) => (typeof v === 'string' && /^\{[^}]+\}$/.test(v) ? v.slice(1, 
 const values = (t) => (typeof t.value === 'object' ? Object.values(t.value) : [t.value]);
 
 // Reglas de capas: semánticos → primitivos; componentes → semánticos (color) o primitivos de medida.
-const MEDIDA = new Set(['space', 'radius', 'size', 'font', 'font-size', 'font-weight', 'motion']);
+const MEDIDA = new Set(['space', 'radius', 'size', 'font', 'font-size', 'font-weight', 'motion', 'shadow']);
 for (const t of all.values()) {
   for (const v of values(t)) {
     const r = ref(v);

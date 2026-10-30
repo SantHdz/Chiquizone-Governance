@@ -1,7 +1,7 @@
 {
  "capa": "componentes",
  "descripcion": "Decisiones de cada componente. Solo apuntan a semánticos (o a primitivos de medida). Los componentes del sitio usan SOLO esta capa.",
- "estado": "propuesta: cada componente se confirma con Sant antes de construirse",
+ "estado": "Botón aprobado por Sant (30 oct 2026): 4 variantes, 3 tamaños, 6 estados, ícono opcional. Resto: propuesta revisada con Impeccable.",
  "grupos": {
   "button": [
    {
@@ -128,6 +128,26 @@
     "name": "button-disabled-opacity",
     "value": ".45",
     "usage": ""
+   },
+   {
+    "name": "button-variant-text-fg",
+    "value": "{link}",
+    "usage": ""
+   },
+   {
+    "name": "button-press-duration",
+    "value": "{motion-feedback}",
+    "usage": ""
+   },
+   {
+    "name": "button-hover-duration",
+    "value": "{motion-hover}",
+    "usage": ""
+   },
+   {
+    "name": "button-ease",
+    "value": "{ease-standard}",
+    "usage": ""
    }
   ],
   "badge": [
@@ -207,6 +227,16 @@
     "name": "card-gap",
     "value": "{space-5}",
     "usage": "Entre tarjetas."
+   },
+   {
+    "name": "card-shadow-hover",
+    "value": "{shadow-raised}",
+    "usage": ""
+   },
+   {
+    "name": "card-hover-duration",
+    "value": "{motion-state}",
+    "usage": ""
    }
   ],
   "input": [
@@ -259,6 +289,21 @@
     "name": "input-text",
     "value": "{fs-16}",
     "usage": "16px evita el zoom en iPhone."
+   },
+   {
+    "name": "input-label",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "input-hint",
+    "value": "{ink-muted}",
+    "usage": ""
+   },
+   {
+    "name": "input-disabled-bg",
+    "value": "{surface-alt}",
+    "usage": ""
    }
   ],
   "step": [
@@ -310,6 +355,28 @@
    {
     "name": "step-line",
     "value": "{line-strong}",
+    "usage": ""
+   }
+  ],
+  "loader": [
+   {
+    "name": "loader-pin",
+    "value": "{accent}",
+    "usage": "Pin que cae."
+   },
+   {
+    "name": "loader-shadow",
+    "value": "{line-strong}",
+    "usage": "Sombra del pin."
+   },
+   {
+    "name": "loader-duration",
+    "value": "{motion-focal}",
+    "usage": ""
+   },
+   {
+    "name": "loader-ease",
+    "value": "{ease-playful}",
     "usage": ""
    }
   ]

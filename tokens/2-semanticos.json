@@ -248,6 +248,14 @@
      "marino": "{sombra-tarjeta-noche}"
     },
     "usage": "Tarjetas sobre surface."
+   },
+   {
+    "name": "shadow-raised",
+    "value": {
+     "claro": "{sombra-elevada}",
+     "marino": "{sombra-elevada-noche}"
+    },
+    "usage": "Tarjeta al pasar el cursor."
    }
   ],
   "tipo": [
@@ -347,6 +355,48 @@
     "name": "section-gap-mobile",
     "value": "{space-8}",
     "usage": "Entre secciones en móvil."
+   }
+  ],
+  "motion": [
+   {
+    "name": "motion-feedback",
+    "value": "{dur-instant}",
+    "usage": "Presionar un control."
+   },
+   {
+    "name": "motion-hover",
+    "value": "{dur-rapida}",
+    "usage": "Hover y foco."
+   },
+   {
+    "name": "motion-state",
+    "value": "{dur-base}",
+    "usage": "Cambio de estado de un componente."
+   },
+   {
+    "name": "motion-enter",
+    "value": "{dur-lenta}",
+    "usage": "Aparición de un bloque."
+   },
+   {
+    "name": "motion-focal",
+    "value": "{dur-focal}",
+    "usage": "Pin que cae (loading y confirmación)."
+   },
+   {
+    "name": "ease-standard",
+    "value": "{ease-out}",
+    "usage": "Curva por defecto."
+   },
+   {
+    "name": "ease-loop",
+    "value": "{ease-in-out}",
+    "usage": "Animaciones que se repiten."
+   },
+   {
+    "name": "ease-playful",
+    "value": "{ease-rebote}",
+    "usage": "Solo pin y stickers."
    }
   ]
  },

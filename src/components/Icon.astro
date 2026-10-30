@@ -1,0 +1,14 @@
+---
+// Íconos de Phosphor (Bold, MIT) curados para Chiquizone. Toman el color del texto.
+const svgs = import.meta.glob('../icons/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+interface Props { name: string; size?: number; class?: string; label?: string }
+const { name, size = 20, class: cls, label } = Astro.props;
+const raw = svgs[`../icons/${name}.svg`];
+if (!raw) throw new Error(`Ícono desconocido: ${name}`);
+const svg = raw.replace('<svg ', `<svg width="${size}" height="${size}" focusable="false" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'} `);
+---
+<span class:list={['icon', cls]} set:html={svg} />
+<style>
+  .icon { display: inline-flex; flex: none; line-height: 0; }
+</style>

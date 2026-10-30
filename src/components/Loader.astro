@@ -1,0 +1,28 @@
+---
+// El pin que cae: loader de marca (rebota) y confirmación (aterriza una vez).
+interface Props { mode?: 'loading' | 'land'; label?: string }
+const { mode = 'loading', label = 'Cargando' } = Astro.props;
+---
+<div class:list={['loader', `loader--${mode}`]} role="status" aria-label={label}>
+  <img class="pin" src="/brand/chiquizone-pin-solo.png" alt="" width="34" height="40" />
+  <span class="shadow"></span>
+</div>
+<style>
+  .loader { display: inline-grid; justify-items: center; gap: 4px; width: 48px; }
+  .pin { width: 34px; height: auto; display: block; }
+  .shadow { width: 30px; height: 7px; border-radius: 50%; background: var(--loader-shadow); opacity: .5; }
+  .loader--loading .pin { animation: drop var(--loader-duration) var(--ease-loop) infinite; animation-duration: 1100ms; }
+  .loader--loading .shadow { animation: squash 1100ms var(--ease-loop) infinite; }
+  .loader--land .pin { animation: land var(--loader-duration) var(--loader-ease) both; }
+  .loader--land .shadow { animation: land-shadow var(--loader-duration) var(--ease-standard) both; }
+  @keyframes drop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  @keyframes squash { 0%, 100% { transform: scaleX(1); opacity: .55; } 50% { transform: scaleX(.55); opacity: .25; } }
+  @keyframes land { from { transform: translateY(-40px); opacity: 0; } 60% { opacity: 1; } }
+  @keyframes land-shadow { from { transform: scaleX(.3); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .loader--loading .pin, .loader--loading .shadow { animation: fade 1400ms ease-in-out infinite; }
+    .loader--land .pin, .loader--land .shadow { animation: fade-in 240ms ease-out both; }
+    @keyframes fade { 50% { opacity: .35; } }
+    @keyframes fade-in { from { opacity: 0; } }
+  }
+</style>
