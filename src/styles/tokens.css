@@ -47,6 +47,7 @@
   --salvia-800: #4A6E3F;
   --salvia-900: #364F2E;
   --blanco: #FFFFFF;
+  --hueso: #FFFCF7;
   --crema: #FFF9F1;
   --crema-200: #F7EEE1;
   --arena: #EADFD0;
@@ -127,7 +128,7 @@
 :root, [data-theme="claro"] {
   /* color */
   --surface: var(--crema);
-  --surface-raised: var(--blanco);
+  --surface-raised: var(--hueso);
   --surface-alt: var(--crema-200);
   --ink: var(--marino-700);
   --ink-muted: var(--pizarra-500);

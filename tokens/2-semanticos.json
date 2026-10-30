@@ -18,7 +18,7 @@
    {
     "name": "surface-raised",
     "value": {
-     "claro": "{blanco}",
+     "claro": "{hueso}",
      "marino": "{marino-700}"
     },
     "usage": "Tarjetas, formularios y paneles sobre `surface`."

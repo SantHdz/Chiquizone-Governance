@@ -209,6 +209,11 @@
     "usage": "Blanco puro."
    },
    {
+    "name": "hueso",
+    "value": "#FFFCF7",
+    "usage": "Blanco hueso para superficies elevadas (tarjetas, campos). La marca no usa blanco puro de fondo."
+   },
+   {
     "name": "crema",
     "value": "#FFF9F1",
     "usage": "Crema cálido, fondo de la marca."

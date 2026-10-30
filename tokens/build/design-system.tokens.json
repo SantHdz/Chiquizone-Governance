@@ -222,6 +222,11 @@
     "usage": "[primitivos] Blanco puro."
    },
    {
+    "name": "hueso",
+    "value": "#FFFCF7",
+    "usage": "[primitivos] Blanco hueso para superficies elevadas (tarjetas, campos). La marca no usa blanco puro de fondo."
+   },
+   {
     "name": "crema",
     "value": "#FFF9F1",
     "usage": "[primitivos] Crema cálido, fondo de la marca."
@@ -297,7 +302,7 @@
    {
     "name": "surface-raised",
     "value": {
-     "claro": "{blanco}",
+     "claro": "{hueso}",
      "marino": "{marino-700}"
     },
     "usage": "[semanticos] Tarjetas, formularios y paneles sobre `surface`."
