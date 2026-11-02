@@ -1,4 +1,4 @@
-# 0008 · El logo del inicio viaja a la barra
+# 0009 · El logo del inicio viaja a la barra
 
 - **Estado:** Propuesta (pendiente de la revisión de Sant)
 - **Fecha:** 2026-11-02
