@@ -153,6 +153,10 @@
   --family-splash: var(--marino-300);
   --family-splash-tint: var(--marino-50);
   --family-splash-ink: var(--marino-500);
+  --logo-marino: var(--marino-500);
+  --logo-frambuesa: var(--frambuesa-500);
+  --logo-sol: var(--sol-500);
+  --logo-salvia: var(--salvia-500);
   --success: var(--salvia-800);
   --warning: var(--sol-900);
   --danger: var(--rojo-600);
@@ -215,6 +219,8 @@
   --family-terreneitor-ink: var(--frambuesa-200);
   --family-splash-tint: var(--marino-noche);
   --family-splash-ink: var(--marino-200);
+  --logo-marino: var(--crema);
+  --logo-frambuesa: var(--frambuesa-400);
   --success: var(--salvia-400);
   --warning: var(--sol-400);
   --danger: var(--rojo-300);

@@ -11,6 +11,7 @@ Cada decisión que cambia la marca, el design system o el sitio queda aquí, con
 | [0005](0005-imagenes-de-ninos.md) | Caras de niños modificadas con IA | Aceptada | 2026-10-29 |
 | [0006](0006-tipografia-titulos.md) | Tipografía de títulos | Aceptada | 2026-11-02 |
 | [0007](0007-licencia.md) | Repositorio público con todos los derechos reservados | Aceptada | 2026-11-02 |
+| [0008](0008-logo-viaja-a-la-barra.md) | El logo del inicio viaja a la barra | Propuesta | 2026-11-02 |
 
 ## Cómo agregar una
 

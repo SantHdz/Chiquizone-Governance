@@ -492,6 +492,38 @@
     "usage": "[semanticos] Texto de Splash sobre superficies (≥7:1)."
    },
    {
+    "name": "logo-marino",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{crema}"
+    },
+    "usage": "[semanticos] Letras y trazos marino del logo. Sobre fondo marino pasan a crema para no perderse."
+   },
+   {
+    "name": "logo-frambuesa",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-400}"
+    },
+    "usage": "[semanticos] Letra C, pin y carita de niña del logo."
+   },
+   {
+    "name": "logo-sol",
+    "value": {
+     "claro": "{sol-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "[semanticos] Letras amarillas del logo."
+   },
+   {
+    "name": "logo-salvia",
+    "value": {
+     "claro": "{salvia-500}",
+     "marino": "{salvia-500}"
+    },
+    "usage": "[semanticos] Letras verdes del logo."
+   },
+   {
     "name": "success",
     "value": {
      "claro": "{salvia-800}",

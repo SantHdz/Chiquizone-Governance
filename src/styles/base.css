@@ -77,6 +77,30 @@ b, strong { font-weight: var(--weight-medium); }
   50% { transform: translateY(-6px) rotate(1.5deg); }
 }
 
+/* Logo: se define una vez (LogoSprite) y se usa con <use>. Los colores salen de los tokens --logo-*. */
+.lg-m { fill: var(--logo-marino); }
+.lg-f { fill: var(--logo-frambuesa); }
+.lg-s { fill: var(--logo-sol); }
+.lg-v { fill: var(--logo-salvia); }
+.logo { display: block; width: 100%; height: auto; aspect-ratio: 640 / 437; overflow: visible; }
+
+/* Las chispas del logo entran una sola vez, solo donde se define --chispa-anim (el logo del inicio). */
+.chispa {
+  transform-box: fill-box; transform-origin: 50% 50%;
+  animation-name: var(--chispa-anim, none); animation-duration: 560ms; animation-timing-function: var(--ease-out); animation-fill-mode: both;
+}
+.chispa-1 { animation-delay: 700ms; }
+.chispa-2 { animation-delay: 820ms; }
+.chispa-3 { animation-delay: 940ms; }
+.chispa-4 { animation-delay: 1060ms; }
+@keyframes chispa-in { from { opacity: 0; transform: scale(.4) rotate(-14deg); } to { opacity: 1; transform: none; } }
+
+/* Viaje del logo del inicio a la barra (src/scripts/logo-viaje.ts). Sin JS no se esconde nada. */
+.logo-ghost { position: fixed; left: 0; top: 0; z-index: 40; transform-origin: 0 0; pointer-events: none; visibility: hidden; will-change: transform; }
+html.logo--fly .logo-ghost { visibility: visible; }
+html.logo--hero .brand, html.logo--fly .brand { visibility: hidden; }
+html.logo--fly .hero-logo, html.logo--dock .hero-logo { visibility: hidden; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
