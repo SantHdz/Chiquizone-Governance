@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { createHmac } from 'node:crypto';
 import { firmaValida, leerEventos } from '../src/whatsapp';
 import { eventosADia } from '../src/calendario';
 
 describe('webhook de WhatsApp', () => {
   const cuerpo = JSON.stringify({ hola: 'mundo' });
-  const firma = `sha256=${createHmac('sha256', 'secreto').update(cuerpo).digest('hex')}`;
+  // HMAC-SHA256 de `cuerpo` con la llave "secreto", calculado aparte.
+  const firma = 'sha256=530936b6b72fc187ed1c3a02001a72b798f16b64beeed96f4ed32d06ca56905a';
 
   it('acepta una firma correcta y rechaza las demás', async () => {
     expect(await firmaValida(cuerpo, firma, 'secreto')).toBe(true);
