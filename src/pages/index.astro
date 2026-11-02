@@ -12,12 +12,35 @@ import Incluye from '../components/Incluye.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import Chispas from '../components/decor/Chispas.astro';
-import { paquetes, familias } from '../data/paquetes';
+import { publicados, preguntasActivas, hayPro, haySplash, familiasPublicadas, unico, familias } from '../data/paquetes';
 import { site, mxn, pct, whatsappLink } from '../data/site';
 
-const secos = paquetes.filter((p) => !p.splash);
-const splash = paquetes.filter((p) => p.splash);
-const porFamilia = (lista: typeof paquetes, f: 'baby' | 'terreneitor') => lista.filter((p) => p.familia === f);
+/* Todo lo que depende de los paquetes sale de `publicados`: con un solo kit el sitio se simplifica solo
+ * y, cuando se active otro, vuelven las preguntas, el bloque Splash y los paquetes Pro (src/data/paquetes.ts). */
+const secos = publicados.filter((p) => !p.splash);
+const splash = publicados.filter((p) => p.splash);
+const porFamilia = (lista: typeof publicados, f: 'baby' | 'terreneitor') => lista.filter((p) => p.familia === f);
+const familiasSecas = familiasPublicadas.filter((f) => porFamilia(secos, f).length > 0);
+const familiasSplash = familiasPublicadas.filter((f) => porFamilia(splash, f).length > 0);
+const unaFamilia = familiasPublicadas.length === 1;
+const unica = familias[familiasPublicadas[0]];
+
+const numeros: Record<number, string> = { 2: 'dos', 3: 'tres' };
+const proPorFamilia = familiasPublicadas
+  .map((f) => publicados.filter((p) => p.pro && p.familia === f).sort((a, b) => Number(a.splash) - Number(b.splash))[0])
+  .filter((p) => p !== undefined);
+const partesPro = proPorFamilia.map((p, i) => (i === 0 ? `${p.nombre} lleva ${numeros[p.cuidadoras!]} cuidadoras` : `${p.nombre}, ${numeros[p.cuidadoras!]}`));
+const cuidadoras = publicados.filter((p) => p.pro).map((p) => p.cuidadoras!);
+const cuidadorasMin = Math.min(...cuidadoras);
+const cuidadorasMax = Math.max(...cuidadoras);
+
+const pasosArma = ['un paso', 'dos pasos', 'tres pasos'][preguntasActivas - 1];
+const preguntasArma = ['una pregunta', 'dos preguntas', 'tres preguntas'][preguntasActivas - 1];
+const leadPaquetes = unico
+  ? unica.resumen
+  : unaFamilia
+    ? (hayPro ? 'Tú cuidas a los niños o se quedan las cuidadoras toda la fiesta.' : `Pensada para niños de ${unica.edades}.`)
+    : 'Dos zonas pensadas para cada etapa.' + (hayPro ? ' Cada una tiene su versión Pro, con cuidadoras toda la fiesta.' : '');
 
 const requisitos = [
   { title: 'Zona techada o con sombra', text: 'El sol directo calienta el material y cansa a los niños.' },
@@ -28,14 +51,14 @@ const requisitos = [
 
 const pasos = [
   { title: 'Nos escribes', text: 'Fecha, hora de inicio, dirección y edades de los niños.' },
-  { title: 'Te cotizamos', text: 'Confirmamos disponibilidad y el paquete ideal para tu fiesta.' },
+  { title: 'Te cotizamos', text: unico ? 'Confirmamos que tu fecha esté libre.' : 'Confirmamos disponibilidad y el paquete ideal para tu fiesta.' },
   { title: `Apartas con el ${pct(site.bookingDepositPct)}`, text: 'Por transferencia. Se descuenta del total.' },
   { title: 'Firmamos contrato', text: `Con copia de INE y depósito de ${mxn(site.guaranteeDeposit)} en garantía.` },
   { title: 'Montamos y recogemos', text: 'Llegamos una hora antes. El depósito se devuelve al terminar.' },
 ];
 
 const incluye = [
-  { icon: 'horario', title: `${site.serviceHours} horas de juego`, text: 'Supervisado o libre, según tu paquete.', wide: true, tone: 'sol' as const },
+  { icon: 'horario', title: `${site.serviceHours} horas de juego`, text: hayPro ? 'Supervisado o libre, según tu paquete.' : 'Los papás cuidan a los niños; nosotros montamos y recogemos.', wide: true, tone: 'sol' as const },
   { icon: 'casa', title: `${site.spaceNeeded} de zona`, text: 'Es todo el espacio que pedimos en tu casa, jardín o salón.', wide: true, tone: 'salvia' as const },
   { icon: 'fecha-confirmada', title: 'Montaje', text: 'Llegamos una hora antes de la fiesta.', tone: 'frambuesa' as const },
   { icon: 'traslado', title: 'Traslado', text: 'Incluido dentro de San Juan del Río.', tone: 'marino' as const },
@@ -55,9 +78,11 @@ const faq = [
   { q: '¿Cuánto espacio necesito?', a: `Un área de ${site.spaceNeeded}, techada o con sombra, con piso plano y un contacto eléctrico a menos de diez metros.` },
   { q: '¿Cuánto dura el servicio?', a: `${site.serviceHours} horas. Llegamos una hora antes a montar y recogemos todo al terminar.` },
   { q: '¿Cómo aparto mi fecha?', a: `Con un anticipo del ${pct(site.bookingDepositPct)} por transferencia, que se descuenta del total. Firmamos contrato con copia de INE y un depósito de ${mxn(site.guaranteeDeposit)} en garantía, que se devuelve al terminar.` },
-  { q: '¿Qué hacen las cuidadoras de los paquetes Pro?', a: 'Se quedan toda la fiesta en la zona: cuidan y organizan el juego. Pro Baby lleva dos cuidadoras y Terreneitor Pro, tres. Nunca sacan a un niño del área ni dan alimentos.' },
+  ...(hayPro ? [{ q: '¿Qué hacen las cuidadoras de los paquetes Pro?', a: `Se quedan toda la fiesta en la zona: cuidan y organizan el juego. ${partesPro.join(' y ')}. Nunca sacan a un niño del área ni dan alimentos.` }] : []),
   { q: '¿El material está limpio?', a: 'Sí. Sanitizamos pieza por pieza antes de cada fiesta.' },
-  { q: '¿Y si hay niños de distintas edades?', a: 'Escríbenos por WhatsApp con las edades y te armamos la combinación que mejor funcione.' },
+  unaFamilia
+    ? { q: '¿Para qué edades es?', a: `La zona ${unica.nombre} es para niños de ${unica.edades}. Si hay invitados más grandes, escríbenos por WhatsApp con las edades y te decimos si les funciona.` }
+    : { q: '¿Y si hay niños de distintas edades?', a: 'Escríbenos por WhatsApp con las edades y te armamos la combinación que mejor funcione.' },
 ];
 
 const serviceLd = {
@@ -66,71 +91,86 @@ const serviceLd = {
   serviceType: 'Renta de zonas de juego para fiestas infantiles',
   provider: { '@type': 'LocalBusiness', name: site.name, url: site.url },
   areaServed: site.areas.map((name) => ({ '@type': 'City', name })),
-  offers: paquetes.map((p) => ({ '@type': 'Offer', name: p.nombre, price: p.precio, priceCurrency: 'MXN', availability: 'https://schema.org/InStock', url: `${site.url}/#${p.id}` })),
+  offers: publicados.map((p) => ({ '@type': 'Offer', name: p.nombre, price: p.precio, priceCurrency: 'MXN', availability: 'https://schema.org/InStock', url: `${site.url}/#${p.id}` })),
 };
 ---
 <Base heroLogo>
   <Hero />
 
-  <Section id="arma" eyebrow="En tres pasos" title="Arma tu *zona*" lead="Responde tres preguntas y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha.">
-    <ArmaTuZona />
-  </Section>
+  {preguntasActivas > 0 && (
+    <Section id="arma" eyebrow={`En ${pasosArma}`} title="Arma tu *zona*" lead={`Responde ${preguntasArma} y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha.`}>
+      <ArmaTuZona />
+    </Section>
+  )}
 
-  <Section id="paquetes" tone="salvia" eyebrow="Paquetes" title="Elige tu *zona*" lead="Dos zonas pensadas para cada etapa. Cada una tiene su versión Pro, con cuidadoras toda la fiesta.">
-    {(['baby', 'terreneitor'] as const).map((f) => (
+  <Section
+    id="paquetes"
+    tone="salvia"
+    eyebrow={unico ? 'Tu paquete' : 'Paquetes'}
+    title={unico ? `La zona *${publicados[0].nombre}*` : 'Elige tu *zona*'}
+    lead={leadPaquetes}
+    align={unico ? 'center' : 'left'}
+  >
+    {familiasSecas.map((f) => (
       <div class:list={['family', `fam-${f}`]}>
-        <div class="family-head" data-reveal>
-          <span class="fam-ico"><Icon name={f === 'baby' ? 'bebe' : 'ninos'} size={24} /></span>
-          <div>
-            <h3 class="display">{familias[f].nombre} <span class="edad">{familias[f].edades}</span></h3>
-            <p>{familias[f].resumen}</p>
+        {!unico && (
+          <div class="family-head" data-reveal>
+            <span class="fam-ico"><Icon name={f === 'baby' ? 'bebe' : 'ninos'} size={24} /></span>
+            <div>
+              <h3 class="display">{familias[f].nombre} <span class="edad">{familias[f].edades}</span></h3>
+              <p>{familias[f].resumen}</p>
+            </div>
           </div>
-        </div>
-        <div class="grid">{porFamilia(secos, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
+        )}
+        <div class:list={['grid', { solo: unico }]}>{porFamilia(secos, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
       </div>
     ))}
 
-    <div class="splash">
-      <div class="splash-head" data-reveal>
-        <span class="fam-ico agua"><Icon name="agua" size={24} /></span>
-        <div>
-          <p class="eyebrow">Para días de calor</p>
-          <h3>Las mismas zonas, <em>con agua</em></h3>
-          <p class="sub">Mesa de agua, tapete fuente y alberca con patitos. Elige Baby o Terreneitor en versión Splash.</p>
+    {haySplash && (
+      <div class="splash">
+        <div class="splash-head" data-reveal>
+          <span class="fam-ico agua"><Icon name="agua" size={24} /></span>
+          <div>
+            <p class="eyebrow">Para días de calor</p>
+            <h3>Las mismas zonas, <em>con agua</em></h3>
+            <p class="sub">Mesa de agua, tapete fuente y alberca con patitos.{familiasSplash.length > 1 ? ' Elige Baby o Terreneitor en versión Splash.' : ''}</p>
+          </div>
         </div>
+        {familiasSplash.map((f) => (
+          <div class="family">
+            <div class="family-head small" data-reveal><h3 class="display">{familias[f].nombre} Splash</h3></div>
+            <div class="grid">{porFamilia(splash, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
+          </div>
+        ))}
       </div>
-      {(['baby', 'terreneitor'] as const).map((f) => (
-        <div class="family">
-          <div class="family-head small" data-reveal><h3 class="display">{familias[f].nombre} Splash</h3></div>
-          <div class="grid">{porFamilia(splash, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
-        </div>
-      ))}
-    </div>
+    )}
   </Section>
 
-  <Section id="incluye" eyebrow="Sin costo extra" title="Lo que llega a tu *fiesta*" lead="Todos los paquetes incluyen esto.">
+  <Section id="incluye" eyebrow="Sin costo extra" title="Lo que llega a tu *fiesta*" lead={unico ? 'Tu paquete incluye todo esto.' : 'Todos los paquetes incluyen esto.'}>
     <Incluye items={incluye} />
   </Section>
 
-  <Section id="supervision" tone="sol">
-    <div class="nanny">
-      <div>
-        <p class="eyebrow" data-reveal>Paquetes Pro</p>
-        <h2 data-reveal style="--i:1">Cuidadoras que se quedan <em>toda</em> la fiesta</h2>
-        <p class="sub" data-reveal style="--i:2">Se quedan las cinco horas en la zona de juego, para que tú puedas estar con tus invitados.</p>
-        <ul class="rings">
-          <li data-reveal style="--i:3">Cuidan y organizan el juego dentro del área</li>
-          <li data-reveal style="--i:4">Pro Baby lleva dos cuidadoras; Terreneitor Pro, tres</li>
-          <li data-reveal style="--i:5">Nunca sacan a un niño del área ni dan alimentos</li>
-        </ul>
+  {hayPro && (
+    <Section id="supervision" tone="sol">
+      <div class="nanny">
+        <div>
+          <p class="eyebrow" data-reveal>{cuidadoras.length > 1 ? 'Paquetes Pro' : 'Paquete Pro'}</p>
+          <h2 data-reveal style="--i:1">Cuidadoras que se quedan <em>toda</em> la fiesta</h2>
+          <p class="sub" data-reveal style="--i:2">Se quedan las cinco horas en la zona de juego, para que tú puedas estar con tus invitados.</p>
+          <ul class="rings">
+            <li data-reveal style="--i:3">Cuidan y organizan el juego dentro del área</li>
+            <li data-reveal style="--i:4">{partesPro.join('; ')}</li>
+            <li data-reveal style="--i:5">Nunca sacan a un niño del área ni dan alimentos</li>
+          </ul>
+        </div>
+        <div class="nanny-card" data-reveal style="--i:2">
+          <Chispas class="chispa" size={34} color="var(--sol-600)" />
+          <div class="big">{cuidadorasMin === cuidadorasMax ? cuidadorasMin : <>{cuidadorasMin}<em>–</em>{cuidadorasMax}</>}</div>
+          <p>cuidadoras incluidas<br />{cuidadoras.length > 1 ? 'en cada paquete Pro' : 'en el paquete Pro'}</p>
+        </div>
       </div>
-      <div class="nanny-card" data-reveal style="--i:2">
-        <Chispas class="chispa" size={34} color="var(--sol-600)" />
-        <div class="big">2<em>–</em>3</div>
-        <p>cuidadoras incluidas<br />en cada paquete Pro</p>
-      </div>
-    </div>
-  </Section>
+    </Section>
+  )}
 
   <Section id="como-funciona" eyebrow="Cómo funciona" title="Apartar tu fecha es *fácil*" lead="Todo se resuelve por WhatsApp en menos de un día.">
     <div class="como">
@@ -173,6 +213,7 @@ const serviceLd = {
   .fam-ico { flex: none; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-raised); color: var(--color-text); box-shadow: var(--shadow-card); }
   .fam-ico.agua { color: var(--family-splash-ink); }
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+  .grid.solo { grid-template-columns: minmax(0, 480px); justify-content: center; text-align: left; }
   .splash {
     margin-top: var(--space-8); padding: var(--space-7); border-radius: var(--radius-lg);
     background: var(--marino-50); border: 1.5px solid var(--marino-100);

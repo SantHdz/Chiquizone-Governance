@@ -3,6 +3,7 @@ import Button from './Button.astro';
 import Globos from './decor/Globos.astro';
 import Banderines from './decor/Banderines.astro';
 import { site, whatsappLink } from '../data/site';
+import { unico } from '../data/paquetes';
 const year = new Date().getFullYear();
 ---
 <section class="cierre" aria-labelledby="cierre-t">
@@ -36,7 +37,7 @@ const year = new Date().getFullYear();
     <div>
       <h3>Secciones</h3>
       <p>
-        <a href="/#paquetes">Paquetes</a><br />
+        <a href="/#paquetes">{unico ? 'La zona' : 'Paquetes'}</a><br />
         <a href="/#como-funciona">Cómo funciona</a><br />
         <a href="/#preguntas">Preguntas frecuentes</a>
       </p>

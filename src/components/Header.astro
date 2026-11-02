@@ -6,10 +6,12 @@
 import Button from './Button.astro';
 import Logo from './Logo.astro';
 import { whatsappLink } from '../data/site';
+import { preguntasActivas, unico } from '../data/paquetes';
 
+/* "Arma tu zona" solo existe si hay algo que elegir; con un solo kit "Paquetes" pasa a "La zona". */
 const izquierda = [
-  { href: '/#arma', label: 'Arma tu zona' },
-  { href: '/#paquetes', label: 'Paquetes' },
+  ...(preguntasActivas > 0 ? [{ href: '/#arma', label: 'Arma tu zona' }] : []),
+  { href: '/#paquetes', label: unico ? 'La zona' : 'Paquetes' },
   { href: '/#incluye', label: 'Qué incluye' },
 ];
 const derecha = [

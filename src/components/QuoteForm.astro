@@ -1,19 +1,23 @@
 ---
 import Button from './Button.astro';
-import { paquetes } from '../data/paquetes';
+import { publicados, unico } from '../data/paquetes';
 import { site } from '../data/site';
 ---
 <form class="quote" data-wa={site.whatsapp}>
   <label>Fecha del evento<input type="date" name="fecha" required /></label>
   <label>Hora de inicio<input type="time" name="hora" required /></label>
   <label class="full">Colonia y ciudad<input type="text" name="lugar" placeholder="Ej. Centro, Tequisquiapan" required /></label>
-  <label>Edades de los niños<input type="text" name="edades" placeholder="Ej. 1, 3 y 5 años" required /></label>
-  <label>Paquete
-    <select name="paquete">
-      <option value="">Aún no sé, recomiéndenme</option>
-      {paquetes.map((p) => <option value={p.nombre}>{p.nombre}</option>)}
-    </select>
-  </label>
+  <label class:list={{ full: unico }}>Edades de los niños<input type="text" name="edades" placeholder="Ej. 1, 3 y 5 años" required /></label>
+  {unico ? (
+    <input type="hidden" name="paquete" value={publicados[0].nombre} />
+  ) : (
+    <label>Paquete
+      <select name="paquete">
+        <option value="">Aún no sé, recomiéndenme</option>
+        {publicados.map((p) => <option value={p.nombre}>{p.nombre}</option>)}
+      </select>
+    </label>
+  )}
   <div class="full actions">
     <Button type="submit" icon="whatsapp">Enviar por WhatsApp</Button>
     <small>Se abre WhatsApp con tu mensaje listo. Te confirmamos disponibilidad el mismo día.</small>

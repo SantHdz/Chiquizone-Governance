@@ -232,7 +232,7 @@ npm run dev        # http://localhost:4321
 
 | Qué | Archivo |
 |---|---|
-| Precios, paquetes y lo que incluyen | `src/data/paquetes.ts` |
+| Precios, paquetes, lo que incluyen y cuáles se muestran (`disponible`) | `src/data/paquetes.ts` |
 | Teléfono, WhatsApp, zonas, anticipo | `src/data/site.ts` |
 | Colores, espacios, componentes | `tokens/*.json` (nunca `tokens.css` a mano) |
 | Componentes | `src/components/` |
@@ -301,6 +301,7 @@ Se siguen como [issues del milestone Fase 2](https://github.com/SantHdz/Chiquizo
 - **Tipografía de títulos.** Probar una serif editorial suave contra Fredoka.
 - **Fotografía real.** Una toma cenital numerada por zona para "Qué incluye" y galerías de fiestas reales.
 - **Reseñas verificadas** con edad del niño, número de invitados y municipio, conectadas a las estrellas en Google.
+- **Activar los demás paquetes.** Al lanzar solo se muestran Baby baby y Pro Baby; Terreneitor y Splash vuelven con `disponible: true` en `src/data/paquetes.ts`.
 - **Datos del negocio.** Capacidad por zona y costo de traslado fuera de San Juan del Río. El anticipo (50 %) y la garantía ($500) ya están confirmados.
 - **Componentes restantes en Figma**: Etiqueta, Campo, Paso, Tarjeta y Loader.
 - **Publicación** en el dominio `chiquizone.com`.

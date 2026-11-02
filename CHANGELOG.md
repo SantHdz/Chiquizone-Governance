@@ -22,6 +22,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Inicio más calmado: sin "Desde $…", horas, espacio ni zonas; titular, dos botones, logo y foto.
 - Barra con el logo al centro y enlaces a los lados; menú móvil con ícono de tres rayas.
 - Anticipo confirmado: 50 % del total por transferencia, más $500 de garantía que se devuelve (issue #3). `site.ts` guarda el porcentaje y no un monto fijo.
+- Al lanzar solo se muestran Baby baby y Pro Baby (issue #5). Cada paquete tiene `disponible` en `src/data/paquetes.ts`; el resto del sitio se arma con los publicados: las preguntas de "Arma tu zona", el bloque Splash, la sección Pro, el formulario y los datos estructurados. Si falta un paquete para alguna respuesta, el build falla con un aviso claro.
 
 ## [0.1.0] · 2026-10-30
 

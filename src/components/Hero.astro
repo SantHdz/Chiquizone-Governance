@@ -8,6 +8,7 @@ import Button from './Button.astro';
 import Logo from './Logo.astro';
 import Globos from './decor/Globos.astro';
 import { whatsappLink } from '../data/site';
+import { preguntasActivas } from '../data/paquetes';
 ---
 <div class="hero">
   <div class="wrap grid">
@@ -23,7 +24,9 @@ import { whatsappLink } from '../data/site';
       <p class="lede" data-reveal style="--i:3">Montamos, cuidamos y recogemos. Tú disfrutas la fiesta.</p>
       <div class="ctas" data-reveal style="--i:4">
         <Button href={whatsappLink()} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
-        <Button href="#arma" variant="outline" size="md" iconRight="siguiente">Arma tu zona</Button>
+        {preguntasActivas > 0
+          ? <Button href="#arma" variant="outline" size="md" iconRight="siguiente">Arma tu zona</Button>
+          : <Button href="#paquetes" variant="outline" size="md" iconRight="siguiente">Ver la zona</Button>}
       </div>
     </div>
 
