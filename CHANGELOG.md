@@ -5,6 +5,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Sin publicar]
 
 ### Agregado
+- Asistente de WhatsApp, fase 1 (`bot/`): cotiza con los precios del sitio, revisa la agenda en Google Calendar y pasa la conversación a Sant.
 - README como caso de estudio, registro de decisiones (`docs/decisiones/`) y resumen del benchmark.
 - CI en GitHub Actions: tokens válidos y al día, y build en cada pull request.
 - Plantillas de issues (bug, mejora, decisión de diseño) y CODEOWNERS.

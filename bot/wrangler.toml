@@ -1,0 +1,18 @@
+name = "chiquizone-asistente"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Calendario de montajes (correo de la cuenta de Google o id del calendario).
+GOOGLE_CALENDAR_ID = "PENDIENTE@chiquizone.com"
+GRAPH_VERSION = "v23.0"
+
+# Conversaciones, pausas y mensajes ya procesados.
+[[kv_namespaces]]
+binding = "CONVERSACIONES"
+id = "PENDIENTE"
+
+# Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
+# ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
+# GOOGLE_SA_EMAIL, GOOGLE_SA_KEY y, opcional, AVISOS_WA (número personal para avisos).
