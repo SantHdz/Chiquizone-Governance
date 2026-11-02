@@ -1,23 +1,33 @@
 ---
-interface Props { items: { title: string; text: string }[] }
-const { items } = Astro.props;
+/* Pasos numerados. El color rota como las letras del logo: sol, salvia, frambuesa, marino. */
+interface Props { items: { title: string; text: string }[]; horizontal?: boolean }
+const { items, horizontal = false } = Astro.props;
 ---
-<ol class="steps">
-  {items.map((i) => <li><h3>{i.title}</h3><p>{i.text}</p></li>)}
+<ol class:list={['steps', { horizontal }]}>
+  {items.map((i, n) => <li data-reveal style={`--i:${n}`}><span class="n display" aria-hidden="true">{n + 1}</span><div><h3>{i.title}</h3><p>{i.text}</p></div></li>)}
 </ol>
 <style>
-  .steps { list-style: none; counter-reset: s; max-width: var(--container-narrow); }
-  li { counter-increment: s; padding: 8px 0 var(--space-5) 64px; position: relative; }
-  li:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 48px; bottom: 4px; border-left: 2px dashed var(--color-border-strong); }
-  li::before {
-    content: counter(s); position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%;
-    font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-lg);
-    display: grid; place-items: center; background: var(--highlight); color: var(--on-highlight);
+  .steps { list-style: none; display: grid; gap: var(--space-5); max-width: var(--container-narrow); }
+  li { display: grid; grid-template-columns: var(--step-size) 1fr; gap: var(--space-4); align-items: start; position: relative; }
+  li:not(:last-child)::after { content: ''; position: absolute; left: calc(var(--step-size) / 2 - 1px); top: calc(var(--step-size) + 6px); bottom: calc(-1 * var(--space-5) + 6px); border-left: 2px dashed var(--step-line); }
+  .n {
+    width: var(--step-size); height: var(--step-size); border-radius: 50%; display: grid; place-items: center;
+    font-size: var(--text-lg); background: var(--step-1-bg); color: var(--step-1-fg);
   }
-  /* Los círculos rotan como las letras del logo: sol, salvia, frambuesa, marino. */
-  li:nth-child(4n+2)::before { background: var(--family-baby); }
-  li:nth-child(4n+3)::before { background: var(--accent); color: var(--on-accent); }
-  li:nth-child(4n+4)::before { background: var(--secondary); color: var(--on-secondary); }
-  h3 { font-size: var(--text-lg); margin-bottom: 2px; }
+  li:nth-child(4n+2) .n { background: var(--step-2-bg); color: var(--step-2-fg); }
+  li:nth-child(4n+3) .n { background: var(--step-3-bg); color: var(--step-3-fg); }
+  li:nth-child(4n+4) .n { background: var(--step-4-bg); color: var(--step-4-fg); }
+  h3 { font-size: var(--text-lg); margin-bottom: 2px; padding-top: 9px; }
   p { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .horizontal { max-width: none; grid-template-columns: repeat(4, 1fr); gap: var(--space-5); }
+  .horizontal li { grid-template-columns: 1fr; gap: var(--space-3); }
+  .horizontal li:not(:last-child)::after { left: calc(var(--step-size) + 10px); right: -10px; top: calc(var(--step-size) / 2); bottom: auto; border-left: 0; border-top: 2px dashed var(--step-line); }
+  .horizontal h3 { padding-top: 0; }
+  @media (max-width: 760px) {
+    .horizontal { grid-template-columns: 1fr; }
+    .horizontal li { grid-template-columns: var(--step-size) 1fr; }
+    .horizontal li:not(:last-child)::after { left: calc(var(--step-size) / 2 - 1px); right: auto; top: calc(var(--step-size) + 6px); bottom: calc(-1 * var(--space-5) + 6px); border-top: 0; border-left: 2px dashed var(--step-line); }
+    .horizontal h3 { padding-top: 9px; }
+  }
 </style>

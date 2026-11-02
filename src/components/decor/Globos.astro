@@ -1,0 +1,29 @@
+---
+/* Tres globos con las formas redondas y la paleta del logo. Decorativo: aria-hidden. */
+interface Props { class?: string; size?: number }
+const { class: cls, size = 160, ...rest } = Astro.props;
+---
+<svg {...rest} class:list={['globos', cls]} width={size} height={size * 1.25} viewBox="0 0 160 200" fill="none" aria-hidden="true" focusable="false">
+  <g class="float float-2">
+    <path d="M52 112 C 50 140, 62 160, 60 196" stroke="var(--marino-500)" stroke-width="2.5" stroke-linecap="round" />
+    <ellipse cx="52" cy="70" rx="38" ry="44" fill="var(--sol-500)" />
+    <path d="M44 38 c -10 6 -16 16 -17 28" stroke="var(--sol-200)" stroke-width="6" stroke-linecap="round" />
+    <path d="M47 112 l 5 8 l 5 -8 z" fill="var(--sol-600)" />
+  </g>
+  <g class="float">
+    <path d="M112 118 C 118 144, 104 166, 110 196" stroke="var(--marino-500)" stroke-width="2.5" stroke-linecap="round" />
+    <ellipse cx="112" cy="76" rx="36" ry="42" fill="var(--frambuesa-500)" />
+    <path d="M104 46 c -9 6 -15 15 -16 26" stroke="var(--frambuesa-300)" stroke-width="6" stroke-linecap="round" />
+    <path d="M107 118 l 5 8 l 5 -8 z" fill="var(--frambuesa-600)" />
+  </g>
+  <g class="float float-3">
+    <path d="M84 140 C 86 160, 80 176, 84 196" stroke="var(--marino-500)" stroke-width="2.5" stroke-linecap="round" />
+    <ellipse cx="84" cy="112" rx="26" ry="30" fill="var(--salvia-500)" />
+    <path d="M78 90 c -6 4 -10 10 -11 18" stroke="var(--salvia-200)" stroke-width="5" stroke-linecap="round" />
+    <path d="M80 140 l 4 7 l 4 -7 z" fill="var(--salvia-700)" />
+  </g>
+</svg>
+<style>
+  .globos { display: block; overflow: visible; }
+  .globos g { transform-origin: 50% 100%; }
+</style>

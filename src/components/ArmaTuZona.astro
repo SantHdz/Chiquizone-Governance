@@ -1,16 +1,18 @@
 ---
 /*
- * "Arma tu zona": tres preguntas que eligen el paquete y, abajo, "¿Tu fecha está libre?".
+ * "Arma tu zona": hasta tres preguntas que eligen el paquete y, abajo, "¿Tu fecha está libre?".
+ * Solo pregunta lo que de verdad puede elegir el cliente entre los paquetes publicados (src/data/paquetes.ts):
+ * con un solo kit no hay preguntas y la sección ni se muestra (la decide index.astro).
  * Benchmark: features 1 (configurador en 3 pasos), 7 (fecha junto a la acción) y 8 (entrada por edad).
  */
 import Button from './Button.astro';
 import Icon from './Icon.astro';
-import { paquetes, familias } from '../data/paquetes';
-import { site, mxn } from '../data/site';
+import { publicados, opciones, familias } from '../data/paquetes';
+import { site, mxn, pct } from '../data/site';
 
-const data = paquetes.map(({ id, nombre, familia, splash, pro, precio, cuidadoras }) => ({ id, nombre, familia, splash, pro, precio, cuidadoras }));
+const data = publicados.map(({ id, nombre, familia, splash, pro, precio, cuidadoras }) => ({ id, nombre, familia, splash, pro, precio, cuidadoras }));
 
-const preguntas = [
+const todas = [
   {
     name: 'edad', title: '¿Cuántos años cumple?',
     opts: [
@@ -33,8 +35,32 @@ const preguntas = [
     ],
   },
 ] as const;
+
+/* Lo que no varía entre los paquetes publicados se manda fijo, para que la búsqueda del paquete siga igual. */
+const fijo = {
+  edad: publicados[0].familia,
+  agua: publicados[0].splash ? 'si' : 'no',
+  pro: publicados[0].pro ? 'si' : 'no',
+};
+const preguntas = todas.filter((q) => opciones[q.name]);
+const ocultas = todas.filter((q) => !opciones[q.name]).map((q) => q.name);
+
+/* Falla al compilar, no frente al cliente: cada respuesta posible tiene que dar un paquete publicado. */
+const combinaciones = preguntas.reduce<Record<string, string>[]>(
+  (acc, q) => acc.flatMap((c) => q.opts.map((o) => ({ ...c, [q.name]: o.value }))),
+  [{ ...fijo }],
+);
+const coincide = (p: (typeof publicados)[number], c: Record<string, string>) =>
+  p.familia === c.edad && (p.splash ? 'si' : 'no') === c.agua && (p.pro ? 'si' : 'no') === c.pro;
+const sinPaquete = combinaciones.filter((c) => !publicados.some((p) => coincide(p, c)));
+if (sinPaquete.length) {
+  throw new Error(`Arma tu zona: no hay paquete publicado para ${JSON.stringify(sinPaquete)}. Activa el que falta en src/data/paquetes.ts.`);
+}
+const primero = Object.fromEntries(preguntas.map((q) => [q.name, q.opts[0].value]));
+const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
 ---
-<form class="arma" data-paquetes={JSON.stringify(data)} data-wa={site.whatsapp}>
+<form class:list={['arma', { compacto: preguntas.length <= 1 }]} data-paquetes={JSON.stringify(data)} data-wa={site.whatsapp}>
+  {ocultas.map((n) => <input type="hidden" name={n} value={fijo[n]} />)}
   <ol class="qs">
     {preguntas.map((q, i) => (
       <li class={`q q-${i + 1}`}>
@@ -54,12 +80,15 @@ const preguntas = [
     ))}
   </ol>
 
-  <div class="result" aria-live="polite">
-    <p class="rk">Tu zona ideal</p>
-    <p class="name" data-out="nombre">Baby baby</p>
-    <p class="price"><span data-out="precio">{mxn(data[0].precio)}</span><small>5 horas de servicio, montaje incluido</small></p>
-    <a class="more" data-out="link" href="#baby-baby">Ver qué incluye <Icon name="siguiente" size={16} /></a>
+  <div class="result">
+    <div class="resumen" aria-live="polite">
+      <p class="rk">Tu zona ideal</p>
+      <p class="name" data-out="nombre">{inicial.nombre}</p>
+      <p class="price"><span data-out="precio">{mxn(inicial.precio)}</span><small>5 horas de servicio, montaje incluido</small></p>
+      <a class="more" data-out="link" href={`#${inicial.id}`}>Ver qué incluye <Icon name="siguiente" size={16} /></a>
+    </div>
 
+    <div class="reserva">
     <fieldset class="fecha">
       <legend>¿Tu fecha está libre?</legend>
       <label>Fecha de la fiesta<input type="date" name="fecha" required /></label>
@@ -72,7 +101,8 @@ const preguntas = [
       <label>Niños, más o menos<input type="number" name="ninos" min="1" max="80" inputmode="numeric" placeholder="Ej. 12" /></label>
     </fieldset>
     <Button type="submit" icon="whatsapp">Revisar mi fecha</Button>
-    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con {mxn(site.bookingDeposit)}.</p>
+    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con el {pct(site.bookingDepositPct)}.</p>
+    </div>
   </div>
 </form>
 
@@ -144,6 +174,7 @@ const preguntas = [
     background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
     padding: var(--space-6);
   }
+  .resumen, .reserva { display: grid; gap: var(--space-3); align-content: start; }
   .result.swap .name, .result.swap .price { animation: cz-swap var(--motion-state) var(--ease-standard); }
   @keyframes cz-swap { from { opacity: 0; transform: translateY(4px); } }
   .rk { font-size: var(--text-sm); font-weight: 700; color: var(--color-text-muted); }
@@ -161,6 +192,19 @@ const preguntas = [
   .fecha input:focus, .fecha select:focus { outline: none; border-color: var(--input-border-focus); box-shadow: 0 0 0 3px var(--marino-100); }
   .fecha input:user-invalid { border-color: var(--input-border-error); }
   .fine { font-size: var(--text-xs); color: var(--color-text-muted); }
+  /* Con una sola pregunta, el resultado va debajo de ella y la fecha en su propia tarjeta: así no queda un hueco a la izquierda. */
+  @media (min-width: 901px) {
+    .compacto { grid-template-areas: "q reserva" "resumen reserva"; align-items: start; row-gap: var(--space-5); }
+    .compacto .qs { grid-area: q; }
+    .compacto .result { display: contents; }
+    .compacto .resumen, .compacto .reserva {
+      background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+      padding: var(--space-6);
+    }
+    .compacto .resumen { grid-area: resumen; }
+    .compacto .reserva { grid-area: reserva; position: sticky; top: 88px; }
+    .compacto .fecha { border-top: 0; margin-top: 0; padding-top: 0; }
+  }
   @media (max-width: 900px) { .arma { grid-template-columns: 1fr; } .result { position: static; } }
   @media (max-width: 480px) { .opts { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .opt:hover { transform: none; } .result.swap .name, .result.swap .price { animation: none; } }

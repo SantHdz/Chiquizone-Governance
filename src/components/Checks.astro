@@ -1,16 +1,20 @@
 ---
 import Icon from './Icon.astro';
-interface Props { items: { title: string; text: string }[] }
-const { items } = Astro.props;
+interface Props { items: { title: string; text: string }[]; title?: string }
+const { items, title } = Astro.props;
 ---
-<div class="checks">
-  {items.map((i) => <div class="check"><Icon name="listo" size={24} /><div><h3>{i.title}</h3><p>{i.text}</p></div></div>)}
-</div>
+<aside class="checks">
+  {title && <h3 class="t">{title}</h3>}
+  <ul>
+    {items.map((i, n) => <li data-reveal style={`--i:${n}`}><Icon name="listo" size={22} /><div><b>{i.title}</b><p>{i.text}</p></div></li>)}
+  </ul>
+</aside>
 <style>
-  .checks { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6) var(--space-8); }
-  .check { display: grid; grid-template-columns: 24px 1fr; gap: var(--space-3); align-items: start; }
-  .check :global(.icon) { color: var(--link); margin-top: 1px; }
-  h3 { font-size: var(--text-lg); margin-bottom: 3px; }
+  .checks { background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-card); }
+  .t { font-size: var(--text-subtitle); margin-bottom: var(--space-4); }
+  ul { list-style: none; display: grid; gap: var(--space-4); }
+  li { display: grid; grid-template-columns: 22px 1fr; gap: var(--space-3); align-items: start; }
+  li :global(.icon) { color: var(--success); margin-top: 2px; }
+  b { display: block; font-weight: var(--weight-bold); }
   p { font-size: var(--text-sm); color: var(--color-text-muted); }
-  @media (max-width: 760px) { .checks { grid-template-columns: 1fr; } }
 </style>

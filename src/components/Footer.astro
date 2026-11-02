@@ -1,8 +1,27 @@
 ---
+import Button from './Button.astro';
+import Globos from './decor/Globos.astro';
+import Banderines from './decor/Banderines.astro';
 import { site, whatsappLink } from '../data/site';
+import { unico } from '../data/paquetes';
 const year = new Date().getFullYear();
 ---
+<section class="cierre" aria-labelledby="cierre-t">
+  <div class="wrap inner">
+    <Globos class="globos" size={110} />
+    <div>
+      <h2 id="cierre-t" data-reveal>¿Fiesta pronto? <em>Escríbenos</em> hoy.</h2>
+      <p data-reveal style="--i:1">Te confirmamos disponibilidad por WhatsApp el mismo día.</p>
+    </div>
+    <div class="acciones" data-reveal style="--i:2">
+      <Button href={whatsappLink()} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
+      <a class="tel" href={`tel:+52${site.phone}`}>{site.phoneDisplay}</a>
+    </div>
+  </div>
+</section>
+
 <footer>
+  <Banderines class="bander" height={40} />
   <div class="wrap grid">
     <div>
       <img class="logo" src="/brand/chiquizone-horizontal-blanco.png" alt="Chiquizone" width="168" height="50" />
@@ -15,17 +34,42 @@ const year = new Date().getFullYear();
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </p>
     </div>
+    <div>
+      <h3>Secciones</h3>
+      <p>
+        <a href="/#paquetes">{unico ? 'La zona' : 'Paquetes'}</a><br />
+        <a href="/#como-funciona">Cómo funciona</a><br />
+        <a href="/#preguntas">Preguntas frecuentes</a>
+      </p>
+    </div>
   </div>
   <div class="wrap legal">© {year} {site.name}</div>
 </footer>
 
 <style>
-  footer { background: var(--marino-700); color: var(--surface); padding: var(--space-8) 0 var(--space-6); }
-  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-7); }
+  .cierre { padding: var(--space-9) 0; background: var(--sol-100); }
+  :global([data-theme="marino"]) .cierre { background: var(--marino-900); }
+  .inner { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-7); align-items: center; }
+  .cierre h2 { font-size: clamp(30px, 4vw, 44px); }
+  .cierre p { color: var(--color-text-muted); margin-top: var(--space-2); }
+  .acciones { display: grid; gap: var(--space-3); justify-items: center; }
+  .tel { font-family: var(--font-headline); font-weight: var(--weight-display); font-size: var(--text-subtitle); text-decoration: none; color: var(--color-text); font-variant-numeric: tabular-nums; }
+  .tel:hover { color: var(--link); }
+
+  footer { background: var(--marino-700); color: var(--crema); padding: 0 0 var(--space-6); }
+  .bander { background: var(--sol-100); }
+  :global([data-theme="marino"]) .bander { background: var(--marino-900); }
+  .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--space-7); padding-top: var(--space-8); }
   .logo { height: 48px; width: auto; margin-bottom: var(--space-4); }
-  h3 { font-size: var(--text-md); margin-bottom: var(--space-2); }
-  p { font-size: var(--text-sm); opacity: .85; }
-  a { text-decoration: none; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); }
+  h3 { font-family: var(--font-body); font-size: var(--text-small); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; margin-bottom: var(--space-3); color: var(--sol-500); }
+  footer p { font-size: var(--text-small); opacity: .9; line-height: 1.9; }
+  footer a { text-decoration: none; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); }
+  footer a:hover { border-color: currentColor; }
   .legal { margin-top: var(--space-7); font-size: var(--text-xs); opacity: .6; }
-  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) {
+    .inner { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+    .globos { display: none; }
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) { .grid { grid-template-columns: 1fr; gap: var(--space-6); } }
 </style>
