@@ -6,7 +6,7 @@
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import { paquetes, familias } from '../data/paquetes';
-import { site, mxn } from '../data/site';
+import { site, mxn, pct } from '../data/site';
 
 const data = paquetes.map(({ id, nombre, familia, splash, pro, precio, cuidadoras }) => ({ id, nombre, familia, splash, pro, precio, cuidadoras }));
 
@@ -72,7 +72,7 @@ const preguntas = [
       <label>Niños, más o menos<input type="number" name="ninos" min="1" max="80" inputmode="numeric" placeholder="Ej. 12" /></label>
     </fieldset>
     <Button type="submit" icon="whatsapp">Revisar mi fecha</Button>
-    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con {mxn(site.bookingDeposit)}.</p>
+    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con el {pct(site.bookingDepositPct)}.</p>
   </div>
 </form>
 

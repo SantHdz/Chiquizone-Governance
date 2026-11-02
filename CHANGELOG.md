@@ -21,6 +21,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Tema oscuro (marino) automático según el sistema.
 - Inicio más calmado: sin "Desde $…", horas, espacio ni zonas; titular, dos botones, logo y foto.
 - Barra con el logo al centro y enlaces a los lados; menú móvil con ícono de tres rayas.
+- Anticipo confirmado: 50 % del total por transferencia, más $500 de garantía que se devuelve (issue #3). `site.ts` guarda el porcentaje y no un monto fijo.
 
 ## [0.1.0] · 2026-10-30
 

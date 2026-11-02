@@ -301,7 +301,7 @@ Se siguen como [issues del milestone Fase 2](https://github.com/SantHdz/Chiquizo
 - **Tipografía de títulos.** Probar una serif editorial suave contra Fredoka.
 - **Fotografía real.** Una toma cenital numerada por zona para "Qué incluye" y galerías de fiestas reales.
 - **Reseñas verificadas** con edad del niño, número de invitados y municipio, conectadas a las estrellas en Google.
-- **Datos del negocio.** Anticipo del 50 %, capacidad por zona y costo de traslado fuera de San Juan del Río.
+- **Datos del negocio.** Capacidad por zona y costo de traslado fuera de San Juan del Río. El anticipo (50 %) y la garantía ($500) ya están confirmados.
 - **Componentes restantes en Figma**: Etiqueta, Campo, Paso, Tarjeta y Loader.
 - **Publicación** en el dominio `chiquizone.com`.
 

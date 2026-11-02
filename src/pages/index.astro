@@ -13,7 +13,7 @@ import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import Chispas from '../components/decor/Chispas.astro';
 import { paquetes, familias } from '../data/paquetes';
-import { site, mxn, whatsappLink } from '../data/site';
+import { site, mxn, pct, whatsappLink } from '../data/site';
 
 const secos = paquetes.filter((p) => !p.splash);
 const splash = paquetes.filter((p) => p.splash);
@@ -29,7 +29,7 @@ const requisitos = [
 const pasos = [
   { title: 'Nos escribes', text: 'Fecha, hora de inicio, dirección y edades de los niños.' },
   { title: 'Te cotizamos', text: 'Confirmamos disponibilidad y el paquete ideal para tu fiesta.' },
-  { title: `Apartas con ${mxn(site.bookingDeposit)}`, text: 'Por transferencia. Se descuenta del total.' },
+  { title: `Apartas con el ${pct(site.bookingDepositPct)}`, text: 'Por transferencia. Se descuenta del total.' },
   { title: 'Firmamos contrato', text: `Con copia de INE y depósito de ${mxn(site.guaranteeDeposit)} en garantía.` },
   { title: 'Montamos y recogemos', text: 'Llegamos una hora antes. El depósito se devuelve al terminar.' },
 ];
@@ -44,7 +44,7 @@ const incluye = [
 ];
 
 const semanas = [
-  { title: '4 semanas antes', text: `Define fecha, hora e invitados, y aparta tu zona con ${mxn(site.bookingDeposit)}.` },
+  { title: '4 semanas antes', text: `Define fecha, hora e invitados, y aparta tu zona con el ${pct(site.bookingDepositPct)}.` },
   { title: '3 semanas antes', text: 'Manda las invitaciones y pide que confirmen cuántos niños van.' },
   { title: '1 semana antes', text: 'Revisa el espacio: sombra, piso plano y un contacto a menos de diez metros.' },
   { title: 'El día de la fiesta', text: 'Llegamos una hora antes a montar. Tú recibes a tus invitados.' },
@@ -54,7 +54,7 @@ const faq = [
   { q: '¿En qué zonas dan servicio?', a: `En ${site.areas.join(' y ')}. El traslado dentro de San Juan del Río está incluido; Tequisquiapan y otros municipios se cotizan.` },
   { q: '¿Cuánto espacio necesito?', a: `Un área de ${site.spaceNeeded}, techada o con sombra, con piso plano y un contacto eléctrico a menos de diez metros.` },
   { q: '¿Cuánto dura el servicio?', a: `${site.serviceHours} horas. Llegamos una hora antes a montar y recogemos todo al terminar.` },
-  { q: '¿Cómo aparto mi fecha?', a: `Con un anticipo de ${mxn(site.bookingDeposit)} por transferencia, que se descuenta del total. Firmamos contrato con copia de INE y un depósito de ${mxn(site.guaranteeDeposit)} en garantía, que se devuelve al terminar.` },
+  { q: '¿Cómo aparto mi fecha?', a: `Con un anticipo del ${pct(site.bookingDepositPct)} por transferencia, que se descuenta del total. Firmamos contrato con copia de INE y un depósito de ${mxn(site.guaranteeDeposit)} en garantía, que se devuelve al terminar.` },
   { q: '¿Qué hacen las cuidadoras de los paquetes Pro?', a: 'Se quedan toda la fiesta en la zona: cuidan y organizan el juego. Pro Baby lleva dos cuidadoras y Terreneitor Pro, tres. Nunca sacan a un niño del área ni dan alimentos.' },
   { q: '¿El material está limpio?', a: 'Sí. Sanitizamos pieza por pieza antes de cada fiesta.' },
   { q: '¿Y si hay niños de distintas edades?', a: 'Escríbenos por WhatsApp con las edades y te armamos la combinación que mejor funcione.' },
@@ -152,7 +152,7 @@ const serviceLd = {
       <QuoteForm />
       <div class="directo" data-reveal style="--i:2">
         <h3>O escríbenos directo</h3>
-        <p>Respondemos el mismo día. Si tu fecha está libre, la apartas con {mxn(site.bookingDeposit)}.</p>
+        <p>Respondemos el mismo día. Si tu fecha está libre, la apartas con el {pct(site.bookingDepositPct)}.</p>
         <Button href={whatsappLink()} variant="secondary" icon="whatsapp" external>WhatsApp {site.phoneDisplay}</Button>
         <Button href={`mailto:${site.email}`} variant="text" icon="correo">{site.email}</Button>
       </div>
