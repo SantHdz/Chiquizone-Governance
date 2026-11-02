@@ -1,0 +1,384 @@
+{
+ "capa": "componentes",
+ "descripcion": "Decisiones de cada componente. Solo apuntan a semánticos (o a primitivos de medida). Los componentes del sitio usan SOLO esta capa.",
+ "estado": "Botón aprobado por Sant (30 oct 2026): 4 variantes, 3 tamaños, 6 estados, ícono opcional. Resto: propuesta revisada con Impeccable.",
+ "grupos": {
+  "button": [
+   {
+    "name": "button-radius",
+    "value": "{radius-pill}",
+    "usage": "Forma burbuja."
+   },
+   {
+    "name": "button-font",
+    "value": "{font-display}",
+    "usage": ""
+   },
+   {
+    "name": "button-weight",
+    "value": "{weight-display}",
+    "usage": ""
+   },
+   {
+    "name": "button-height-sm",
+    "value": "{size-40}",
+    "usage": ""
+   },
+   {
+    "name": "button-height-md",
+    "value": "{size-48}",
+    "usage": ""
+   },
+   {
+    "name": "button-height-lg",
+    "value": "{size-56}",
+    "usage": ""
+   },
+   {
+    "name": "button-pad-x-sm",
+    "value": "{space-4}",
+    "usage": ""
+   },
+   {
+    "name": "button-pad-x-md",
+    "value": "{space-5}",
+    "usage": ""
+   },
+   {
+    "name": "button-pad-x-lg",
+    "value": "{space-6}",
+    "usage": ""
+   },
+   {
+    "name": "button-text-sm",
+    "value": "{fs-15}",
+    "usage": ""
+   },
+   {
+    "name": "button-text-md",
+    "value": "{fs-17}",
+    "usage": ""
+   },
+   {
+    "name": "button-text-lg",
+    "value": "{fs-20}",
+    "usage": ""
+   },
+   {
+    "name": "button-gap",
+    "value": "{space-2}",
+    "usage": "Entre ícono y texto."
+   },
+   {
+    "name": "button-shadow",
+    "value": "{shadow-pop}",
+    "usage": ""
+   },
+   {
+    "name": "button-primary-bg",
+    "value": "{accent}",
+    "usage": ""
+   },
+   {
+    "name": "button-primary-bg-hover",
+    "value": "{accent-hover}",
+    "usage": ""
+   },
+   {
+    "name": "button-primary-fg",
+    "value": "{on-accent}",
+    "usage": ""
+   },
+   {
+    "name": "button-secondary-bg",
+    "value": "{secondary}",
+    "usage": ""
+   },
+   {
+    "name": "button-secondary-fg",
+    "value": "{on-secondary}",
+    "usage": ""
+   },
+   {
+    "name": "button-outline-bg",
+    "value": "{surface-raised}",
+    "usage": ""
+   },
+   {
+    "name": "button-outline-fg",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "button-outline-border",
+    "value": "{line-strong}",
+    "usage": ""
+   },
+   {
+    "name": "button-outline-border-hover",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "button-focus",
+    "value": "{focus-ring}",
+    "usage": ""
+   },
+   {
+    "name": "button-disabled-opacity",
+    "value": ".45",
+    "usage": ""
+   },
+   {
+    "name": "button-variant-text-fg",
+    "value": "{link}",
+    "usage": ""
+   },
+   {
+    "name": "button-press-duration",
+    "value": "{motion-feedback}",
+    "usage": ""
+   },
+   {
+    "name": "button-hover-duration",
+    "value": "{motion-hover}",
+    "usage": ""
+   },
+   {
+    "name": "button-ease",
+    "value": "{ease-standard}",
+    "usage": ""
+   }
+  ],
+  "badge": [
+   {
+    "name": "badge-radius",
+    "value": "{radius-pill}",
+    "usage": ""
+   },
+   {
+    "name": "badge-height",
+    "value": "{size-24}",
+    "usage": ""
+   },
+   {
+    "name": "badge-pad-x",
+    "value": "{space-3}",
+    "usage": ""
+   },
+   {
+    "name": "badge-text",
+    "value": "{fs-12}",
+    "usage": ""
+   },
+   {
+    "name": "badge-weight",
+    "value": "{weight-bold}",
+    "usage": ""
+   },
+   {
+    "name": "badge-promo-bg",
+    "value": "{highlight}",
+    "usage": ""
+   },
+   {
+    "name": "badge-promo-fg",
+    "value": "{on-highlight}",
+    "usage": ""
+   },
+   {
+    "name": "badge-brand-bg",
+    "value": "{accent}",
+    "usage": ""
+   },
+   {
+    "name": "badge-brand-fg",
+    "value": "{on-accent}",
+    "usage": ""
+   }
+  ],
+  "card": [
+   {
+    "name": "card-bg",
+    "value": "{surface-raised}",
+    "usage": ""
+   },
+   {
+    "name": "card-border",
+    "value": "{line}",
+    "usage": ""
+   },
+   {
+    "name": "card-radius",
+    "value": "{radius-lg}",
+    "usage": ""
+   },
+   {
+    "name": "card-pad",
+    "value": "{space-5}",
+    "usage": ""
+   },
+   {
+    "name": "card-shadow",
+    "value": "{shadow-card}",
+    "usage": ""
+   },
+   {
+    "name": "card-gap",
+    "value": "{space-5}",
+    "usage": "Entre tarjetas."
+   },
+   {
+    "name": "card-shadow-hover",
+    "value": "{shadow-raised}",
+    "usage": ""
+   },
+   {
+    "name": "card-hover-duration",
+    "value": "{motion-state}",
+    "usage": ""
+   }
+  ],
+  "input": [
+   {
+    "name": "input-bg",
+    "value": "{surface-raised}",
+    "usage": ""
+   },
+   {
+    "name": "input-fg",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "input-placeholder",
+    "value": "{ink-muted}",
+    "usage": ""
+   },
+   {
+    "name": "input-border",
+    "value": "{line-strong}",
+    "usage": ""
+   },
+   {
+    "name": "input-border-focus",
+    "value": "{focus-ring}",
+    "usage": ""
+   },
+   {
+    "name": "input-border-error",
+    "value": "{danger}",
+    "usage": ""
+   },
+   {
+    "name": "input-radius",
+    "value": "{radius-sm}",
+    "usage": ""
+   },
+   {
+    "name": "input-height",
+    "value": "{size-48}",
+    "usage": ""
+   },
+   {
+    "name": "input-pad-x",
+    "value": "{space-4}",
+    "usage": ""
+   },
+   {
+    "name": "input-text",
+    "value": "{fs-16}",
+    "usage": "16px evita el zoom en iPhone."
+   },
+   {
+    "name": "input-label",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "input-hint",
+    "value": "{ink-muted}",
+    "usage": ""
+   },
+   {
+    "name": "input-disabled-bg",
+    "value": "{surface-alt}",
+    "usage": ""
+   }
+  ],
+  "step": [
+   {
+    "name": "step-size",
+    "value": "{size-44}",
+    "usage": ""
+   },
+   {
+    "name": "step-1-bg",
+    "value": "{highlight}",
+    "usage": ""
+   },
+   {
+    "name": "step-1-fg",
+    "value": "{on-highlight}",
+    "usage": ""
+   },
+   {
+    "name": "step-2-bg",
+    "value": "{family-baby}",
+    "usage": ""
+   },
+   {
+    "name": "step-2-fg",
+    "value": "{on-highlight}",
+    "usage": ""
+   },
+   {
+    "name": "step-3-bg",
+    "value": "{accent}",
+    "usage": ""
+   },
+   {
+    "name": "step-3-fg",
+    "value": "{on-accent}",
+    "usage": ""
+   },
+   {
+    "name": "step-4-bg",
+    "value": "{secondary}",
+    "usage": ""
+   },
+   {
+    "name": "step-4-fg",
+    "value": "{on-secondary}",
+    "usage": ""
+   },
+   {
+    "name": "step-line",
+    "value": "{line-strong}",
+    "usage": ""
+   }
+  ],
+  "loader": [
+   {
+    "name": "loader-pin",
+    "value": "{accent}",
+    "usage": "Pin que cae."
+   },
+   {
+    "name": "loader-shadow",
+    "value": "{line-strong}",
+    "usage": "Sombra del pin."
+   },
+   {
+    "name": "loader-duration",
+    "value": "{motion-focal}",
+    "usage": ""
+   },
+   {
+    "name": "loader-ease",
+    "value": "{ease-playful}",
+    "usage": ""
+   }
+  ]
+ }
+}

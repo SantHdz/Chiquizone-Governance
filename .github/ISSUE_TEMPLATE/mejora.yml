@@ -1,0 +1,22 @@
+name: Mejora o feature
+description: Algo nuevo para el sitio o el design system
+labels: [mejora]
+body:
+  - type: textarea
+    id: que
+    attributes:
+      label: Qué queremos
+    validations:
+      required: true
+  - type: dropdown
+    id: origen
+    attributes:
+      label: Origen
+      options: [Benchmark, Design system, Figma, Petición del negocio, Datos o analítica]
+    validations:
+      required: true
+  - type: textarea
+    id: listo
+    attributes:
+      label: Cuándo está listo
+      description: Cómo sabremos que quedó.

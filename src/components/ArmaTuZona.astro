@@ -1,0 +1,167 @@
+---
+/*
+ * "Arma tu zona": tres preguntas que eligen el paquete y, abajo, "¿Tu fecha está libre?".
+ * Benchmark: features 1 (configurador en 3 pasos), 7 (fecha junto a la acción) y 8 (entrada por edad).
+ */
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { paquetes, familias } from '../data/paquetes';
+import { site, mxn } from '../data/site';
+
+const data = paquetes.map(({ id, nombre, familia, splash, pro, precio, cuidadoras }) => ({ id, nombre, familia, splash, pro, precio, cuidadoras }));
+
+const preguntas = [
+  {
+    name: 'edad', title: '¿Cuántos años cumple?',
+    opts: [
+      { value: 'baby', label: familias.baby.edades, hint: 'Gatea o da sus primeros pasos', icon: 'bebe' },
+      { value: 'terreneitor', label: familias.terreneitor.edades, hint: 'Corre, brinca y quiere retos', icon: 'ninos' },
+    ],
+  },
+  {
+    name: 'agua', title: '¿Juego con agua?',
+    opts: [
+      { value: 'no', label: 'Sin agua', hint: 'Para cualquier clima', icon: 'sol' },
+      { value: 'si', label: 'Con agua', hint: 'Splash, para días de calor', icon: 'agua' },
+    ],
+  },
+  {
+    name: 'pro', title: '¿Quién cuida la zona?',
+    opts: [
+      { value: 'no', label: 'Nosotros los papás', hint: 'Montamos y recogemos', icon: 'casa' },
+      { value: 'si', label: 'Cuidadoras Chiquizone', hint: 'Se quedan toda la fiesta', icon: 'cuidado' },
+    ],
+  },
+] as const;
+---
+<form class="arma" data-paquetes={JSON.stringify(data)} data-wa={site.whatsapp}>
+  <ol class="qs">
+    {preguntas.map((q, i) => (
+      <li class={`q q-${i + 1}`}>
+        <fieldset>
+          <legend><span class="n" aria-hidden="true">{i + 1}</span>{q.title}</legend>
+          <div class="opts">
+            {q.opts.map((o, j) => (
+              <label class="opt">
+                <input type="radio" name={q.name} value={o.value} checked={j === 0} />
+                <Icon name={o.icon} size={22} />
+                <span><b>{o.label}</b><small>{o.hint}</small></span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </li>
+    ))}
+  </ol>
+
+  <div class="result" aria-live="polite">
+    <p class="rk">Tu zona ideal</p>
+    <p class="name" data-out="nombre">Baby baby</p>
+    <p class="price"><span data-out="precio">{mxn(data[0].precio)}</span><small>5 horas de servicio, montaje incluido</small></p>
+    <a class="more" data-out="link" href="#baby-baby">Ver qué incluye <Icon name="siguiente" size={16} /></a>
+
+    <fieldset class="fecha">
+      <legend>¿Tu fecha está libre?</legend>
+      <label>Fecha de la fiesta<input type="date" name="fecha" required /></label>
+      <label>Municipio
+        <select name="municipio">
+          {site.areas.map((a) => <option>{a}</option>)}
+          <option value="otro">Otro (lo cotizamos)</option>
+        </select>
+      </label>
+      <label>Niños, más o menos<input type="number" name="ninos" min="1" max="80" inputmode="numeric" placeholder="Ej. 12" /></label>
+    </fieldset>
+    <Button type="submit" icon="whatsapp">Revisar mi fecha</Button>
+    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con {mxn(site.bookingDeposit)}.</p>
+  </div>
+</form>
+
+<script>
+  const mxn = (n: number) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n).replace('MX', '');
+  document.querySelectorAll<HTMLFormElement>('form.arma').forEach((form) => {
+    const paquetes = JSON.parse(form.dataset.paquetes || '[]');
+    const out = (k: string) => form.querySelector<HTMLElement>(`[data-out="${k}"]`)!;
+    const pick = () => {
+      const d = new FormData(form);
+      return paquetes.find((p: any) => p.familia === d.get('edad') && p.splash === (d.get('agua') === 'si') && p.pro === (d.get('pro') === 'si'));
+    };
+    const render = () => {
+      const p = pick(); if (!p) return;
+      out('nombre').textContent = p.nombre;
+      out('precio').textContent = mxn(p.precio);
+      (out('link') as HTMLAnchorElement).href = `#${p.id}`;
+      const r = form.querySelector('.result')!;
+      r.classList.remove('swap'); void (r as HTMLElement).offsetWidth; r.classList.add('swap');
+    };
+    form.addEventListener('change', (e) => { if ((e.target as HTMLInputElement).type === 'radio') render(); });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const p = pick(); const d = new FormData(form);
+      const fecha = String(d.get('fecha') || '');
+      const fechaTxt = new Date(fecha + 'T12:00').toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+      const muni = d.get('municipio') === 'otro' ? 'otro municipio (por confirmar)' : String(d.get('municipio'));
+      const lines = [
+        `Hola Chiquizone, ¿tienen libre el ${fechaTxt}?`,
+        `Paquete: ${p?.nombre} (${mxn(p?.precio)})`,
+        `Municipio: ${muni}`,
+        d.get('ninos') ? `Niños: ${d.get('ninos')} aprox.` : '',
+      ].filter(Boolean);
+      const a = document.createElement('a');
+      a.href = `https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`;
+      a.target = '_blank'; a.rel = 'noopener'; a.click();
+      const btn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      btn?.setAttribute('aria-busy', 'true');
+      setTimeout(() => btn?.removeAttribute('aria-busy'), 1200);
+    });
+  });
+</script>
+
+<style>
+  .arma { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-6); align-items: start; }
+  .qs { list-style: none; display: grid; gap: var(--space-5); }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-lg); color: var(--color-text); margin-bottom: var(--space-3); }
+  .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; background: var(--step-1-bg); color: var(--step-1-fg); }
+  .q-2 .n { background: var(--step-2-bg); color: var(--step-2-fg); }
+  .q-3 .n { background: var(--step-3-bg); color: var(--step-3-fg); }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .opt {
+    position: relative; display: grid; grid-template-columns: 22px 1fr; gap: var(--space-3); align-items: start; cursor: pointer;
+    background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4);
+    transition: border-color var(--motion-hover) var(--ease-standard), box-shadow var(--motion-hover) var(--ease-standard), transform var(--motion-hover) var(--ease-standard);
+  }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .opt :global(.icon) { color: var(--color-text-muted); margin-top: 1px; }
+  .opt b { display: block; font-weight: 800; color: var(--color-text); line-height: 1.3; }
+  .opt small { display: block; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px; }
+  .opt:hover { border-color: var(--color-border-strong); transform: translateY(-1px); }
+  .opt:has(input:checked) { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--frambuesa-50), var(--shadow-pop); }
+  .opt:has(input:checked) :global(.icon) { color: var(--color-accent); }
+  .opt:has(input:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+
+  .result {
+    position: sticky; top: 88px; display: grid; gap: var(--space-3); align-content: start;
+    background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+    padding: var(--space-6);
+  }
+  .result.swap .name, .result.swap .price { animation: cz-swap var(--motion-state) var(--ease-standard); }
+  @keyframes cz-swap { from { opacity: 0; transform: translateY(4px); } }
+  .rk { font-size: var(--text-sm); font-weight: 700; color: var(--color-text-muted); }
+  .name { font-family: var(--font-display); font-weight: var(--weight-display); font-size: 30px; line-height: 1.1; color: var(--color-text); }
+  .price span { font-family: var(--font-display); font-weight: var(--weight-display); font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--color-text); }
+  .price small { display: block; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 6px; }
+  .more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--link); text-underline-offset: 4px; }
+  .fecha { display: grid; gap: var(--space-3); border-top: 1.5px dashed var(--color-border); padding-top: var(--space-4); margin-top: var(--space-2); }
+  .fecha legend { font-size: var(--text-md, 17px); margin-bottom: 0; padding-top: var(--space-4); float: left; width: 100%; }
+  .fecha label { display: grid; gap: 6px; font-size: var(--text-sm); font-weight: 700; color: var(--input-label); }
+  .fecha input, .fecha select {
+    font: inherit; font-weight: 400; font-size: var(--input-text); color: var(--input-fg); background: var(--input-bg);
+    border: 1.5px solid var(--input-border); border-radius: var(--input-radius); padding: 0 var(--input-pad-x); height: var(--input-height); width: 100%;
+  }
+  .fecha input:focus, .fecha select:focus { outline: none; border-color: var(--input-border-focus); box-shadow: 0 0 0 3px var(--marino-100); }
+  .fecha input:user-invalid { border-color: var(--input-border-error); }
+  .fine { font-size: var(--text-xs); color: var(--color-text-muted); }
+  @media (max-width: 900px) { .arma { grid-template-columns: 1fr; } .result { position: static; } }
+  @media (max-width: 480px) { .opts { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .opt:hover { transform: none; } .result.swap .name, .result.swap .price { animation: none; } }
+</style>

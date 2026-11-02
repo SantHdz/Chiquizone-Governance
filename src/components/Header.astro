@@ -1,0 +1,40 @@
+---
+import Button from './Button.astro';
+import { whatsappLink } from '../data/site';
+const links = [
+  { href: '/#arma', label: 'Arma tu zona' },
+  { href: '/#paquetes', label: 'Paquetes' },
+  { href: '/#splash', label: 'Splash' },
+  { href: '/#preguntas', label: 'Preguntas' },
+  { href: '/#cotiza', label: 'Cotiza' },
+];
+---
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="/"><img src="/brand/chiquizone-horizontal.png" alt="Chiquizone, inicio" width="168" height="50" /></a>
+    <nav aria-label="Principal">
+      <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    </nav>
+    <Button href={whatsappLink()} size="sm" icon="whatsapp" external>WhatsApp</Button>
+  </div>
+</header>
+
+<style>
+  .top {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .bar { display: flex; align-items: center; gap: var(--space-6); height: 72px; }
+  .logo { display: block; flex: none; }
+  .logo img { height: 44px; width: auto; }
+  nav { margin-left: auto; }
+  ul { display: flex; gap: var(--space-5); list-style: none; }
+  nav a { text-decoration: none; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-muted); }
+  nav a:hover { color: var(--color-text); }
+  @media (max-width: 760px) {
+    nav { display: none; }
+    .bar :global(.btn) { margin-left: auto; }
+  }
+</style>

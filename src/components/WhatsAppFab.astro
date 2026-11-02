@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import { whatsappLink } from '../data/site';
+---
+<a class="fab" href={whatsappLink()} target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <Icon name="whatsapp" size={28} />
+</a>
+<style>
+  .fab {
+    position: fixed; right: 18px; bottom: 18px; z-index: 20;
+    width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--color-accent); color: var(--color-on-accent);
+    box-shadow: var(--shadow-raised);
+    transition: transform var(--motion-hover) var(--ease-standard), background-color var(--motion-hover) var(--ease-standard);
+  }
+  .fab:hover { transform: translateY(-2px); background: var(--accent-hover); }
+  .fab:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .fab:hover { transform: none; } }
+</style>

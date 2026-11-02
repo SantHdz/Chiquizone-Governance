@@ -1,0 +1,22 @@
+name: Decisión de diseño
+description: Una decisión de marca, tokens o componentes que hay que tomar y registrar
+labels: [decisión]
+body:
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Qué problema hay y qué lo hace necesario ahora.
+    validations:
+      required: true
+  - type: textarea
+    id: opciones
+    attributes:
+      label: Opciones
+      description: Dos a cuatro, con lo que pasa si se elige cada una.
+    validations:
+      required: true
+  - type: input
+    id: recomendacion
+    attributes:
+      label: Recomendación

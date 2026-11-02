@@ -1,0 +1,123 @@
+{
+ "capa": "compat",
+ "descripcion": "Alias temporales que aún usan componentes del sitio antiguos. Se borran conforme cada componente pasa a tokens de componente.",
+ "grupos": {
+  "web": [
+   {
+    "name": "color-bg",
+    "value": "{surface}",
+    "usage": ""
+   },
+   {
+    "name": "color-surface",
+    "value": "{surface-raised}",
+    "usage": ""
+   },
+   {
+    "name": "color-surface-alt",
+    "value": "{surface-alt}",
+    "usage": ""
+   },
+   {
+    "name": "color-text",
+    "value": "{ink}",
+    "usage": ""
+   },
+   {
+    "name": "color-text-muted",
+    "value": "{ink-muted}",
+    "usage": ""
+   },
+   {
+    "name": "color-border",
+    "value": "{line}",
+    "usage": ""
+   },
+   {
+    "name": "color-border-strong",
+    "value": "{line-strong}",
+    "usage": ""
+   },
+   {
+    "name": "color-accent",
+    "value": "{accent}",
+    "usage": ""
+   },
+   {
+    "name": "color-accent-hover",
+    "value": "{accent-hover}",
+    "usage": ""
+   },
+   {
+    "name": "color-on-accent",
+    "value": "{on-accent}",
+    "usage": ""
+   },
+   {
+    "name": "color-focus",
+    "value": "{focus-ring}",
+    "usage": ""
+   },
+   {
+    "name": "text-xs",
+    "value": "{fs-13}",
+    "usage": ""
+   },
+   {
+    "name": "text-sm",
+    "value": "{fs-14}",
+    "usage": ""
+   },
+   {
+    "name": "text-md",
+    "value": "{fs-16}",
+    "usage": ""
+   },
+   {
+    "name": "text-lg",
+    "value": "{fs-18}",
+    "usage": ""
+   },
+   {
+    "name": "text-xl",
+    "value": "{fs-28}",
+    "usage": ""
+   },
+   {
+    "name": "text-2xl",
+    "value": "clamp(30px, 4.5vw, 40px)",
+    "usage": ""
+   },
+   {
+    "name": "text-3xl",
+    "value": "clamp(36px, 7vw, 56px)",
+    "usage": ""
+   },
+   {
+    "name": "leading-tight",
+    "value": "1.1",
+    "usage": ""
+   },
+   {
+    "name": "leading-body",
+    "value": "1.6",
+    "usage": ""
+   },
+   {
+    "name": "tracking-label",
+    "value": ".08em",
+    "usage": ""
+   },
+   {
+    "name": "radius-arch",
+    "value": "280px 280px 44px 44px",
+    "usage": ""
+   },
+   {
+    "name": "duration",
+    "value": "{dur-entrada}",
+    "usage": ""
+   }
+  ]
+ }
+}

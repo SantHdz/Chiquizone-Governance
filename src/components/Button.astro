@@ -1,0 +1,71 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'text';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: string;
+  iconRight?: string;
+  external?: boolean;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  loading?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', size = 'md', icon, iconRight, external = false, type = 'button', disabled = false, loading = false, class: extra } = Astro.props;
+const cls = ['btn', `btn--${variant}`, `btn--${size}`, extra];
+const iconSize = size === 'lg' ? 22 : size === 'sm' ? 18 : 20;
+---
+{href ? (
+  <a class:list={cls} href={href} aria-disabled={disabled ? 'true' : undefined} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+    {icon && <Icon name={icon} size={iconSize} />}<span><slot /></span>{iconRight && <Icon name={iconRight} size={iconSize} />}
+  </a>
+) : (
+  <button class:list={cls} type={type} disabled={disabled} aria-busy={loading ? 'true' : undefined}>
+    {icon && <Icon name={icon} size={iconSize} />}<span><slot /></span>{iconRight && <Icon name={iconRight} size={iconSize} />}
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+)}
+
+<style>
+  .btn {
+    position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--button-gap);
+    height: var(--button-height-md); padding: 0 var(--button-pad-x-md);
+    font-family: var(--button-font); font-weight: var(--button-weight); font-size: var(--button-text-md); line-height: 1;
+    border-radius: var(--button-radius); border: 1.5px solid transparent; text-decoration: none; white-space: nowrap; cursor: pointer;
+    box-shadow: var(--button-shadow);
+    transition: background-color var(--button-hover-duration) var(--button-ease), border-color var(--button-hover-duration) var(--button-ease),
+      transform var(--button-hover-duration) var(--button-ease), box-shadow var(--button-hover-duration) var(--button-ease);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(1px) scale(.98); box-shadow: none; transition-duration: var(--button-press-duration); }
+  .btn:focus-visible { outline: 2px solid var(--button-focus); outline-offset: 3px; }
+  .btn--sm { height: var(--button-height-sm); padding-inline: var(--button-pad-x-sm); font-size: var(--button-text-sm); }
+  .btn--lg { height: var(--button-height-lg); padding-inline: var(--button-pad-x-lg); font-size: var(--button-text-lg); }
+  .btn--primary { background: var(--button-primary-bg); color: var(--button-primary-fg); }
+  .btn--primary:hover { background: var(--button-primary-bg-hover); }
+  .btn--secondary { background: var(--button-secondary-bg); color: var(--button-secondary-fg); }
+  .btn--outline { background: var(--button-outline-bg); color: var(--button-outline-fg); border-color: var(--button-outline-border); box-shadow: none; }
+  .btn--outline:hover { border-color: var(--button-outline-border-hover); }
+  .btn--text {
+    background: transparent; color: var(--button-variant-text-fg); box-shadow: none; padding-inline: 4px; height: auto; min-height: 44px;
+    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px;
+  }
+  .btn--text:hover { transform: none; text-decoration-color: var(--highlight); }
+  .btn:disabled, .btn[aria-disabled='true'] { opacity: var(--button-disabled-opacity); box-shadow: none; transform: none; cursor: not-allowed; }
+  /* Cargando: se oculta el contenido sin cambiar el ancho y suben tres burbujas */
+  .btn[aria-busy='true'] { cursor: progress; }
+  .btn[aria-busy='true'] > :not(.dots) { visibility: hidden; }
+  .dots { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; gap: 5px; }
+  .btn[aria-busy='true'] .dots { display: flex; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: bubble 900ms var(--ease-loop) infinite; }
+  .dots i:nth-child(2) { animation-delay: 120ms; }
+  .dots i:nth-child(3) { animation-delay: 240ms; }
+  @keyframes bubble { 0%, 100% { transform: translateY(2px); opacity: .55; } 40% { transform: translateY(-4px); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .btn:hover, .btn:active { transform: none; }
+    .dots i { animation: fade 1400ms ease-in-out infinite; }
+    @keyframes fade { 50% { opacity: .35; } }
+  }
+</style>

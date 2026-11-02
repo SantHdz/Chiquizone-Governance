@@ -1,0 +1,31 @@
+---
+import { site, whatsappLink } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer>
+  <div class="wrap grid">
+    <div>
+      <img class="logo" src="/brand/chiquizone-horizontal-blanco.png" alt="Chiquizone" width="168" height="50" />
+      <p>Zonas de juego para fiestas en {site.areas.join(' y ')}, {site.region}.</p>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <p>
+        <a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp {site.phoneDisplay}</a><br />
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+    </div>
+  </div>
+  <div class="wrap legal">© {year} {site.name}</div>
+</footer>
+
+<style>
+  footer { background: var(--marino-700); color: var(--surface); padding: var(--space-8) 0 var(--space-6); }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-7); }
+  .logo { height: 48px; width: auto; margin-bottom: var(--space-4); }
+  h3 { font-size: var(--text-md); margin-bottom: var(--space-2); }
+  p { font-size: var(--text-sm); opacity: .85; }
+  a { text-decoration: none; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); }
+  .legal { margin-top: var(--space-7); font-size: var(--text-xs); opacity: .6; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+</style>

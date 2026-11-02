@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+interface Props { items: { title: string; text: string }[] }
+const { items } = Astro.props;
+---
+<div class="checks">
+  {items.map((i) => <div class="check"><Icon name="listo" size={24} /><div><h3>{i.title}</h3><p>{i.text}</p></div></div>)}
+</div>
+<style>
+  .checks { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6) var(--space-8); }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: var(--space-3); align-items: start; }
+  .check :global(.icon) { color: var(--link); margin-top: 1px; }
+  h3 { font-size: var(--text-lg); margin-bottom: 3px; }
+  p { font-size: var(--text-sm); color: var(--color-text-muted); }
+  @media (max-width: 760px) { .checks { grid-template-columns: 1fr; } }
+</style>

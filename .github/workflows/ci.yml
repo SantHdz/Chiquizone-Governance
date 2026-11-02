@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: Tokens y build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Tokens válidos y al día (capas, contraste AA y CSS generado)
+        run: |
+          npm run tokens
+          git diff --exit-code -- src/styles/tokens.css tokens/build || (echo "::error::tokens.css no está al día: corre npm run tokens y sube el resultado" && exit 1)
+      - name: Build del sitio
+        run: npx astro build
