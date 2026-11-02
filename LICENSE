@@ -1,0 +1,19 @@
+Todos los derechos reservados / All rights reserved
+
+Copyright (c) 2026 Santiago Arturo Hernández Jiménez (código y documentación).
+La marca Chiquizone, su nombre, logotipos, ilustraciones e imágenes pertenecen a Chiquizone.
+
+Este repositorio es público únicamente para que pueda consultarse como portafolio.
+No se concede ninguna licencia: queda prohibido copiar, modificar, distribuir,
+sublicenciar o usar con fines comerciales cualquier parte de su contenido sin
+permiso previo y por escrito de los titulares.
+
+This repository is public for portfolio viewing only. No license is granted:
+copying, modifying, distributing, sublicensing or commercial use of any part of
+its contents requires prior written permission from the copyright holders.
+
+Excepciones / Exceptions:
+- Los íconos en src/icons/ provienen de Phosphor Icons y conservan su licencia
+  MIT (ver src/icons/LICENSE-phosphor.txt).
+- Las fuentes Fredoka y Nunito se cargan desde Google Fonts bajo la SIL Open
+  Font License.

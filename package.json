@@ -7,9 +7,13 @@
     "tokens": "node scripts/build-tokens.mjs",
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check": "npm run tokens && git diff --exit-code -- src/styles/tokens.css tokens/build && astro build"
   },
   "dependencies": {
     "astro": "5.18.2"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
