@@ -389,7 +389,12 @@
    {
     "name": "font-display",
     "value": "\"Fredoka\", \"Baloo 2\", \"Arial Rounded MT Bold\", system-ui, sans-serif",
-    "usage": "Fredoka: títulos, botones, precios."
+    "usage": "Fredoka: impacto puntual (promos, nombres de paquete, botones) y logo."
+   },
+   {
+    "name": "font-headline",
+    "value": "\"Fraunces\", \"Iowan Old Style\", \"Georgia\", serif",
+    "usage": "Fraunces: títulos de página y de sección, precios. Cursiva para una palabra clave."
    },
    {
     "name": "font-body",

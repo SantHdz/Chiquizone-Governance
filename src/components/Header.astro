@@ -1,40 +1,79 @@
 ---
 import Button from './Button.astro';
+import Icon from './Icon.astro';
 import { whatsappLink } from '../data/site';
 const links = [
   { href: '/#arma', label: 'Arma tu zona' },
   { href: '/#paquetes', label: 'Paquetes' },
-  { href: '/#splash', label: 'Splash' },
+  { href: '/#incluye', label: 'Qué incluye' },
+  { href: '/#como-funciona', label: 'Cómo funciona' },
   { href: '/#preguntas', label: 'Preguntas' },
-  { href: '/#cotiza', label: 'Cotiza' },
 ];
 ---
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="/"><img src="/brand/chiquizone-horizontal.png" alt="Chiquizone, inicio" width="168" height="50" /></a>
-    <nav aria-label="Principal">
+    <nav aria-label="Principal" id="nav">
       <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
     </nav>
-    <Button href={whatsappLink()} size="sm" icon="whatsapp" external>WhatsApp</Button>
+    <div class="cta">
+      <Button href={whatsappLink()} size="sm" icon="whatsapp" external>Cotiza</Button>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">
+        <Icon name="agregar" size={22} class="ico-abrir" /><Icon name="cerrar" size={22} class="ico-cerrar" />
+      </button>
+    </div>
   </div>
 </header>
 
+<script>
+  const top = document.querySelector<HTMLElement>('header.top')!;
+  const btn = top.querySelector<HTMLButtonElement>('.menu')!;
+  const nav = top.querySelector<HTMLElement>('nav')!;
+  btn.addEventListener('click', () => {
+    const open = top.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  });
+  nav.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) { top.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); } });
+  const onScroll = () => top.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); addEventListener('scroll', onScroll, { passive: true });
+</script>
+
 <style>
   .top {
-    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
-    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border);
+    position: sticky; top: 0; z-index: 30;
+    background: var(--color-bg);
+    border-bottom: 1.5px solid transparent;
+    transition: border-color var(--motion-state) var(--ease-standard), box-shadow var(--motion-state) var(--ease-standard);
   }
-  .bar { display: flex; align-items: center; gap: var(--space-6); height: 72px; }
+  .top.scrolled { border-color: var(--color-border); box-shadow: 0 6px 24px -18px rgb(23 40 81 / .35); }
+  .bar { display: flex; align-items: center; gap: var(--space-6); height: 76px; }
   .logo { display: block; flex: none; }
-  .logo img { height: 44px; width: auto; }
+  .logo img { height: 46px; width: auto; }
   nav { margin-left: auto; }
   ul { display: flex; gap: var(--space-5); list-style: none; }
-  nav a { text-decoration: none; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-muted); }
+  nav a {
+    position: relative; text-decoration: none; font-size: var(--text-small); font-weight: var(--weight-bold); color: var(--color-text-muted);
+    padding: 6px 2px; transition: color var(--motion-hover) var(--ease-standard);
+  }
+  nav a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2.5px; border-radius: 2px; background: var(--color-accent);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--motion-state) var(--ease-standard);
+  }
   nav a:hover { color: var(--color-text); }
-  @media (max-width: 760px) {
+  nav a:hover::after { transform: scaleX(1); }
+  .cta { display: flex; align-items: center; gap: var(--space-3); }
+  .menu { display: none; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--color-border-strong); background: transparent; color: var(--color-text); cursor: pointer; place-items: center; }
+  .menu :global(.ico-abrir) { transform: rotate(0); }
+  .menu :global(.ico-cerrar), .open .menu :global(.ico-abrir) { display: none; }
+  .open .menu :global(.ico-cerrar) { display: inline-flex; }
+  @media (max-width: 860px) {
     nav { display: none; }
-    .bar :global(.btn) { margin-left: auto; }
+    .cta { margin-left: auto; }
+    .menu { display: grid; }
+    .open nav { display: block; position: absolute; left: 0; right: 0; top: 100%; background: var(--color-bg); border-bottom: 1.5px solid var(--color-border); box-shadow: var(--shadow-raised); }
+    .open ul { flex-direction: column; gap: 0; padding: var(--space-3) var(--gutter) var(--space-4); }
+    .open nav a { display: block; padding: 12px 4px; font-size: var(--text-body-l); font-weight: var(--weight-medium); color: var(--color-text); }
+    .open nav a::after { display: none; }
   }
 </style>

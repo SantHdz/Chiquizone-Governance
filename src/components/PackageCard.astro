@@ -4,18 +4,20 @@ import Icon from './Icon.astro';
 import { familias, type Paquete } from '../data/paquetes';
 import { mxn, whatsappLink } from '../data/site';
 
-interface Props { paquete: Paquete }
-const { paquete: p } = Astro.props;
+interface Props { paquete: Paquete; index?: number }
+const { paquete: p, index = 0 } = Astro.props;
 const familia = familias[p.familia];
 const tone = p.splash ? 'splash' : p.familia;
 const familyIcon = p.splash ? 'agua' : p.familia === 'baby' ? 'bebe' : 'ninos';
 const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen disponible la fecha ___?`;
 ---
-<article id={p.id} class:list={['card', `tone-${tone}`, { pro: p.pro }]}>
+<article id={p.id} class:list={['card', `tone-${tone}`, { pro: p.pro }]} data-reveal style={`--i:${index}`}>
+  {p.pro && <span class="ribbon display">Pro</span>}
   <header>
-    <h3>{p.nombre}</h3>
+    <span class="fam-ico"><Icon name={familyIcon} size={20} /></span>
+    <h3 class="display">{p.nombre}</h3>
     <div class="meta">
-      <span class="badge"><Icon name={familyIcon} size={14} />{familia.edades}</span>
+      <span class="badge">{familia.edades}</span>
       {p.pro && <span class="badge"><Icon name="cuidado" size={14} />{p.cuidadoras} cuidadoras</span>}
     </div>
   </header>
@@ -26,7 +28,7 @@ const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen dispo
   </div>
 
   <footer>
-    <div class="amt">{mxn(p.precio)}<span>5 horas de servicio</span></div>
+    <div class="amt">{mxn(p.precio)}<span>5 horas · montaje incluido</span></div>
     <Button href={whatsappLink(msg)} variant={p.pro ? 'primary' : 'outline'} size="sm" external>Apartar fecha</Button>
   </footer>
 </article>
@@ -34,15 +36,21 @@ const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen dispo
 <style>
   .card {
     --fam: var(--family-baby); --fam-tint: var(--family-baby-tint); --fam-ink: var(--family-baby-ink);
-    background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: var(--card-radius);
+    position: relative; background: var(--card-bg); border: 1.5px solid var(--card-border); border-radius: var(--radius-lg);
     box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; height: 100%;
     transition: transform var(--card-hover-duration) var(--ease-standard), box-shadow var(--card-hover-duration) var(--ease-standard), border-color var(--card-hover-duration) var(--ease-standard);
   }
-  .card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); border-color: var(--fam); }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); border-color: var(--fam); }
   .tone-terreneitor { --fam: var(--family-terreneitor); --fam-tint: var(--family-terreneitor-tint); --fam-ink: var(--family-terreneitor-ink); }
   .tone-splash { --fam: var(--family-splash); --fam-tint: var(--family-splash-tint); --fam-ink: var(--family-splash-ink); }
-  header { background: var(--fam-tint); padding: var(--card-pad) var(--card-pad) var(--space-4); display: grid; gap: var(--space-2); }
-  h3 { font-size: 26px; }
+  .pro { border-color: color-mix(in srgb, var(--fam) 55%, var(--card-border)); }
+  .ribbon {
+    position: absolute; top: 18px; right: -34px; transform: rotate(45deg); width: 130px; text-align: center; padding: 5px 0;
+    background: var(--highlight); color: var(--on-highlight); font-size: var(--text-small); letter-spacing: .08em; text-transform: uppercase;
+  }
+  header { background: var(--fam-tint); padding: var(--card-pad); display: grid; gap: var(--space-2); border-bottom: 1.5px dashed var(--card-border); }
+  .fam-ico { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-raised); color: var(--fam-ink); margin-bottom: var(--space-1); }
+  h3 { font-size: 28px; color: var(--fam-ink); }
   .meta { display: flex; flex-wrap: wrap; gap: 6px; }
   .badge {
     display: inline-flex; align-items: center; gap: 6px; height: var(--badge-height); padding: 0 var(--badge-pad-x);
@@ -55,10 +63,10 @@ const msg = `Hola Chiquizone, me interesa el paquete ${p.nombre}. ¿Tienen dispo
   li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 22px; }
   li :global(.icon) { color: var(--fam-ink); margin-top: 2px; }
   footer {
-    padding: var(--space-4) var(--card-pad) var(--card-pad); border-top: 1.5px dashed var(--card-border);
+    padding: var(--space-4) var(--card-pad) var(--card-pad);
     display: flex; align-items: end; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
   }
-  .amt { font-family: var(--font-display); font-size: var(--text-price); font-weight: var(--weight-display); line-height: 1; font-variant-numeric: tabular-nums; }
-  .amt span { display: block; font-family: var(--font-body); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-muted); margin-top: var(--space-2); }
+  .amt { font-family: var(--font-headline); font-size: var(--text-price); font-weight: var(--weight-display); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .amt span { display: block; font-family: var(--font-body); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-muted); margin-top: var(--space-2); letter-spacing: 0; }
   @media (prefers-reduced-motion: reduce) { .card:hover { transform: none; } }
 </style>

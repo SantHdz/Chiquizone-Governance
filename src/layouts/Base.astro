@@ -36,22 +36,53 @@ const jsonLd = {
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#FFF9F1" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFF9F1" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111E3D" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/brand/chiquizone-vertical.png', site.url).toString()} />
+    <meta property="og:image" content={new URL('/fotos/og-montaje.jpg', site.url).toString()} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,500..700,50;1,9..144,500..700,50&family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {/* Tema: sigue el sistema (claro / marino) y marca que hay JS para las entradas al hacer scroll. */}
+    <script is:inline>
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('js');
+        try {
+          var guardado = localStorage.getItem('cz-tema');
+          var oscuro = guardado ? guardado === 'marino' : matchMedia('(prefers-color-scheme: dark)').matches;
+          if (oscuro) h.dataset.theme = 'marino';
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
+    <a class="skip" href="#contenido">Ir al contenido</a>
     <Header />
     <main id="contenido"><slot /></main>
     <Footer />
     <WhatsAppFab />
+    <script>
+      /* Entradas al hacer scroll: cada [data-reveal] aparece una sola vez al entrar en pantalla.
+       * Con reduced-motion todo se muestra de inmediato. */
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (quieto || !('IntersectionObserver' in window)) {
+        items.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+          }
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+        items.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>

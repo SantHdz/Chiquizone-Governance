@@ -118,7 +118,7 @@ const ds = {
   name: 'Chiquizone', version: 2,
   meta: { source: 'chiquizone-web/tokens (scripts/build-tokens.mjs)' },
   color: { themes: [{ id: 'claro', name: 'Claro' }, { id: 'marino', name: 'Noche (marino)' }], tokens: dsColor },
-  type: { fonts: [], families: { display: resolve('font-display', 'claro'), body: resolve('font-body', 'claro') }, groups: sem['estilos-texto'] },
+  type: { fonts: [], families: { headline: resolve('font-headline', 'claro'), display: resolve('font-display', 'claro'), body: resolve('font-body', 'claro') }, groups: sem['estilos-texto'] },
   spacing: { tokens: lit(prim, 'space') },
   radius: { tokens: lit(prim, 'radius') },
   shadow: { note: 'Sombras planas desplazadas, como un globo apoyado en el piso.', tokens: sem.grupos.shadow.map((t) => ({ name: t.name, value: Object.fromEntries(THEMES.map((th) => [th, resolve(t.name, th)])), usage: t.usage })) },

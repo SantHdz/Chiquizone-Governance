@@ -86,6 +86,7 @@
   --size-56: 56px;
   /* font */
   --font-display: "Fredoka", "Baloo 2", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-headline: "Fraunces", "Iowan Old Style", "Georgia", serif;
   --font-body: "Nunito", "Avenir Next", system-ui, sans-serif;
   /* font-size */
   --fs-12: 12px;

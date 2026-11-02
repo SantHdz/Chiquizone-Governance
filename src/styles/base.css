@@ -15,17 +15,31 @@ body {
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
   caret-color: var(--accent);
+  overflow-x: clip;
 }
 
+/* Títulos en Fraunces (ADR 0006). La cursiva marca una palabra clave por título. */
 h1, h2, h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-headline);
   font-weight: var(--weight-display);
+  font-optical-sizing: auto;
   text-wrap: balance;
   line-height: var(--leading-tight);
 }
-h1 { font-size: var(--text-3xl); letter-spacing: -.01em; }
-h1 em { font-style: normal; color: var(--color-accent); }
-h2 { font-size: var(--text-2xl); }
+h1 { font-size: var(--text-3xl); letter-spacing: -.02em; line-height: 1.02; }
+h2 { font-size: var(--text-2xl); letter-spacing: -.015em; }
+h3 { font-size: var(--text-xl); letter-spacing: -.005em; }
+h1 em, h2 em, h3 em { font-style: italic; font-weight: 500; color: var(--color-accent); }
+
+/* Fredoka solo para impacto puntual: promos, nombres de paquete, etiquetas grandes. */
+.display { font-family: var(--font-display); font-weight: var(--weight-display); letter-spacing: 0; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: var(--text-label); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: var(--color-accent);
+}
+.eyebrow::before { content: ''; width: 22px; height: 3px; border-radius: 2px; background: currentColor; }
 
 a { color: inherit; }
 img { max-width: 100%; display: block; }
@@ -35,12 +49,36 @@ b, strong { font-weight: var(--weight-medium); }
 
 .wrap { max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
 
+.skip {
+  position: absolute; left: var(--space-4); top: -60px; z-index: 50; padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--color-accent); color: var(--color-on-accent); font-weight: var(--weight-bold); text-decoration: none;
+}
+.skip:focus { top: var(--space-3); }
+
 .sr-only {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;
 }
 
+/* Entradas al hacer scroll. --i escalona hermanos; sin JS todo es visible. */
+.js [data-reveal] {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity var(--motion-enter) var(--ease-standard), transform var(--motion-enter) var(--ease-standard);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* Balanceo lento de los adornos (globos, chispas). Pequeño y largo, nunca nervioso. */
+.float { animation: cz-float 7s var(--ease-loop) infinite; }
+.float-2 { animation-delay: -2.3s; animation-duration: 8s; }
+.float-3 { animation-delay: -4.1s; animation-duration: 9s; }
+@keyframes cz-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(1.5deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js [data-reveal] { opacity: 1; transform: none; }
 }

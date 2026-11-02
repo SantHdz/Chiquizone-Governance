@@ -1,13 +1,13 @@
 ---
-/* "Qué incluye" en bloques Bento (benchmark: radiografía de la caja). Se cambia por la foto cenital numerada en la fase 2. */
+/* "Qué incluye" en bloques Bento. Cada bloque dice una sola cosa. */
 import Icon from './Icon.astro';
-interface Props { items: { icon: string; title: string; text: string; wide?: boolean }[] }
+interface Props { items: { icon: string; title: string; text: string; wide?: boolean; tone?: 'sol' | 'salvia' | 'frambuesa' | 'marino' }[] }
 const { items } = Astro.props;
 ---
 <ul class="bento">
-  {items.map((i) => (
-    <li class:list={{ wide: i.wide }}>
-      <Icon name={i.icon} size={24} />
+  {items.map((i, n) => (
+    <li class:list={[{ wide: i.wide }, i.tone && `t-${i.tone}`]} data-reveal style={`--i:${n}`}>
+      <span class="ico"><Icon name={i.icon} size={22} /></span>
       <h3>{i.title}</h3>
       <p>{i.text}</p>
     </li>
@@ -18,11 +18,18 @@ const { items } = Astro.props;
   li {
     background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-lg);
     padding: var(--space-5); display: grid; gap: var(--space-2); align-content: start;
+    transition: transform var(--motion-state) var(--ease-standard), box-shadow var(--motion-state) var(--ease-standard);
   }
-  li.wide { grid-column: span 2; background: var(--color-surface-alt); }
-  li :global(.icon) { color: var(--link); margin-bottom: var(--space-2); }
+  li:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); }
+  li.wide { grid-column: span 2; }
+  .ico { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--sol-200); color: var(--marino-700); margin-bottom: var(--space-2); }
+  .t-salvia .ico { background: var(--salvia-200); color: var(--salvia-800); }
+  .t-frambuesa .ico { background: var(--frambuesa-100); color: var(--frambuesa-600); }
+  .t-marino .ico { background: var(--marino-100); color: var(--marino-600); }
+  .wide h3 { font-size: clamp(28px, 3vw, 36px); }
   h3 { font-size: var(--text-lg); }
-  p { font-size: var(--text-sm); color: var(--color-text-muted); }
+  p { font-size: var(--text-sm); color: var(--color-text-muted); max-width: 30ch; }
   @media (max-width: 900px) { .bento { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .bento { grid-template-columns: 1fr; } li.wide { grid-column: auto; } }
+  @media (prefers-reduced-motion: reduce) { li:hover { transform: none; } }
 </style>

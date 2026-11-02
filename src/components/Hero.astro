@@ -1,51 +1,97 @@
 ---
+/*
+ * Hero: titular grande a la izquierda, foto real del montaje en arco a la derecha.
+ * Los datos (zonas, horas, precio) salen de site.ts y paquetes.ts.
+ */
 import Button from './Button.astro';
+import Globos from './decor/Globos.astro';
+import Chispas from './decor/Chispas.astro';
 import { site, mxn, whatsappLink } from '../data/site';
 import { precioDesde } from '../data/paquetes';
 ---
 <div class="hero">
-  <div class="wrap">
-    <div class="arch">
-      <img class="mark" src="/brand/chiquizone-vertical.png" alt="Chiquizone" width="220" height="150" />
-      <h1>La zona de juego <em>crece con</em> tus hijos</h1>
-      <p class="lede">Montamos, supervisamos y recogemos. Ustedes disfrutan la fiesta.</p>
-      <div class="ctas">
+  <div class="wrap grid">
+    <div class="copy">
+      <p class="eyebrow" data-reveal>Zonas de juego para fiestas · {site.areas.join(' y ')}</p>
+      <h1 data-reveal style="--i:1">
+        <Chispas class="chispa" size={30} />
+        La zona de juego que <em>crece</em> con tus hijos
+      </h1>
+      <p class="lede" data-reveal style="--i:2">Montamos, cuidamos y recogemos. Tú disfrutas la fiesta.</p>
+      <div class="ctas" data-reveal style="--i:3">
         <Button href={whatsappLink()} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
-        <Button href="#arma" variant="text" icon="siguiente">Arma tu zona</Button>
+        <Button href="#arma" variant="outline" size="md" iconRight="siguiente">Arma tu zona</Button>
       </div>
+      <dl class="facts" data-reveal style="--i:4">
+        <div><dt>Desde {mxn(precioDesde)}</dt><dd>montaje incluido</dd></div>
+        <div><dt>{site.serviceHours} horas</dt><dd>de juego</dd></div>
+        <div><dt>{site.spaceNeeded}</dt><dd>es todo el espacio que pedimos</dd></div>
+      </dl>
     </div>
-    <dl class="meta">
-      <div><dt>{site.areas.join(' y ')}</dt><dd>Querétaro</dd></div>
-      <div><dt>{site.serviceHours} horas</dt><dd>de servicio</dd></div>
-      <div><dt>{site.spaceNeeded}</dt><dd>espacio necesario</dd></div>
-      <div><dt>Desde {mxn(precioDesde)}</dt><dd>montaje incluido</dd></div>
-    </dl>
+
+    <figure class="photo" data-reveal style="--i:2">
+      <div class="frame">
+        <img
+          src="/fotos/montaje-jardin-1000.webp"
+          srcset="/fotos/montaje-jardin-640.webp 640w, /fotos/montaje-jardin-1000.webp 1000w"
+          sizes="(max-width: 900px) 92vw, 520px"
+          width="1000" height="750"
+          alt="Zona de juego Chiquizone montada en un jardín: corral de colores, brincolín, carritos y mesas infantiles."
+          fetchpriority="high"
+        />
+      </div>
+      <Globos class="globos" size={132} />
+      <figcaption><span class="display">Montaje real</span> en un jardín de la zona</figcaption>
+    </figure>
   </div>
 </div>
+
 <style>
-  .hero { padding: var(--space-9) 0 var(--space-8); text-align: center; }
-  .arch {
-    position: relative; max-width: 580px; margin: 0 auto; background: var(--color-surface);
-    border: 1px solid var(--color-border); border-radius: var(--radius-arch); box-shadow: var(--shadow-card);
-    padding: 74px 46px 46px;
+  .hero { position: relative; padding: var(--space-8) 0 var(--space-9); overflow: clip; }
+  .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--space-7); align-items: center; }
+  .copy { display: grid; gap: var(--space-5); justify-items: start; }
+  h1 { font-size: clamp(42px, 5.4vw, 70px); position: relative; max-width: 12ch; }
+  .chispa { position: absolute; left: -36px; top: -4px; transform: rotate(-12deg); }
+  .lede { font-size: var(--text-body-l); color: var(--color-text-muted); max-width: 34ch; }
+  .ctas { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: var(--space-2); }
+  .facts { display: flex; gap: var(--space-6); flex-wrap: wrap; margin-top: var(--space-4); padding-top: var(--space-5); border-top: 1.5px dashed var(--color-border-strong); width: 100%; }
+  .facts dt { font-family: var(--font-headline); font-weight: var(--weight-display); font-size: var(--text-subtitle); font-variant-numeric: tabular-nums; }
+  .facts dd { font-size: var(--text-small); color: var(--color-text-muted); }
+
+  .photo { position: relative; margin: 0; justify-self: end; width: min(100%, 470px); }
+  .frame {
+    position: relative; border-radius: var(--radius-arch); overflow: hidden; aspect-ratio: 4 / 4.6;
+    box-shadow: var(--shadow-raised);
+    transform: rotate(1.5deg);
   }
-  .arch::before {
-    content: ''; position: absolute; inset: 14px; border: 2px dashed var(--color-border);
-    border-radius: 266px 266px 24px 24px; pointer-events: none;
+  .frame::before {
+    /* bloque de color detrás, como un globo apoyado */
+    content: ''; position: absolute; inset: 0;
   }
-  .mark { position: relative; width: 220px; height: auto; margin: 0 auto var(--space-5); }
-  .lede { max-width: 36ch; margin: var(--space-5) auto 0; color: var(--color-text-muted); }
-  .ctas { position: relative; margin-top: var(--space-6); display: flex; gap: var(--space-5); justify-content: center; flex-wrap: wrap; }
-  .meta { margin-top: var(--space-7); display: flex; justify-content: center; gap: var(--space-7); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-muted); }
-  dt { font-family: var(--font-display); font-weight: var(--weight-display); color: var(--color-text); font-size: var(--text-lg); }
-  @media (max-width: 640px) {
-    .arch { padding: 58px 26px 36px; border-radius: 200px 200px 28px 28px; }
-    .arch::before { border-radius: 186px 186px 20px 20px; }
-    .meta { gap: var(--space-5) var(--space-6); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 60%; }
+  .photo::before {
+    content: ''; position: absolute; inset: 14px -14px -14px 14px; border-radius: var(--radius-arch);
+    background: var(--sol-200); z-index: -1; transform: rotate(-2deg);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .arch { animation: rise var(--duration) var(--ease-out) both; }
-    .meta { animation: rise var(--duration) .25s var(--ease-out) both; }
-    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  :global([data-theme="marino"]) .photo::before { background: var(--marino-700); }
+  .globos { position: absolute; left: -58px; top: 34px; }
+  figcaption {
+    position: absolute; left: 20px; bottom: 20px; padding: 8px 14px; border-radius: var(--radius-pill);
+    background: var(--surface-raised); color: var(--ink); font-size: var(--text-small); box-shadow: var(--shadow-card);
+  }
+  figcaption .display { color: var(--color-accent); margin-right: 4px; }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; gap: var(--space-7); }
+    .photo { justify-self: center; width: min(100%, 440px); margin-top: var(--space-3); }
+    .globos { left: -20px; top: 10px; width: 100px; height: 125px; }
+    h1 { max-width: none; }
+    .chispa { left: auto; right: -8px; top: -30px; }
+  }
+  @media (max-width: 480px) {
+    .hero { padding-top: var(--space-6); }
+    .frame { aspect-ratio: 4 / 4.2; }
+    .facts { gap: var(--space-4) var(--space-5); }
+    .ctas :global(.btn) { width: 100%; }
   }
 </style>
