@@ -81,7 +81,7 @@ npm run typecheck
 
 Lo que necesita Sant, una sola vez:
 
-1. **Google.** Ya hecho con hola@chiquizone.com (Sant, 2026-11-03): calendario "Chiquizone" (su id está en `wrangler.toml`), proyecto `chiquizone-asistente` con Google Calendar API y cuenta de servicio `asistente@chiquizone-asistente.iam.gserviceaccount.com`. Falta la llave JSON, que se carga como secreto (`GOOGLE_SA_KEY`, el campo `private_key`; `GOOGLE_SA_EMAIL`, el campo `client_email`).
+1. **Google.** Ya hecho con hola@chiquizone.com (Sant, 2026-11-03): calendario "Chiquizone" (su id está en `wrangler.toml`), proyecto `chiquizone-asistente` con Google Calendar API y cuenta de servicio `asistente@chiquizone-asistente.iam.gserviceaccount.com`. Delegación de todo el dominio autorizada (ID de cliente 111809709629376066934, alcance `calendar.events`): la cuenta actúa en nombre de hola@chiquizone.com (`GOOGLE_SUBJECT` en `wrangler.toml`). Falta la llave JSON: su campo `private_key` se carga como secreto `GOOGLE_SA_KEY`.
    - El calendario se comparte con la cuenta de servicio con "Realizar cambios y ver los detalles de todos los eventos". Para eso, en admin.google.com › Apps › Google Workspace › Calendar › Configuración de uso compartido, el uso compartido externo debe permitir "que los usuarios externos cambien los calendarios".
    - Plan B si Workspace no deja compartirlo: en admin.google.com › Seguridad › Acceso y control de datos › Controles de API › Delegación de todo el dominio, agrega el ID de cliente de la cuenta de servicio con el alcance `https://www.googleapis.com/auth/calendar.events`, y guarda `GOOGLE_SUBJECT=hola@chiquizone.com` como secreto. La cuenta actúa en nombre de hola@ solo para eventos de Calendar.
 2. **Meta.** En developers.facebook.com crea una app de tipo Business con el producto WhatsApp y conecta el número existente con la opción de la app de WhatsApp Business (coexistencia). Anota el Phone number ID, el App secret y un token permanente de usuario del sistema.
@@ -97,7 +97,7 @@ npx wrangler d1 create chiquizone                 # copia el id a wrangler.toml
 npx wrangler d1 migrations apply chiquizone --remote
 npx wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine
 # en wrangler.toml, pon el id del calendario en GOOGLE_CALENDAR_ID
-for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_EMAIL GOOGLE_SA_KEY ADMIN_TOKEN; do
+for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_KEY ADMIN_TOKEN; do
   npx wrangler secret put $s
 done
 npm run deploy
