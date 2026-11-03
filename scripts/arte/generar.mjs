@@ -18,7 +18,7 @@ import { resolve, dirname, extname, join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { render, rng } from './plantillas.mjs';
 import { construirPrompt } from './prompt.mjs';
-import { generarImagen } from './imagen-ia.mjs';
+import { generarImagenes } from './imagen-ia.mjs';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const estilo = JSON.parse(readFileSync(join(raiz, 'identidad/estilo.json'), 'utf8'));
@@ -114,15 +114,18 @@ const manifiesto = [];
 let fallas = 0;
 
 for (const pieza of piezas) {
-  /* Con --ia, una pieza con escena y sin foto recibe una imagen de ChatGPT. Se guarda y se reutiliza
-     en la siguiente corrida para no pagar dos veces; bórrala de arte/fotos-ia/ para pedir otra. */
+  /* Con --ia, una pieza con escena y sin foto recibe al menos dos opciones de ChatGPT. Se dibuja la pieza
+     con cada una para elegir; ninguna se da por buena hasta que pones la elegida en "foto". Las imágenes
+     se guardan en arte/fotos-ia/ y se reutilizan para no pagar dos veces; bórralas para pedir otras. */
+  let opcionesIa = null;
   if (conIa && pieza.escena && !pieza.foto) {
-    const destino = join(raiz, 'arte/fotos-ia', `${pieza.id}.png`);
     try {
-      const r = await generarImagen({ tipo: pieza.escena_tipo || 'foto', escena: pieza.escena, formato: (pieza.formatos || ['post'])[0], hueco: pieza.hueco, destino });
-      pieza.foto = destino;
+      const r = await generarImagenes({ tipo: pieza.escena_tipo || 'foto', escena: pieza.escena, formato: (pieza.formatos || ['post'])[0],
+        hueco: pieza.hueco, base: join(raiz, 'arte/fotos-ia', pieza.id), opciones: pieza.opciones_ia });
+      opcionesIa = r.archivos;
+      pieza.foto = opcionesIa[0];
       pieza.foto_generada = true;
-      console.log(`  · ${pieza.id}: imagen de ChatGPT ${r.reutilizada ? 'reutilizada' : 'generada'} (${destino})`);
+      console.log(`  · ${pieza.id}: ${opcionesIa.length} opciones de ChatGPT (${r.nuevas} nuevas) en arte/fotos-ia/`);
     } catch (e) {
       console.error(`✗ ${pieza.id}: no se pudo generar la imagen con ChatGPT. ${e.message}`);
     }
@@ -139,12 +142,14 @@ for (const pieza of piezas) {
   const dir = join(salida, pieza.id);
   mkdirSync(dir, { recursive: true });
 
-  for (const nombreFormato of formatos) for (const nombreTema of temas) for (let v = 1; v <= variantes; v++) {
+  const fotos = opcionesIa || [pieza.foto];
+  for (const [k, foto] of fotos.entries()) for (const nombreFormato of formatos) for (const nombreTema of temas) for (let v = 1; v <= variantes; v++) {
+    pieza.foto = foto;
     const formato = estilo.formatos[nombreFormato];
     const tema = estilo.temas[nombreTema];
     const r = rng(hash(`${pieza.id}|${v}`));
     const html = render({ pieza, tema, formato, nombreFormato, r, assets, fuentes: estilo.tipografia.google_fonts });
-    const nombre = `${pieza.id}-${nombreFormato}-${nombreTema}-v${v}`;
+    const nombre = `${pieza.id}-${nombreFormato}-${nombreTema}-v${v}${opcionesIa ? `-opcion${k + 1}` : ''}`;
     const archivoHtml = join(dir, `${nombre}.html`);
     writeFileSync(archivoHtml, html);
     const pagina = await navegador.newPage({ viewport: { width: formato.ancho, height: formato.alto } });
@@ -152,8 +157,14 @@ for (const pieza of piezas) {
     await pagina.evaluate(() => document.fonts.ready);
     await pagina.screenshot({ path: join(dir, `${nombre}.png`) });
     await pagina.close();
-    manifiesto.push({ id: pieza.id, archivo: join(pieza.id, `${nombre}.png`), formato: nombreFormato, tema: nombreTema, variante: v });
+    manifiesto.push({ id: pieza.id, archivo: join(pieza.id, `${nombre}.png`), formato: nombreFormato, tema: nombreTema, variante: v,
+      ...(opcionesIa && { opcion: k + 1, foto, por_elegir: true }) });
     console.log(`✓ ${nombre}.png`);
+  }
+
+  if (opcionesIa) {
+    console.log(`  · ${pieza.id}: elige una opción y pon su ruta en "foto" (con foto_generada: true) antes de subirla.`);
+    pieza.foto = undefined;
   }
 
   /* Si la pieza pide una escena y aún no tiene foto, deja listo el prompt para generarla. */

@@ -29,7 +29,7 @@ Con `--ia`, cada pieza que trae `escena` y no trae `foto` recibe una imagen gene
 2. Copia `.env.example` como `.env` y pega la clave. `.env` no se sube al repo.
 3. `npm run arte -- piezas.csv --ia`
 
-Las imágenes quedan en `arte/fotos-ia/<id>.png` y se reutilizan en la siguiente corrida, así no se paga dos veces. Para pedir otra, borra ese archivo. Modelo y calidad se cambian con `OPENAI_IMAGE_MODEL` y `OPENAI_IMAGE_QUALITY` en `.env`.
+Cada escena recibe **al menos dos opciones** (`arte/fotos-ia/<id>-1.png`, `-2.png`; hasta 4 con `opciones_ia`), y la pieza se dibuja con cada una (`…-opcion1.png`, `…-opcion2.png`). Ninguna se sube sola: eliges una, pones su ruta en `foto` con `foto_generada: true` y vuelves a correr. Las opciones se reutilizan en la siguiente corrida, así no se paga dos veces; para pedir otras, borra esos archivos. Modelo y calidad se cambian con `OPENAI_IMAGE_MODEL` y `OPENAI_IMAGE_QUALITY` en `.env`.
 
 ## Cómo se hace una variante
 
