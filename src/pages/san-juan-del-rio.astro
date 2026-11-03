@@ -1,0 +1,58 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Prosa from '../components/Prosa.astro';
+import Checks from '../components/Checks.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { requisitos, pasos } from '../data/contenido';
+import { base, pro, edades, incluidoSiempre, mxn, pct, site } from '../lib/tema';
+
+const [ciudad, otra] = site.areas;
+const faq = [
+  { q: `¿Dan servicio en ${ciudad}?`, a: `Sí. Montamos la zona de juego en tu casa, jardín o salón en ${ciudad}, y el traslado dentro de la ciudad está incluido en el precio.` },
+  { q: '¿Cuánto cuesta rentar una zona de juego para una fiesta?', a: `${base.nombre} cuesta ${mxn(base.precio)} y ${pro.nombre}, con ${pro.cuidadoras} cuidadoras, ${mxn(pro.precio)}. Los dos incluyen ${site.serviceHours} horas de servicio, montaje y desmontaje.` },
+  { q: '¿A qué hora llegan a montar?', a: 'Una hora antes de la fiesta. Nos dices la hora de inicio y llegamos con ese tiempo para dejar todo listo.' },
+  { q: '¿Con cuánta anticipación debo apartar?', a: `Te recomendamos definir fecha, hora e invitados y apartar unas cuatro semanas antes. Se aparta con el ${pct(site.bookingDepositPct)} del total por transferencia.` },
+  { q: `¿Y si mi fiesta es en ${otra} u otro municipio?`, a: `Escríbenos con la dirección: el traslado fuera de ${ciudad} se cotiza.` },
+];
+---
+<Landing
+  id="sjr"
+  eyebrow="San Juan del Río, Querétaro"
+  titulo={`Zonas de juego para fiestas en *${ciudad}*`}
+  lead={`Montamos la zona de juego en tu casa, jardín o salón en ${ciudad}. El traslado dentro de la ciudad va incluido en el precio.`}
+  mensaje="Hola Chiquizone, quiero cotizar una zona de juego para una fiesta en San Juan del Río."
+>
+  <Section id="servicio" eyebrow="El servicio" title="Lo que llega a tu *fiesta*" lead={`En ${ciudad}, todo esto va incluido en cualquier paquete.`}>
+    <Prosa>
+      <ul>{incluidoSiempre.map((x) => <li>{x}</li>)}</ul>
+      <p>Tenemos {base.nombre}, para niños de {edades}, y {pro.nombre}, con {pro.cuidadoras} cuidadoras toda la fiesta. <a href="/precios/">Ver precios</a>.</p>
+    </Prosa>
+  </Section>
+
+  <Section id="espacio" tone="salvia" eyebrow="El lugar" title="Dónde la *montamos*">
+    <div class="dos">
+      <Prosa>
+        <p>La zona ocupa {site.spaceNeeded} y puede ir en tu casa, jardín o salón en {ciudad}. Lo importante es que el lugar cumpla estos requisitos.</p>
+        <p>Si tienes dudas de tu espacio, escríbenos por WhatsApp y lo revisamos contigo.</p>
+      </Prosa>
+      <Checks title="Lo que necesitamos del espacio" items={requisitos} />
+    </div>
+  </Section>
+
+  <Section id="como-apartar" eyebrow="Cómo apartar" title={`Tu fecha en ${ciudad} en *cinco* pasos`}>
+    <Steps items={pasos} />
+    <div class="cta"><Button href="/#arma" iconRight="siguiente">Arma tu zona</Button></div>
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title={`Preguntas sobre ${ciudad}`} narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .dos { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: start; }
+  .cta { margin-top: var(--space-6); }
+  @media (max-width: 860px) { .dos { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,80 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Prosa from '../components/Prosa.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { base, pro, edades, lista, mxn, pct, apartado, precioDe, precioOpcion, site } from '../lib/tema';
+
+const numeros: Record<number, string> = { 2: 'dos', 3: 'tres' };
+const cuidadoras = numeros[pro.cuidadoras!];
+/* Lo que Pro suma sobre Baby baby sale de paquetes.ts, no de un texto fijo. */
+const suma = (x: string) => (pro.extras ?? []).some((e) => e.toLowerCase() === x.toLowerCase());
+const filas = [
+  { dato: 'Precio', base: mxn(base.precio), pro: mxn(pro.precio) },
+  { dato: `Para apartar (${pct(site.bookingDepositPct)})`, base: apartado(base.precio), pro: apartado(pro.precio) },
+  { dato: 'Quién cuida a los niños', base: 'Los papás', pro: `${pro.cuidadoras} cuidadoras toda la fiesta` },
+  { dato: 'Montaña rusa', base: 'No incluida', pro: suma('Montaña rusa') ? 'Incluida' : 'No incluida' },
+  { dato: 'Máquina de burbujas', base: 'No incluida', pro: suma('Máquina de burbujas') ? 'Incluida' : 'No incluida' },
+  { dato: 'Servicio', base: `${site.serviceHours} horas`, pro: `${site.serviceHours} horas` },
+  { dato: 'Niños de', base: edades, pro: edades },
+];
+const faq = [
+  { q: '¿Cuántas cuidadoras van a la fiesta?', a: `Con ${pro.nombre} van ${cuidadoras} cuidadoras y se quedan las ${site.serviceHours} horas en la zona de juego.` },
+  { q: '¿Qué hacen las cuidadoras?', a: 'Cuidan y organizan el juego dentro del área, para que tú puedas estar con tus invitados.' },
+  { q: '¿Qué no hacen?', a: 'Nunca sacan a un niño del área ni dan alimentos.' },
+  { q: `¿Puedo tener cuidadora con ${base.nombre}?`, a: `Sí. Puedes sumar una cuidadora extra por las ${site.serviceHours} horas (${precioDe('cuidadora-extra')}) o una hora extra con cuidadora (${precioOpcion('hora-extra', 'con-cuidadora')}). Si prefieres que se queden ${cuidadoras} toda la fiesta, ${pro.nombre} las incluye.` },
+  { q: '¿Cuánto cuesta el paquete con cuidadoras?', a: `${pro.nombre} cuesta ${mxn(pro.precio)}. Incluye ${lista(pro.extras ?? [])}, además de todo lo de ${base.nombre}.` },
+];
+---
+<Landing
+  id="cuidadoras"
+  eyebrow="Paquete Pro Baby"
+  titulo="Cuidadoras para fiestas *infantiles*"
+  lead={`Con ${pro.nombre}, ${cuidadoras} cuidadoras se quedan las ${site.serviceHours} horas en la zona de juego, para que tú estés con tus invitados.`}
+  mensaje="Hola Chiquizone, quiero cotizar el paquete Pro Baby con cuidadoras."
+>
+  <Section id="que-hacen" eyebrow="Qué hacen" title="Cuidadoras que se quedan *toda* la fiesta">
+    <Prosa>
+      <p>Si buscas niñeras o nanas para una fiesta infantil, esto es lo que incluye {pro.nombre}. Las cuidadoras llegan con la zona y se quedan en ella toda la fiesta, para que tú puedas atender a tus invitados.</p>
+      <ul>
+        <li>Cuidan y organizan el juego dentro del área.</li>
+        <li>Se quedan las {site.serviceHours} horas de la fiesta, con {cuidadoras} cuidadoras en {pro.nombre}.</li>
+        <li>Nunca sacan a un niño del área ni dan alimentos.</li>
+      </ul>
+    </Prosa>
+  </Section>
+
+  <Section id="comparar" tone="salvia" eyebrow="Compara" title={`${base.nombre} o *${pro.nombre}*`} lead="La misma zona de juego: la diferencia es quién cuida a los niños y lo que suma.">
+    <div class="tabla-wrap" data-reveal>
+      <table>
+        <caption class="sr-only">Comparación entre {base.nombre} y {pro.nombre}</caption>
+        <thead><tr><th scope="col">&nbsp;</th><th scope="col">{base.nombre}</th><th scope="col">{pro.nombre}</th></tr></thead>
+        <tbody>
+          {filas.map((f) => <tr><th scope="row">{f.dato}</th><td>{f.base}</td><td>{f.pro}</td></tr>)}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section id="mas-cuidado" eyebrow="Si lo necesitas" title="Más *cuidado* en Baby baby">
+    <Prosa>
+      <p>Si eliges {base.nombre} y quieres apoyo, puedes sumar una cuidadora extra por las {site.serviceHours} horas ({precioDe('cuidadora-extra')}) o una hora extra con cuidadora ({precioOpcion('hora-extra', 'con-cuidadora')}).</p>
+      <p>Mira <a href="/precios/">todos los precios y complementos</a> o arma tu zona y revisa el total en <a href="/#arma">Arma tu zona</a>.</p>
+    </Prosa>
+    <div class="cta"><Button href="/#arma" iconRight="siguiente">Arma tu zona</Button></div>
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title="Preguntas sobre las *cuidadoras*" narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .tabla-wrap { overflow-x: auto; border: 1.5px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-card); }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  th, td { padding: var(--space-4) var(--space-5); text-align: left; border-bottom: 1.5px dashed var(--color-border); font-size: var(--text-md); }
+  thead th { font-family: var(--font-headline); font-weight: var(--weight-display); font-size: var(--text-lg); border-bottom: 1.5px solid var(--color-border); }
+  tbody th { font-weight: var(--weight-bold); color: var(--color-text-muted); font-size: var(--text-sm); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  .cta { margin-top: var(--space-6); }
+</style>

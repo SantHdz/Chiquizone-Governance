@@ -1,0 +1,65 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Prosa from '../components/Prosa.astro';
+import Checks from '../components/Checks.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { requisitos, pasos } from '../data/contenido';
+import { base, pro, edades, incluidoSiempre, lista, mxn, pct, site } from '../lib/tema';
+
+const faq = [
+  { q: '¿Qué es un playground móvil?', a: `Es una zona de juego que se lleva y se monta en el lugar de la fiesta. La de Chiquizone mide ${site.spaceNeeded}, tiene piso acolchado, corral alrededor y juegos para niños de ${edades}.` },
+  { q: '¿Dónde se puede montar?', a: 'En tu casa, jardín o salón, siempre que la zona esté techada o con sombra, con piso plano y libre, y haya un contacto eléctrico a menos de diez metros.' },
+  { q: '¿Es lo mismo que rentar un brincolín?', a: `No. La zona incluye un brincolín baby, pero también ${lista(base.incluye.filter((x) => !/brincol/i.test(x)))}. Es una zona completa de juego, no una sola pieza.` },
+  { q: '¿Cuánto tardan en montar y qué pasa al terminar?', a: 'Llegamos una hora antes de la fiesta para montar, así que la zona está lista cuando llegan los invitados. Al terminar desmontamos y nos llevamos todo.' },
+  { q: '¿Cuánto cuesta?', a: `${base.nombre} cuesta ${mxn(base.precio)} y ${pro.nombre}, con ${pro.cuidadoras} cuidadoras, ${mxn(pro.precio)}. Aparta tu fecha con el ${pct(site.bookingDepositPct)} del total.` },
+];
+---
+<Landing
+  id="playground"
+  eyebrow="Playground móvil"
+  titulo="Playground móvil para fiestas *infantiles*"
+  lead={`Llevamos una zona de juego completa a tu casa, jardín o salón en ${site.areas.join(' y ')}. La montamos antes de la fiesta y la recogemos al terminar.`}
+  mensaje="Hola Chiquizone, quiero cotizar un playground móvil para una fiesta."
+>
+  <Section id="que-es" eyebrow="Qué es" title="Una zona de juego que *llega* a tu fiesta">
+    <Prosa>
+      <p>Un playground móvil es una zona de juego que se lleva y se monta en el lugar de la fiesta, en vez de llevar a los niños a un salón. También se le conoce como zona de juegos portátil o <i lang="en">soft play</i>. En Chiquizone es una zona de {site.spaceNeeded} con piso acolchado, corral perimetral y juegos para niños de {edades}.</p>
+      <p>Tú eliges el lugar. Nosotros llegamos una hora antes, armamos la zona, sanitizamos cada pieza antes de la fiesta y, cuando termina, desmontamos y nos llevamos todo.</p>
+    </Prosa>
+  </Section>
+
+  <Section id="que-trae" tone="salvia" eyebrow="Qué trae" title="Todo lo que *llega* en la zona" lead={`Así es ${base.nombre}, la zona base. ${pro.nombre} suma ${lista(pro.extras ?? [])}.`}>
+    <Prosa>
+      <ul>{base.incluye.map((x) => <li>{x}</li>)}</ul>
+      <p>Además, en todos los paquetes: {lista(incluidoSiempre)}.</p>
+      <p>Mira <a href="/precios/">cuánto cuesta cada paquete y cada complemento</a>.</p>
+    </Prosa>
+  </Section>
+
+  <Section id="espacio" eyebrow="El lugar" title="Cuánto *espacio* necesita">
+    <div class="dos">
+      <Prosa>
+        <p>La zona ocupa {site.spaceNeeded}. Puede ir en tu casa, jardín o salón, mientras cumpla lo que ves aquí.</p>
+        <p>Si no estás seguro de tu espacio, escríbenos por WhatsApp y lo revisamos contigo.</p>
+      </Prosa>
+      <Checks title="Lo que necesitamos del espacio" items={requisitos} />
+    </div>
+  </Section>
+
+  <Section id="como-se-reserva" eyebrow="Cómo se reserva" title="Apartar tu fecha es *fácil*" lead="Todo se resuelve por WhatsApp.">
+    <Steps items={pasos} />
+    <div class="cta"><Button href="/#arma" variant="outline" iconRight="siguiente">Arma tu zona y mira tu total</Button></div>
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title="Preguntas sobre el *playground* móvil" narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .dos { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: start; }
+  .cta { margin-top: var(--space-6); }
+  @media (max-width: 860px) { .dos { grid-template-columns: 1fr; } }
+</style>

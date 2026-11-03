@@ -16,8 +16,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Logo vectorizado provisional (`scripts/vectorizar-logo.py`) hasta tener el SVG oficial.
 - Paso opcional "¿Quieres sumar algo?" en Arma tu zona: ocho complementos y el combo Fiesta completa, con total estimado y apartado del 50 % que se actualizan al marcar, y mensaje de WhatsApp con la cuenta (ADR 0011, propuesta). Los datos viven en `src/data/complementos.ts` y `calcular()` es la única cuenta.
 - Íconos para los complementos (bocina, burbujas, letrero, picnic, montaña rusa, brincolín, hora extra y combo).
+- Capa de SEO (ADR 0012, propuesta): seis páginas por tema (playground móvil, juegos para bebés, cuidadoras, precios, San Juan del Río y Tequisquiapan), datos estructurados enlazados, `robots.txt` abierto a buscadores de IA, `sitemap.xml`, `llms.txt`, página 404 y la prueba `npm run seo` en CI. Guía en `docs/seo.md`.
 
 ### Cambiado
+- Título, descripción y metaetiquetas del inicio con las palabras que busca la gente; la ceja del inicio dice "Playground móvil para fiestas". Las direcciones llevan barra final.
 - Precios aprobados por Sant el 3 de noviembre: Baby baby sube de $1,870 a $1,970 (apartado de $985) y Pro Baby de $3,200 a $3,800 (apartado de $1,900), ahora con 2 cuidadoras.
 - Títulos en Fraunces con una palabra en cursiva; Fredoka queda para impacto puntual (ADR 0006, aceptada).
 - Secciones con ceja, título y entradilla; "Cómo funciona" junto a los requisitos del espacio; Splash dentro de Paquetes.

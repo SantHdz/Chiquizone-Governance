@@ -1,0 +1,21 @@
+---
+/* Página que se muestra cuando una dirección no existe. Lleva noindex para que no entre a Google. */
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import Relacionadas from '../components/Relacionadas.astro';
+---
+<Base title="Página no encontrada | Chiquizone" description="Esta página no existe o cambió de lugar. Mira las zonas de juego, los precios o escríbenos por WhatsApp." noindex>
+  <Section eyebrow="Error 404" title="Esa página no está en *la zona*" lead="Pudo cambiar de lugar o la dirección tiene un error. Elige a dónde seguir.">
+    <div class="acciones">
+      <Button href="/" iconRight="siguiente">Ir al inicio</Button>
+      <Button href="/precios/" variant="outline">Ver precios</Button>
+    </div>
+  </Section>
+  <Section eyebrow="Páginas" title="Lo que *puedes* ver">
+    <Relacionadas />
+  </Section>
+</Base>
+<style>
+  .acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+</style>

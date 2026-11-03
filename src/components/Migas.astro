@@ -1,0 +1,20 @@
+---
+/* Migas de pan: "Inicio / Esta página". Las mismas migas salen en los datos estructurados (Base.astro). */
+interface Props { items: { nombre: string; ruta: string }[] }
+const { items } = Astro.props;
+---
+<nav class="migas" aria-label="Migas de pan">
+  <ol>
+    {items.map((m, i) => (
+      <li>{i < items.length - 1 ? <a href={m.ruta}>{m.nombre}</a> : <span aria-current="page">{m.nombre}</span>}</li>
+    ))}
+  </ol>
+</nav>
+<style>
+  .migas { padding: var(--space-4) 0 0; font-size: var(--text-small); }
+  ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); color: var(--color-text-muted); }
+  li + li::before { content: '/'; margin-right: var(--space-2); opacity: .6; }
+  a { color: var(--link); text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  [aria-current] { color: var(--color-text); font-weight: var(--weight-bold); }
+</style>

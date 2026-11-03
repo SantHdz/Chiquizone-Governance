@@ -1,0 +1,60 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Prosa from '../components/Prosa.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { familias } from '../data/paquetes';
+import { base, pro, edades, lista, mxn, precioOpcion, site } from '../lib/tema';
+
+const resumen = familias[base.familia].resumen;
+const faq = [
+  { q: '¿Desde qué edad pueden jugar?', a: `La zona ${base.nombre} es para niños de ${edades}.` },
+  { q: '¿Qué trae la zona para bebés?', a: `${lista(base.incluye)}.` },
+  { q: '¿Los papás tienen que cuidar a los niños?', a: `Con ${base.nombre}, los papás cuidan a los niños; nosotros montamos y recogemos. Con ${pro.nombre}, ${pro.cuidadoras} cuidadoras se quedan toda la fiesta en la zona.` },
+  { q: '¿Y si hay niños más grandes?', a: `Escríbenos por WhatsApp con las edades y te decimos si la zona les funciona. También puedes sumar un brincolín para los grandes: mediano ${precioOpcion('brincolin', 'mediano')} o grande ${precioOpcion('brincolin', 'grande')}.` },
+  { q: '¿El material está limpio?', a: 'Sí. Sanitizamos pieza por pieza antes de cada fiesta.' },
+];
+---
+<Landing
+  id="bebes"
+  eyebrow="Para bebés y primeros cumpleaños"
+  titulo="Juegos para bebés en tu *fiesta*"
+  lead={`${resumen} Es la zona ${base.nombre}, para niños de ${edades}.`}
+  mensaje="Hola Chiquizone, quiero cotizar la zona Baby baby para el cumpleaños de mi bebé."
+>
+  <Section id="a-su-altura" eyebrow="Baby baby" title="Una zona pensada a su *altura*">
+    <Prosa>
+      <p>{base.nombre} es la zona para los niños que gatean, dan sus primeros pasos y celebran su primer cumpleaños: de {edades}. Todo está a su altura y es suave, pensado para fiestas de 1 año y para los primeros cumpleaños.</p>
+      <p>El piso es de tatami acolchado y un corral perimetral delimita la zona. Dentro hay {lista(base.incluye.filter((x) => !/tatami|corral/i.test(x)))}.</p>
+      <p>Cuesta <strong>{mxn(base.precio)}</strong> por {site.serviceHours} horas de servicio, con montaje y desmontaje incluidos. <a href="/precios/">Ver todos los precios</a>.</p>
+    </Prosa>
+  </Section>
+
+  <Section id="seguridad" tone="salvia" eyebrow="Tranquilidad" title="Cómo cuidamos *cada* detalle">
+    <Prosa>
+      <ul>
+        <li>Sanitizamos cada pieza antes de cada fiesta, una por una.</li>
+        <li>El corral perimetral marca el área de juego y el tatami acolchado cubre el piso.</li>
+        <li>Llegamos una hora antes a montar, para que todo esté listo cuando llegue el primer invitado.</li>
+        <li>Con {pro.nombre}, {pro.cuidadoras} cuidadoras se quedan toda la fiesta. Nunca sacan a un niño del área ni dan alimentos. <a href="/cuidadoras-para-fiestas-infantiles/">Conoce qué hacen las cuidadoras</a>.</li>
+      </ul>
+    </Prosa>
+  </Section>
+
+  <Section id="primer-cumpleanos" eyebrow="Primer cumpleaños" title="Una fiesta para *todas* las edades">
+    <Prosa>
+      <p>En un primer cumpleaños casi siempre hay invitados de varias edades, desde bebés hasta primos más grandes. Si vienen niños mayores de 3 años, escríbenos por WhatsApp con las edades y te decimos si la zona les funciona.</p>
+      <p>Para los hermanos y primos mayores puedes sumar un brincolín aparte: mediano por {precioOpcion('brincolin', 'mediano')} o grande por {precioOpcion('brincolin', 'grande')}. Ocupa más espacio que la zona, así que cuéntanos cómo es tu lugar al cotizar.</p>
+      <p>Si quieres armar tu zona con complementos y ver el total, usa <a href="/#arma">Arma tu zona</a>.</p>
+    </Prosa>
+    <div class="cta"><Button href="/#arma" iconRight="siguiente">Arma tu zona</Button></div>
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title="Preguntas sobre los juegos para *bebés*" narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .cta { margin-top: var(--space-6); }
+</style>

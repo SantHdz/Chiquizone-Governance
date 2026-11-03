@@ -6,6 +6,8 @@ import WhatsAppFab from '../components/WhatsAppFab.astro';
 import LogoSprite from '../components/LogoSprite.astro';
 import Logo from '../components/Logo.astro';
 import { site } from '../data/site';
+import { urlDe } from '../data/seo';
+import { negocio, sitio, pagina, type Miga } from '../lib/schema';
 
 interface Props {
   title?: string;
@@ -13,20 +15,21 @@ interface Props {
   noindex?: boolean;
   /** Inicio: el logo grande viaja a la barra al hacer scroll. */
   heroLogo?: boolean;
+  /** Migas de pan (sin el inicio): salen en pantalla y en los datos estructurados. */
+  migas?: Miga[];
+  /** Nodos extra de schema.org para esta página (por ejemplo una lista de precios). */
+  schema?: object[];
 }
-const { title = `${site.name} · ${site.tagline}`, description = site.description, noindex = false, heroLogo = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, site.url).toString();
+const { title = `${site.name} · ${site.tagline}`, description = site.description, noindex = false, heroLogo = false, migas, schema = [] } = Astro.props;
+const ruta = Astro.url.pathname;
+const canonical = urlDe(ruta);
+const ogImage = urlDe('/fotos/og-montaje.jpg');
+const ogAlt = 'Zona de juego Chiquizone montada en un jardín: corral de colores, brincolín, carritos y mesas infantiles.';
 
-const jsonLd = {
+/* Un solo bloque con todo enlazado por @id: el negocio, el sitio (solo en el inicio), la página, sus migas y lo extra. */
+const grafo = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: site.name,
-  description: site.description,
-  url: site.url,
-  email: site.email,
-  telephone: `+52${site.phone}`,
-  areaServed: site.areas.map((name) => ({ '@type': 'City', name })),
-  address: { '@type': 'PostalAddress', addressLocality: 'San Juan del Río', addressRegion: site.region, addressCountry: 'MX' },
+  '@graph': [negocio(), ...(ruta === '/' ? [sitio()] : []), ...pagina({ ruta, titulo: title, descripcion: description, migas }), ...schema],
 };
 ---
 <!doctype html>
@@ -37,22 +40,31 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFF9F1" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111E3D" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/fotos/og-montaje.jpg', site.url).toString()} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,500..700,50;1,9..144,500..700,50&family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(grafo)} />
     {/* Tema: sigue el sistema (claro / marino) y marca que hay JS para las entradas al hacer scroll. */}
     <script is:inline>
       (function () {

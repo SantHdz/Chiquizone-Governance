@@ -4,6 +4,7 @@ import Globos from './decor/Globos.astro';
 import Banderines from './decor/Banderines.astro';
 import { site, whatsappLink } from '../data/site';
 import { unico } from '../data/paquetes';
+import { temas } from '../data/seo';
 const year = new Date().getFullYear();
 ---
 <section class="cierre" aria-labelledby="cierre-t">
@@ -35,6 +36,10 @@ const year = new Date().getFullYear();
       </p>
     </div>
     <div>
+      <h3>Conoce más</h3>
+      <p>{temas.map((t, i) => <>{i > 0 && <br />}<a href={t.ruta}>{t.nombre}</a></>)}</p>
+    </div>
+    <div>
       <h3>Secciones</h3>
       <p>
         <a href="/#paquetes">{unico ? 'La zona' : 'Paquetes'}</a><br />
@@ -59,7 +64,7 @@ const year = new Date().getFullYear();
   footer { background: var(--marino-700); color: var(--crema); padding: 0 0 var(--space-6); }
   .bander { background: var(--sol-100); }
   :global([data-theme="marino"]) .bander { background: var(--marino-900); }
-  .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--space-7); padding-top: var(--space-8); }
+  .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--space-7); padding-top: var(--space-8); }
   .logo { height: 48px; width: auto; margin-bottom: var(--space-4); }
   h3 { font-family: var(--font-body); font-size: var(--text-small); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; margin-bottom: var(--space-3); color: var(--sol-500); }
   footer p { font-size: var(--text-small); opacity: .9; line-height: 1.9; }
