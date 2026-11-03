@@ -38,7 +38,7 @@ flowchart LR
 
 ## Conocimiento (RAG)
 
-Hoy el material completo cabe en el prompt y cada fragmento lleva su id; el modelo marca `[[id]]` y el Worker lo convierte en "_Fuente: …_". La búsqueda vectorial con reranking se enciende cuando el material crezca (decisión de Sant pendiente). Para agregar o cambiar información: edita `conocimiento/`, corre `npm run conocimiento` y abre un PR.
+Hoy el material completo cabe en el prompt y cada fragmento lleva su id; el modelo marca `[[id]]` y el Worker lo convierte en "_Fuente: …_". La búsqueda vectorial con reranking se enciende cuando el material pase de unas 50 páginas (decisión de Sant, 2026-11-03). Para agregar o cambiar información: edita `conocimiento/`, corre `npm run conocimiento` y abre un PR.
 
 Reglas de convivencia con Sant:
 
