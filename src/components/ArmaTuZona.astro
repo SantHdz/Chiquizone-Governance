@@ -1,13 +1,17 @@
 ---
 /*
- * "Arma tu zona": hasta tres preguntas que eligen el paquete y, abajo, "¿Tu fecha está libre?".
+ * "Arma tu zona": hasta tres preguntas que eligen el paquete, "¿Quieres sumar algo?" con los complementos y, abajo,
+ * "¿Tu fecha está libre?".
  * Solo pregunta lo que de verdad puede elegir el cliente entre los paquetes publicados (src/data/paquetes.ts):
  * con un solo kit no hay preguntas y la sección ni se muestra (la decide index.astro).
+ * Los complementos, sus precios y a qué paquete aplican salen de src/data/complementos.ts; el total y el apartado
+ * (50 % del total con complementos) los calcula `calcular`, la misma cuenta que usa el asistente.
  * Benchmark: features 1 (configurador en 3 pasos), 7 (fecha junto a la acción) y 8 (entrada por edad).
  */
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import { publicados, opciones, familias } from '../data/paquetes';
+import { complementosPublicados, combosPublicados, hayComplementos, precioSuelto, ahorro, trae } from '../data/complementos';
 import { site, mxn, pct } from '../data/site';
 
 const data = publicados.map(({ id, nombre, familia, splash, pro, precio, cuidadoras }) => ({ id, nombre, familia, splash, pro, precio, cuidadoras }));
@@ -58,8 +62,13 @@ if (sinPaquete.length) {
 }
 const primero = Object.fromEntries(preguntas.map((q) => [q.name, q.opts[0].value]));
 const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
+
+/* Los complementos que no aplican al paquete inicial nacen ocultos; el script los muestra al cambiar de paquete. */
+const aplica = (lista: string[]) => lista.includes(inicial.id);
+const desde = (o: { precio: number }[]) => Math.min(...o.map((x) => x.precio));
+const numeroExtras = preguntas.length + 1;
 ---
-<form class:list={['arma', { compacto: preguntas.length <= 1 }]} data-paquetes={JSON.stringify(data)} data-wa={site.whatsapp}>
+<form class:list={['arma', { compacto: preguntas.length <= 1 && !hayComplementos, 'con-extras': hayComplementos }]} data-paquetes={JSON.stringify(data)} data-wa={site.whatsapp} data-deposito={site.bookingDepositPct}>
   {ocultas.map((n) => <input type="hidden" name={n} value={fijo[n]} />)}
   <ol class="qs">
     {preguntas.map((q, i) => (
@@ -78,6 +87,51 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
         </fieldset>
       </li>
     ))}
+
+    {hayComplementos && (
+      <li class={`q q-${numeroExtras}`}>
+        <fieldset class="extras">
+          <legend><span class="n" aria-hidden="true">{numeroExtras}</span>¿Quieres sumar algo?</legend>
+          <p class="ayuda">Es opcional. Lo que marques se suma a tu total.</p>
+
+          {combosPublicados.map((k) => (
+            <div class="ex combo" data-combo={k.id} data-incluye={k.incluye.join(' ')} data-paquetes={k.paquetes.join(' ')} hidden={!aplica(k.paquetes)}>
+              <label class="ex-main">
+                <input type="checkbox" name="combo" value={k.id} />
+                <span class="ex-ico"><Icon name="combo" size={20} /></span>
+                <span class="ex-txt"><b>{k.nombre}</b><small>{trae(k)}</small></span>
+                <span class="ex-precio"><b>{mxn(k.precio)}</b><s>{mxn(precioSuelto(k))} sueltos</s></span>
+              </label>
+              <p class="ex-ahorro">Ahorras {mxn(ahorro(k))}</p>
+            </div>
+          ))}
+
+          <div class="ex-grid">
+            {complementosPublicados.map((x) => (
+              <div class="ex" data-extra={x.id} data-paquetes={x.paquetes.join(' ')} hidden={!aplica(x.paquetes)}>
+                <label class="ex-main">
+                  <input type="checkbox" name="extra" value={x.id} />
+                  <span class="ex-ico"><Icon name={x.icono} size={20} /></span>
+                  <span class="ex-txt">
+                    <b>{x.nombre}</b>
+                    <small data-precio>{x.opciones ? `Desde +${mxn(desde(x.opciones))}` : `+${mxn(x.precio!)}`}</small>
+                  </span>
+                </label>
+                {x.detalle && <p class="ex-nota">{x.detalle}</p>}
+                {x.opciones && (
+                  <fieldset class="ex-ops" disabled>
+                    <legend class="sr-only">Opciones de {x.nombre}</legend>
+                    {x.opciones.map((o, i) => (
+                      <label><input type="radio" name={`op-${x.id}`} value={o.id} checked={i === 0} />{o.etiqueta} · {mxn(o.precio)}</label>
+                    ))}
+                  </fieldset>
+                )}
+              </div>
+            ))}
+          </div>
+        </fieldset>
+      </li>
+    )}
   </ol>
 
   <div class="result">
@@ -86,6 +140,18 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
       <p class="name" data-out="nombre">{inicial.nombre}</p>
       <p class="price"><span data-out="precio">{mxn(inicial.precio)}</span><small>5 horas de servicio, montaje incluido</small></p>
       <a class="more" data-out="link" href={`#${inicial.id}`}>Ver qué incluye <Icon name="siguiente" size={16} /></a>
+
+      {hayComplementos && (
+        <div class="suma" data-out="suma" hidden>
+          <p class="rk">Tus complementos</p>
+          <ul data-out="lineas"></ul>
+          <dl class="cuenta">
+            <div><dt>Total estimado</dt><dd data-out="total"></dd></div>
+            <div class="apartar"><dt>Para apartar ({pct(site.bookingDepositPct)})</dt><dd data-out="apartar"></dd></div>
+          </dl>
+          <p class="fine">Se descuenta del total. La fecha te la confirmamos por WhatsApp.</p>
+        </div>
+      )}
     </div>
 
     <div class="reserva">
@@ -101,38 +167,122 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
       <label>Niños, más o menos<input type="number" name="ninos" min="1" max="80" inputmode="numeric" placeholder="Ej. 12" /></label>
     </fieldset>
     <Button type="submit" icon="whatsapp">Revisar mi fecha</Button>
-    <p class="fine">Te confirmamos por WhatsApp el mismo día. Apartas con el {pct(site.bookingDepositPct)}.</p>
+    <p class="fine">Te confirmamos por WhatsApp el mismo día{hayComplementos ? ', con tu zona y tus complementos ya escritos' : ''}. Apartas con el {pct(site.bookingDepositPct)}{hayComplementos ? ' del total' : ''}.</p>
     </div>
   </div>
 </form>
 
 <script>
+  import { calcular, type Seleccion } from '../data/complementos';
+
   const mxn = (n: number) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n).replace('MX', '');
+  const pctTxt = (n: number) => `${n} %`;
+
   document.querySelectorAll<HTMLFormElement>('form.arma').forEach((form) => {
     const paquetes = JSON.parse(form.dataset.paquetes || '[]');
-    const out = (k: string) => form.querySelector<HTMLElement>(`[data-out="${k}"]`)!;
+    const out = (k: string) => form.querySelector<HTMLElement>(`[data-out="${k}"]`);
+    const caja = (el: Element) => el.querySelector<HTMLInputElement>('input[type=checkbox]')!;
+    const extras = [...form.querySelectorAll<HTMLElement>('.ex[data-extra]')];
+    const combos = [...form.querySelectorAll<HTMLElement>('.ex.combo')];
+    const deposito = Number(form.dataset.deposito || 50);
+    let ultimo = '';
+
     const pick = () => {
       const d = new FormData(form);
       return paquetes.find((p: any) => p.familia === d.get('edad') && p.splash === (d.get('agua') === 'si') && p.pro === (d.get('pro') === 'si'));
     };
+
+    /* Qué complementos se ofrecen en este paquete, qué trae el combo marcado y qué opciones están activas. */
+    const sincronizar = (id: string) => {
+      [...extras, ...combos].forEach((el) => {
+        const ok = (el.dataset.paquetes || '').split(' ').includes(id);
+        if (!ok) caja(el).checked = false;
+        el.hidden = !ok;
+      });
+      const marcado = combos.find((el) => !el.hidden && caja(el).checked);
+      const dentro = marcado ? (marcado.dataset.incluye || '').split(' ') : [];
+      extras.forEach((el) => {
+        const va = dentro.includes(el.dataset.extra || '');
+        const cb = caja(el);
+        cb.disabled = va;
+        el.classList.toggle('incl', va);
+        const precio = el.querySelector<HTMLElement>('[data-precio]');
+        if (precio) {
+          precio.dataset.orig ??= precio.textContent || '';
+          precio.textContent = va ? 'Va en el combo' : precio.dataset.orig;
+        }
+        const ops = el.querySelector<HTMLFieldSetElement>('.ex-ops');
+        if (ops) ops.disabled = !cb.checked || cb.disabled;
+      });
+    };
+
+    const leer = (): Seleccion => {
+      const combo = combos.find((el) => !el.hidden && caja(el).checked)?.dataset.combo;
+      const marcados: string[] = [];
+      const elegidas: Record<string, string> = {};
+      extras.forEach((el) => {
+        const cb = caja(el);
+        if (el.hidden || cb.disabled || !cb.checked) return;
+        const id = el.dataset.extra!;
+        marcados.push(id);
+        const r = el.querySelector<HTMLInputElement>('input[type=radio]:checked');
+        if (r) elegidas[id] = r.value;
+      });
+      return { combo, extras: marcados, opciones: elegidas };
+    };
+
     const render = () => {
       const p = pick(); if (!p) return;
-      out('nombre').textContent = p.nombre;
-      out('precio').textContent = mxn(p.precio);
+      out('nombre')!.textContent = p.nombre;
+      out('precio')!.textContent = mxn(p.precio);
       (out('link') as HTMLAnchorElement).href = `#${p.id}`;
-      const r = form.querySelector('.result')!;
-      r.classList.remove('swap'); void (r as HTMLElement).offsetWidth; r.classList.add('swap');
+
+      if (extras.length || combos.length) {
+        sincronizar(p.id);
+        const cuenta = calcular(p.id, leer());
+        const suma = out('suma');
+        if (suma) {
+          suma.hidden = cuenta.lineas.length === 0;
+          out('lineas')!.replaceChildren(...cuenta.lineas.map((l) => {
+            const li = document.createElement('li');
+            const nombre = document.createElement('span');
+            nombre.textContent = l.nombre;
+            if (l.detalle) { const s = document.createElement('small'); s.textContent = l.detalle; nombre.append(s); }
+            const precio = document.createElement('b');
+            precio.textContent = `+${mxn(l.precio)}`;
+            li.append(nombre, precio);
+            return li;
+          }));
+          out('total')!.textContent = mxn(cuenta.total);
+          out('apartar')!.textContent = mxn(cuenta.apartar);
+        }
+      }
+
+      /* La animación es solo para cuando cambia el paquete, no para cada complemento. */
+      if (p.id !== ultimo) {
+        const r = form.querySelector('.result')!;
+        r.classList.remove('swap'); void (r as HTMLElement).offsetWidth; r.classList.add('swap');
+        ultimo = p.id;
+      }
     };
-    form.addEventListener('change', (e) => { if ((e.target as HTMLInputElement).type === 'radio') render(); });
+
+    form.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t.type === 'radio' || t.type === 'checkbox') render();
+    });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const p = pick(); const d = new FormData(form);
       const fecha = String(d.get('fecha') || '');
       const fechaTxt = new Date(fecha + 'T12:00').toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
       const muni = d.get('municipio') === 'otro' ? 'otro municipio (por confirmar)' : String(d.get('municipio'));
+      const cuenta = p && (extras.length || combos.length) ? calcular(p.id, leer()) : null;
+      const conExtras = cuenta && cuenta.lineas.length > 0;
       const lines = [
         `Hola Chiquizone, ¿tienen libre el ${fechaTxt}?`,
         `Paquete: ${p?.nombre} (${mxn(p?.precio)})`,
+        conExtras ? `Complementos: ${cuenta.lineas.map((l) => `${l.nombre}${l.detalle ? ` con ${l.detalle.toLowerCase()}` : ''} (${mxn(l.precio)})`).join(', ')}` : '',
+        conExtras ? `Total estimado: ${mxn(cuenta.total)} (para apartar, ${pctTxt(deposito)}: ${mxn(cuenta.apartar)})` : '',
         `Municipio: ${muni}`,
         d.get('ninos') ? `Niños: ${d.get('ninos')} aprox.` : '',
       ].filter(Boolean);
@@ -143,6 +293,8 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
       btn?.setAttribute('aria-busy', 'true');
       setTimeout(() => btn?.removeAttribute('aria-busy'), 1200);
     });
+
+    render();
   });
 </script>
 
@@ -169,6 +321,34 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
   .opt:has(input:checked) :global(.icon) { color: var(--color-accent); }
   .opt:has(input:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
 
+  /* Complementos */
+  .ayuda { font-size: var(--text-sm); color: var(--color-text-muted); margin: calc(var(--space-2) * -1) 0 var(--space-3) calc(32px + var(--space-3)); }
+  .ex-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); align-items: start; margin-top: var(--space-3); }
+  .ex {
+    background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4);
+    transition: border-color var(--motion-hover) var(--ease-standard), box-shadow var(--motion-hover) var(--ease-standard);
+  }
+  .ex[hidden] { display: none; }
+  .ex:has(.ex-main input:checked) { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--frambuesa-50), var(--shadow-pop); }
+  .ex:has(.ex-main input:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+  .ex.incl { border-style: dashed; background: transparent; box-shadow: none; }
+  .ex-main { display: grid; grid-template-columns: 22px auto 1fr auto; gap: var(--space-3); align-items: center; cursor: pointer; }
+  .ex-main input { width: 22px; height: 22px; margin: 0; accent-color: var(--color-accent); cursor: pointer; }
+  .ex-ico { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--sol-200); color: var(--marino-700); }
+  .ex:has(.ex-main input:checked) .ex-ico { background: var(--color-accent); color: var(--surface-raised); }
+  .ex-txt b { display: block; font-weight: 800; line-height: 1.25; color: var(--color-text); }
+  .ex-txt small { display: block; font-size: var(--text-xs); font-weight: 700; color: var(--color-text-muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .ex-nota { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-2) 0 0 calc(22px + 36px + var(--space-3) * 2); }
+  .ex-ops { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-2) 0 0 calc(22px + 36px + var(--space-3) * 2); }
+  .ex-ops label { display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 700; color: var(--color-text); cursor: pointer; }
+  .ex-ops input { accent-color: var(--color-accent); }
+  .ex-ops:disabled label { color: var(--color-text-muted); cursor: default; }
+  .combo { border-color: var(--highlight); }
+  .ex-precio { text-align: right; }
+  .ex-precio b { display: block; font-family: var(--font-display); font-weight: var(--weight-display); font-size: 22px; line-height: 1; color: var(--color-text); font-variant-numeric: tabular-nums; }
+  .ex-precio s { display: block; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 4px; }
+  .ex-ahorro { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; margin: var(--space-2) 0 0 calc(22px + 36px + var(--space-3) * 2); border-radius: 999px; background: var(--sol-200); color: var(--marino-700); font-size: var(--text-xs); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+
   .result {
     position: sticky; top: 88px; display: grid; gap: var(--space-3); align-content: start;
     background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
@@ -182,6 +362,22 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
   .price span { font-family: var(--font-display); font-weight: var(--weight-display); font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--color-text); }
   .price small { display: block; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 6px; }
   .more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--link); text-underline-offset: 4px; }
+
+  .suma { display: grid; gap: var(--space-3); border-top: 1.5px dashed var(--color-border); padding-top: var(--space-4); }
+  .suma[hidden] { display: none; }
+  .suma ul { list-style: none; display: grid; gap: var(--space-2); }
+  /* Los renglones los crea el script, por eso :global. */
+  .suma ul :global(li) { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); font-weight: 700; color: var(--color-text); }
+  .suma ul :global(li small) { display: block; font-size: var(--text-xs); font-weight: 400; color: var(--color-text-muted); }
+  .suma ul :global(li b) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cuenta { display: grid; gap: var(--space-2); }
+  .cuenta div { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+  .cuenta dt { font-size: var(--text-sm); font-weight: 700; color: var(--color-text-muted); }
+  .cuenta dd { margin: 0; font-family: var(--font-display); font-weight: var(--weight-display); font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--color-text); }
+  .cuenta .apartar { background: var(--sol-200); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); }
+  .cuenta .apartar dt { color: var(--marino-700); }
+  .cuenta .apartar dd { font-size: 22px; color: var(--marino-700); }
+
   .fecha { display: grid; gap: var(--space-3); border-top: 1.5px dashed var(--color-border); padding-top: var(--space-4); margin-top: var(--space-2); }
   .fecha legend { font-size: var(--text-md, 17px); margin-bottom: 0; padding-top: var(--space-4); float: left; width: 100%; }
   .fecha label { display: grid; gap: 6px; font-size: var(--text-sm); font-weight: 700; color: var(--input-label); }
@@ -205,7 +401,24 @@ const inicial = publicados.find((p) => coincide(p, { ...fijo, ...primero }))!;
     .compacto .reserva { grid-area: reserva; position: sticky; top: 88px; }
     .compacto .fecha { border-top: 0; margin-top: 0; padding-top: 0; }
   }
+  /* Con complementos: las elecciones a la izquierda, el resumen con el total pegado a la derecha (así el total se ve
+     mientras eliges) y "¿Tu fecha está libre?" a todo lo ancho, debajo. */
+  @media (min-width: 901px) {
+    .con-extras { grid-template-columns: 1.5fr 1fr; grid-template-areas: "q resumen" "reserva reserva"; row-gap: var(--space-6); }
+    .con-extras .qs { grid-area: q; }
+    .con-extras .result { display: contents; }
+    .con-extras .resumen, .con-extras .reserva {
+      background: var(--color-surface); border: 1.5px solid var(--card-border); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+      padding: var(--space-6);
+    }
+    .con-extras .resumen { grid-area: resumen; position: sticky; top: 88px; }
+    .con-extras .reserva { grid-area: reserva; grid-template-columns: 1fr auto; align-items: end; gap: var(--space-4) var(--space-5); }
+    .con-extras .fecha { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; border-top: 0; margin-top: 0; padding-top: 0; }
+    .con-extras .fecha legend { grid-column: 1 / -1; float: none; padding-top: 0; }
+    .con-extras .reserva .fine { grid-column: 1 / -1; }
+  }
   @media (max-width: 900px) { .arma { grid-template-columns: 1fr; } .result { position: static; } }
+  @media (max-width: 560px) { .ex-grid { grid-template-columns: 1fr; } }
   @media (max-width: 480px) { .opts { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .opt:hover { transform: none; } .result.swap .name, .result.swap .price { animation: none; } }
 </style>

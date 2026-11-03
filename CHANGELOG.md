@@ -14,8 +14,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Skill ui-ux-pro-max para guiar decisiones de UX y movimiento (PR #16).
 - Logo grande en el inicio que viaja al centro de la barra al hacer scroll, con colores por tokens y versión para tema marino (ADR 0009, propuesta).
 - Logo vectorizado provisional (`scripts/vectorizar-logo.py`) hasta tener el SVG oficial.
+- Paso opcional "¿Quieres sumar algo?" en Arma tu zona: ocho complementos y el combo Fiesta completa, con total estimado y apartado del 50 % que se actualizan al marcar, y mensaje de WhatsApp con la cuenta (ADR 0011, propuesta). Los datos viven en `src/data/complementos.ts` y `calcular()` es la única cuenta.
+- Íconos para los complementos (bocina, burbujas, letrero, picnic, montaña rusa, brincolín, hora extra y combo).
 
 ### Cambiado
+- Baby baby sube de $1,870 a $1,970 (apartado de $985), aprobado por Sant el 3 de noviembre. Pro Baby sigue en $3,200 hasta que Sant decida su precio con 2 cuidadoras.
 - Títulos en Fraunces con una palabra en cursiva; Fredoka queda para impacto puntual (ADR 0006, aceptada).
 - Secciones con ceja, título y entradilla; "Cómo funciona" junto a los requisitos del espacio; Splash dentro de Paquetes.
 - Tema oscuro (marino) automático según el sistema.

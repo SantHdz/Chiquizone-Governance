@@ -115,7 +115,7 @@ Los componentes fueron revisados con las guías de [Impeccable](https://github.c
 
 ### Íconos
 
-[Phosphor](https://phosphoricons.com) en peso Bold (licencia MIT): su trazo redondeado conversa con Fredoka. Son 29 íconos con nombres en español (`whatsapp`, `bebe`, `agua`, `cuidado`, `fecha-confirmada`…) en `src/icons/`.
+[Phosphor](https://phosphoricons.com) en peso Bold (licencia MIT): su trazo redondeado conversa con Fredoka. Son 37 íconos con nombres en español (`whatsapp`, `bebe`, `agua`, `cuidado`, `fecha-confirmada`…) en `src/icons/`.
 
 ---
 
@@ -233,6 +233,7 @@ npm run dev        # http://localhost:4321
 | Qué | Archivo |
 |---|---|
 | Precios, paquetes, lo que incluyen y cuáles se muestran (`disponible`) | `src/data/paquetes.ts` |
+| Complementos, combos, sus precios y en qué paquete se ofrecen | `src/data/complementos.ts` |
 | Teléfono, WhatsApp, zonas, anticipo | `src/data/site.ts` |
 | Colores, espacios, componentes | `tokens/*.json` (nunca `tokens.css` a mano) |
 | Componentes | `src/components/` |
@@ -275,8 +276,8 @@ flowchart LR
 ├── scripts/build-tokens.mjs       # valida capas y contraste, genera el CSS
 ├── src/
 │   ├── components/                # Button, PackageCard, ArmaTuZona, Faq, Loader, Icon…
-│   ├── data/                      # paquetes.ts y site.ts: la única fuente de precios y datos
-│   ├── icons/                     # 29 íconos Phosphor Bold
+│   ├── data/                      # paquetes.ts, complementos.ts y site.ts: la única fuente de precios y datos
+│   ├── icons/                     # 37 íconos Phosphor Bold
 │   ├── layouts/Base.astro         # SEO, Open Graph y datos estructurados
 │   ├── pages/                     # index.astro y design-system.astro (guía viva)
 │   └── styles/                    # tokens.css (generado) y base.css

@@ -13,6 +13,7 @@ import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import Chispas from '../components/decor/Chispas.astro';
 import { publicados, preguntasActivas, hayPro, haySplash, familiasPublicadas, unico, familias } from '../data/paquetes';
+import { hayComplementos } from '../data/complementos';
 import { site, mxn, pct, whatsappLink } from '../data/site';
 
 /* Todo lo que depende de los paquetes sale de `publicados`: con un solo kit el sitio se simplifica solo
@@ -34,8 +35,15 @@ const cuidadoras = publicados.filter((p) => p.pro).map((p) => p.cuidadoras!);
 const cuidadorasMin = Math.min(...cuidadoras);
 const cuidadorasMax = Math.max(...cuidadoras);
 
-const pasosArma = ['un paso', 'dos pasos', 'tres pasos'][preguntasActivas - 1];
+/* Los complementos cuentan como un paso más; "Arma tu zona" se muestra si hay algo que preguntar o algo que sumar. */
+const pasosTotales = preguntasActivas + (hayComplementos ? 1 : 0);
+const pasosArma = ['un paso', 'dos pasos', 'tres pasos', 'cuatro pasos'][pasosTotales - 1];
 const preguntasArma = ['una pregunta', 'dos preguntas', 'tres preguntas'][preguntasActivas - 1];
+const leadArma = preguntasActivas > 0
+  ? (hayComplementos
+      ? `Responde ${preguntasArma}, suma lo que quieras y al final revisamos tu fecha.`
+      : `Responde ${preguntasArma} y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha.`)
+  : 'Suma lo que quieras a tu zona y al final revisamos tu fecha.';
 const leadPaquetes = unico
   ? unica.resumen
   : unaFamilia
@@ -97,8 +105,8 @@ const serviceLd = {
 <Base heroLogo>
   <Hero />
 
-  {preguntasActivas > 0 && (
-    <Section id="arma" eyebrow={`En ${pasosArma}`} title="Arma tu *zona*" lead={`Responde ${preguntasArma} y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha.`}>
+  {pasosTotales > 0 && (
+    <Section id="arma" eyebrow={`En ${pasosArma}`} title="Arma tu *zona*" lead={leadArma}>
       <ArmaTuZona />
     </Section>
   )}
