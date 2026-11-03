@@ -1,0 +1,53 @@
+[
+  {
+    "id": "hero-montaje",
+    "plantilla": "foto",
+    "eyebrow": "Zonas de juego para fiestas",
+    "titulo": "La zona de juego que *crece* con tus hijos",
+    "texto": "Montamos, cuidamos y recogemos. Tú disfrutas la fiesta.",
+    "foto": "public/fotos/montaje-jardin-1000.webp",
+    "foto_real": true,
+    "cta": "Cotiza por WhatsApp",
+    "temas": ["crema", "marino"],
+    "formatos": ["post", "cuadrado", "historia"],
+    "variantes": 2
+  },
+  {
+    "id": "frase-disfruta",
+    "plantilla": "frase",
+    "eyebrow": "Tu fiesta, sin pendientes",
+    "titulo": "Tú *disfrutas*, nosotros cuidamos",
+    "texto": "Cinco horas de juego con montaje, sanitización y recogida incluidos.",
+    "cta": "427 150 3500",
+    "temas": ["sol", "salvia", "frambuesa"],
+    "formatos": ["post", "historia"],
+    "variantes": 1
+  },
+  {
+    "id": "promo-baby",
+    "plantilla": "promo",
+    "titulo": "Para los que dan sus *primeros* pasos",
+    "paquete": {
+      "nombre": "Baby baby",
+      "edad": "4 meses a 3 años",
+      "precio": "$1,870",
+      "detalle": "5 horas · montaje incluido",
+      "incluye": ["Brincolín baby y resbaladilla", "Alberca de pelotas", "Tatami acolchado", "Corral perimetral"]
+    },
+    "cta": "Aparta tu fecha",
+    "temas": ["crema", "marino"],
+    "formatos": ["post", "cuadrado"],
+    "variantes": 1
+  },
+  {
+    "id": "escena-alberca",
+    "plantilla": "foto",
+    "eyebrow": "Paquetes Splash",
+    "titulo": "Juego con *agua* para los días de calor",
+    "texto": "Alberca con patitos, mesa de agua y tapete fuente.",
+    "escena": "Zona de juego para bebés con alberca inflable pequeña con patitos de hule, mesa de agua y tapete acolchado, montada sobre pasto junto a una alberca",
+    "hueco": "ninguno",
+    "temas": ["salvia"],
+    "formatos": ["post"]
+  }
+]

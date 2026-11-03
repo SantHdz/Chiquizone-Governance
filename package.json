@@ -8,7 +8,9 @@
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
     "preview": "astro preview",
-    "check": "npm run tokens && git diff --exit-code -- src/styles/tokens.css tokens/build && astro build"
+    "check": "npm run tokens && git diff --exit-code -- src/styles/tokens.css tokens/build && astro build",
+    "arte": "node scripts/arte/generar.mjs",
+    "prompt": "node scripts/arte/prompt.mjs"
   },
   "dependencies": {
     "astro": "5.18.2"
