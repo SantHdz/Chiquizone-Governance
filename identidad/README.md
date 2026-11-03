@@ -8,6 +8,7 @@ Aquí vive la parte que leen las máquinas del **Manual de identidad visual de C
 | `piezas-ejemplo.json` / `.csv` | Ejemplos de piezas listas para generar. El CSV tiene las mismas columnas que puede tener la Central de contenido. |
 | `assets/logos/` | Logos oficiales en alta resolución (copia de `marca/logos`). |
 | `../scripts/arte/generar.mjs` | Dibuja las piezas en PNG con las plantillas de marca y valida que no se salgan del manual. |
+| `../scripts/arte/imagen-ia.mjs` | Pide la imagen a ChatGPT (API de OpenAI) cuando corres con `--ia`. |
 | `../scripts/arte/prompt.mjs` | Arma el prompt de imagen con el estilo fijo; tú solo describes la escena. |
 
 ## Uso
@@ -19,6 +20,16 @@ npm run arte -- identidad/piezas-ejemplo.json            # PNG en arte/salida/
 npm run arte -- piezas.csv --solo promo-baby             # una sola pieza
 npm run prompt -- --escena "brincolín blanco y corral de colores en un jardín" --hueco arriba
 ```
+
+## Imágenes con ChatGPT
+
+Con `--ia`, cada pieza que trae `escena` y no trae `foto` recibe una imagen generada por la API de imágenes de OpenAI, con el prompt de marca. La IA solo hace la foto o ilustración; logo, textos y colores los pone la plantilla, y esas piezas nunca llevan "Montaje real".
+
+1. Crea una clave en platform.openai.com/api-keys (se paga por imagen).
+2. Copia `.env.example` como `.env` y pega la clave. `.env` no se sube al repo.
+3. `npm run arte -- piezas.csv --ia`
+
+Las imágenes quedan en `arte/fotos-ia/<id>.png` y se reutilizan en la siguiente corrida, así no se paga dos veces. Para pedir otra, borra ese archivo. Modelo y calidad se cambian con `OPENAI_IMAGE_MODEL` y `OPENAI_IMAGE_QUALITY` en `.env`.
 
 ## Cómo se hace una variante
 

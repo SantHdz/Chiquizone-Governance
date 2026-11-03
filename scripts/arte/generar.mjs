@@ -4,6 +4,7 @@
  *
  *   node scripts/arte/generar.mjs identidad/piezas-ejemplo.json
  *   node scripts/arte/generar.mjs piezas.csv --salida arte/salida --solo promo-baby
+ *   node scripts/arte/generar.mjs piezas.csv --ia     (pide a ChatGPT la imagen de las piezas con escena)
  *
  * Cada pieza se multiplica por sus temas × formatos × variantes. Las variantes cambian solo lo que el
  * manual permite mover (lado de los globos, giro de la foto, inicio de los banderines, chispas); el
@@ -17,6 +18,7 @@ import { resolve, dirname, extname, join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { render, rng } from './plantillas.mjs';
 import { construirPrompt } from './prompt.mjs';
+import { generarImagen } from './imagen-ia.mjs';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const estilo = JSON.parse(readFileSync(join(raiz, 'identidad/estilo.json'), 'utf8'));
@@ -32,6 +34,8 @@ if (!entrada) {
 const salida = resolve(opt('salida', join(raiz, 'arte/salida')));
 const solo = opt('solo');
 const forzar = args.includes('--forzar');
+const conIa = args.includes('--ia');
+try { process.loadEnvFile(join(raiz, '.env')); } catch { /* sin .env: se usan las variables de la terminal */ }
 
 /* ---------- Lectura ---------- */
 function leerCsv(txt) {
@@ -110,6 +114,19 @@ const manifiesto = [];
 let fallas = 0;
 
 for (const pieza of piezas) {
+  /* Con --ia, una pieza con escena y sin foto recibe una imagen de ChatGPT. Se guarda y se reutiliza
+     en la siguiente corrida para no pagar dos veces; bórrala de arte/fotos-ia/ para pedir otra. */
+  if (conIa && pieza.escena && !pieza.foto) {
+    const destino = join(raiz, 'arte/fotos-ia', `${pieza.id}.png`);
+    try {
+      const r = await generarImagen({ tipo: pieza.escena_tipo || 'foto', escena: pieza.escena, formato: (pieza.formatos || ['post'])[0], hueco: pieza.hueco, destino });
+      pieza.foto = destino;
+      pieza.foto_generada = true;
+      console.log(`  · ${pieza.id}: imagen de ChatGPT ${r.reutilizada ? 'reutilizada' : 'generada'} (${destino})`);
+    } catch (e) {
+      console.error(`✗ ${pieza.id}: no se pudo generar la imagen con ChatGPT. ${e.message}`);
+    }
+  }
   const errores = validar(pieza);
   if (errores.length) {
     console.error(`✗ ${pieza.id}:\n  - ${errores.join('\n  - ')}`);
