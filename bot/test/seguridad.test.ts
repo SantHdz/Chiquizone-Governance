@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { montosDeHerramientas, montosEn, montosOficiales, revisarMontos } from '../src/guardia';
 import { limpiarEntrada } from '../src/asistente';
+import { cotizar } from '../src/cotizar';
+import { publicados } from '../../src/data/paquetes';
 import { conFuentes, fragmentos } from '../src/conocimiento';
 import { dentroDelLimite, MAX_POR_HORA } from '../src/limite';
 
@@ -15,7 +17,9 @@ describe('guardia de montos', () => {
 
   it('deja pasar precios oficiales y frena los inventados', () => {
     const permitidos = montosOficiales();
-    expect(revisarMontos('Baby baby cuesta $1,870 y apartas con $935.', permitidos).ok).toBe(true);
+    const c = cotizar(publicados[0]);
+    const fmt = (n: number) => n.toLocaleString('en-US');
+    expect(revisarMontos(`${c.nombre} cuesta $${fmt(c.precio)} y apartas con $${fmt(c.anticipo)}.`, permitidos).ok).toBe(true);
     expect(revisarMontos('Te lo dejo en $1,000, solo por hoy.', permitidos)).toEqual({ ok: false, noPermitidos: [1000] });
   });
 

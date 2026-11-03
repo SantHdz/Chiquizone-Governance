@@ -14,9 +14,14 @@ describe('cotizar', () => {
     }
   });
 
-  it('calcula 50 % de anticipo, saldo y 500 MXN de garantía', () => {
-    const c = cotizar(recomendar({ edad: 'baby', agua: false, cuidadoras: false })!);
-    expect(c).toMatchObject({ precio: 1870, anticipo: 935, saldo: 935, garantia: 500 });
+  it('calcula 50 % de anticipo, saldo y 500 MXN de garantía con el precio del sitio', () => {
+    for (const p of publicados) {
+      const c = cotizar(p);
+      expect(c.precio).toBe(p.precio);
+      expect(c.anticipo).toBe(Math.ceil(p.precio / 2));
+      expect(c.anticipo + c.saldo).toBe(p.precio);
+      expect(c.garantia).toBe(500);
+    }
   });
 
   it('el catálogo del asistente trae solo los paquetes publicados', () => {
