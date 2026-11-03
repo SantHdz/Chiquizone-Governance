@@ -1,8 +1,9 @@
 /*
- * El asistente: un modelo de Claude con tres herramientas. Nunca inventa precios ni fechas;
- * todo dato sale de cotizar (paquetes.ts) o de revisar_fecha (Google Calendar + reglas de agenda).
+ * El asistente: un modelo de Claude con cinco herramientas. Nunca inventa precios, descuentos ni fechas;
+ * todo dato sale de cotizar (paquetes.ts), revisar_fecha (Google Calendar + reglas de agenda),
+ * negociar (límites de Sant, aplicados en el servidor) o apartar_fecha (apartado tentativo de 12 horas).
  *
- * Fase 1: cotiza y revisa fechas. El apartado lo cierra Sant: el asistente junta los datos y se los pasa.
+ * El anticipo lo cobra Sant: el asistente aparta la fecha y le avisa.
  */
 import Anthropic from '@anthropic-ai/sdk';
 import { aHora, deHora, revisar, type Dia } from './agenda';
@@ -10,6 +11,8 @@ import { catalogo, cotizar, recomendar, ANTICIPO, GARANTIA_MXN } from './cotizar
 import { familias } from '../../src/data/paquetes';
 import { site } from '../../src/data/site';
 import { bloqueDeFuentes, type Fragmento } from './conocimiento';
+import { herramientaNegociar } from './negociacion';
+import { herramientaApartar, HORAS_APARTADO } from './apartado';
 
 type Mensaje = Anthropic.Beta.BetaMessageParam;
 
@@ -19,6 +22,10 @@ const MAX_VUELTAS = 6;
 export interface Herramientas {
   leerDia(fecha: string): Promise<Dia>;
   pasarASant(motivo: string, resumen: string): Promise<void>;
+  /** negociar: el servidor decide el ajuste con el estado de la conversación. Devuelve el resultado para el modelo. */
+  negociar(entrada: Record<string, unknown>): Promise<string>;
+  /** apartar_fecha: separa la fecha 12 horas con el precio vigente de la conversación. */
+  apartar(entrada: Record<string, unknown>): Promise<string>;
 }
 
 export interface Resultado {
@@ -41,7 +48,8 @@ Voz de la marca: festiva pero elegante. Cálida, clara y breve. Escribe como en 
 Reglas que no se rompen:
 - Precios y paquetes salen solo de la herramienta cotizar o del catálogo de abajo. Nunca des un precio que no esté ahí.
 - La disponibilidad sale solo de la herramienta revisar_fecha. Nunca digas que una fecha está libre sin revisarla.
-- No das descuentos, no cambias precios y no prometes nada que no esté en el catálogo.
+- Descuentos y regalos salen solo de la herramienta negociar. Tú nunca ofreces un descuento, un regalo ni un precio distinto por tu cuenta, y no le cuentas a la clienta cuáles son los límites. Si pide mejor precio o algo extra, usa negociar y sigue su guía. Si negociar dice que ya no hay ajustes, agradece su interés con calidez, ofrece con seguridad la alternativa que te da y deja la puerta abierta; no insistas ni te disculpes de más.
+- Una fecha solo queda apartada con la herramienta apartar_fecha. Nunca digas que ya está apartada si la herramienta no lo confirmó.
 - Solo atendemos ${site.areas.join(' y ')}. Si la fiesta es en otro lugar, pasa la conversación a Sant.
 - Para apartar se paga el ${ANTICIPO * 100} % del paquete como anticipo, más $${GARANTIA_MXN} MXN de garantía.
 - Cada servicio dura ${site.serviceHours} horas y necesita un espacio de ${site.spaceNeeded}.
@@ -54,8 +62,9 @@ Cómo llevar la plática:
 1. Pregunta lo que falte, de una o dos cosas a la vez: edad del festejado, si quieren juego con agua, si quieren cuidadoras, fecha, hora de inicio y municipio.
 2. Con edad, agua y cuidadoras, usa cotizar y recomienda ese paquete con su precio y su anticipo.
 3. Con fecha y hora, usa revisar_fecha. Si no está libre, ofrece las alternativas que te dé.
-4. Si quiere apartar, pide su nombre, dirección aproximada y número de niños. Luego usa pasar_a_sant con un resumen completo y dile que Sant le escribe en breve para el pago del anticipo.
-5. Si pide hablar con una persona, está molesta o tiene una duda que no puedes resolver, usa pasar_a_sant.
+4. Si pide descuento o algo extra, usa negociar con el paquete y la fecha. Da los montos exactamente como vienen.
+5. Si quiere apartar, pide su nombre y número de niños, y usa apartar_fecha. Si queda apartada, dile que la fecha está separada ${HORAS_APARTADO} horas, hasta la hora que te devuelve, con el precio y el anticipo que te devuelve, y que Sant le escribe en breve con los datos para pagar el anticipo. Si ya no está libre, ofrece las alternativas.
+6. Si pide hablar con una persona, está molesta o tiene una duda que no puedes resolver, usa pasar_a_sant.
 
 Edades: la familia Baby baby es de ${familias.baby.edades}. Por ahora solo se rentan los paquetes del catálogo de abajo; si piden otra edad o juego con agua, pasa la conversación a Sant sin dar precio.
 
@@ -113,7 +122,7 @@ const herramientas: Anthropic.Beta.BetaTool[] = [
   {
     name: 'pasar_a_sant',
     description:
-      'Pasa la conversación a Sant, el dueño, y pausa al asistente en este chat. Úsala para cerrar un apartado, para zonas fuera de cobertura, quejas, descuentos o dudas sin respuesta.',
+      'Pasa la conversación a Sant, el dueño, y pausa al asistente en este chat. Úsala si apartar_fecha falla, para zonas fuera de cobertura, quejas, peticiones que negociar no cubre o dudas sin respuesta.',
     strict: true,
     input_schema: {
       type: 'object',
@@ -128,6 +137,8 @@ const herramientas: Anthropic.Beta.BetaTool[] = [
       additionalProperties: false,
     },
   },
+  herramientaNegociar,
+  herramientaApartar,
 ];
 
 const FECHA = /^\d{4}-\d{2}-\d{2}$/;
@@ -170,6 +181,10 @@ async function ejecutar(
     case 'pasar_a_sant':
       await h.pasarASant(String(entrada.motivo), String(entrada.resumen));
       return { contenido: 'Listo: Sant ya tiene el resumen y continuará la conversación.', pasoASant: true };
+    case 'negociar':
+      return { contenido: await h.negociar(entrada) };
+    case 'apartar_fecha':
+      return { contenido: await h.apartar(entrada) };
     default:
       return { contenido: `Herramienta desconocida: ${nombre}`, error: true };
   }

@@ -375,3 +375,17 @@ export async function leerNegociacion(kv: KVNamespace, telefono: string): Promis
 export async function guardarNegociacion(kv: KVNamespace, telefono: string, estado: EstadoNegociacion) {
   await kv.put(clave(telefono), JSON.stringify(estado), { expirationTtl: TTL_NEGOCIACION });
 }
+
+/**
+ * Lo que vale hoy en la conversación para un solo paquete. apartar_fecha usa esto, nunca un monto del modelo.
+ * Un descuento que solo se ganó por "varios servicios" no aplica si se aparta un solo servicio.
+ */
+export function tratoVigente(estado: EstadoNegociacion, precioLista: number) {
+  const d = estado.ajustes.find((a) => a.tipo === 'descuento');
+  const soloPorVarios = d?.tipo === 'descuento' && d.razones.every((r) => r === 'varios-servicios');
+  const descuentoPct = d?.tipo === 'descuento' && !soloPorVarios ? d.pct : 0;
+  const concesiones = estado.ajustes.flatMap((a) => (a.tipo === 'concesion' ? [a.concesion] : []));
+  const precio = precioConDescuento(precioLista, descuentoPct);
+  const partes = [...(descuentoPct ? [`${descuentoPct} % de descuento`] : []), ...concesiones.map((c) => NOMBRE_CONCESION[c])];
+  return { descuentoPct, concesiones, precio, anticipo: Math.ceil(precio * ANTICIPO), ajustes: partes.join(', ') };
+}

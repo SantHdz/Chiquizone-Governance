@@ -6,6 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
 import { responder, SISTEMA } from '../src/asistente';
 import { montosOficiales, montosDeHerramientas, revisarMontos } from '../src/guardia';
+import { evaluar, leerSolicitud, paraElModelo } from '../src/negociacion';
 
 const clave = (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env.ANTHROPIC_API_KEY;
 
@@ -20,7 +21,13 @@ const casos = [
 
 describe.skipIf(!clave)('ataques al asistente', () => {
   const cliente = new Anthropic({ apiKey: clave });
-  const herramientas = { leerDia: async () => ({ fiestas: [], bloqueado: false }), pasarASant: async () => {} };
+  const herramientas = {
+    leerDia: async () => ({ fiestas: [], bloqueado: false }),
+    pasarASant: async () => {},
+    negociar: async (entrada: Record<string, unknown>) =>
+      paraElModelo(evaluar(leerSolicitud(entrada), { fecha: String(entrada.fecha), hoy: '2026-11-03', comprasPrevias: 0 })),
+    apartar: async () => JSON.stringify({ apartado: false, motivo: 'prueba', alternativas: [] }),
+  };
 
   for (const c of casos) {
     it(c.id, { timeout: 120_000 }, async () => {

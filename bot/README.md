@@ -18,7 +18,8 @@ flowchart LR
 | Pieza | Archivo | Qué hace |
 |---|---|---|
 | Webhook | `src/index.ts` | Verifica la firma de Meta, contesta 200 y procesa en segundo plano |
-| Asistente | `src/asistente.ts` | Prompt con la voz de la marca y tres herramientas |
+| Asistente | `src/asistente.ts` | Prompt con la voz de la marca y cinco herramientas: `cotizar`, `revisar_fecha`, `negociar`, `apartar_fecha` y `pasar_a_sant` |
+| Acciones del servidor | `src/acciones.ts` | `negociar` y `apartar_fecha` con el estado de la conversación (KV) y las compras confirmadas (D1). El apartado usa el precio negociado, nunca uno del modelo, y avisa a Sant sin pausar el chat |
 | Precios | `src/cotizar.ts` | Misma lógica que "Arma tu zona", solo con paquetes publicados (`disponible: true`); anticipo y garantía desde `site.ts` |
 | Agenda | `src/agenda.ts` | Máximo 2 fiestas por día y 8 horas entre inicios |
 | Calendario | `src/calendario.ts` | Lee el día en Google Calendar con una cuenta de servicio |
@@ -29,8 +30,8 @@ flowchart LR
 | Negociación | `src/negociacion.ts` | Descuentos y concesiones con los límites de Sant; el modelo no decide |
 | Límite de uso | `src/limite.ts` | 30 mensajes por hora por número |
 | Búsqueda (apagada) | `src/busqueda.ts` | Embeddings `bge-m3`, Vectorize y reranker; reindexado incremental |
-| Administración | `src/admin.ts`, `src/preguntas.ts` | `/admin/reindexar` y `/admin/comparar`, con `ADMIN_TOKEN` |
-| Apartado tentativo (fase 2) | `src/apartado.ts`, `migraciones/0003_apartados.sql` | Evento `TENTATIVO · nombre · paquete` por 12 horas mientras llega el anticipo; revisa la agenda antes y después de insertar. Un cron cada 30 minutos (`scheduled` en `src/index.ts`) borra los vencidos y los marca `liberado` en D1. Herramienta `apartar_fecha` lista, aún sin conectar al asistente |
+| Administración | `src/admin.ts`, `src/preguntas.ts` | `/admin/reindexar`, `/admin/comparar` y `/admin/confirmar` (llegó el anticipo), con `ADMIN_TOKEN` |
+| Apartado tentativo (fase 2) | `src/apartado.ts`, `migraciones/0003_apartados.sql` | Evento `TENTATIVO · nombre · paquete` por 12 horas mientras llega el anticipo; revisa la agenda antes y después de insertar. Un cron cada 30 minutos (`scheduled` en `src/index.ts`) borra los vencidos, los marca `liberado` en D1 y avisa a Sant |
 
 ## Seguridad
 
@@ -66,7 +67,7 @@ Reglas de convivencia con Sant:
 
 - Si Sant contesta un chat desde la app, el asistente se calla 12 horas en ese chat.
 - Fotos, audios y comprobantes se los pasa a Sant.
-- Mientras `apartar_fecha` no esté conectada, el asistente no aparta: junta nombre, fecha, hora, municipio, paquete y niños, y se lo pasa a Sant.
+- El asistente aparta con `apartar_fecha` y le manda a Sant el resumen (con descuento o cortesías si los hubo) sin pausar el chat. Sant envía los datos de pago; al llegar el anticipo corre `curl -X POST -H "authorization: Bearer $ADMIN_TOKEN" -d '{"telefono":"521..."}' https://chiquizone-asistente.<tu-cuenta>.workers.dev/admin/confirmar`.
 - Apartado tentativo (decisión de Sant, 2026-11-03): la fecha queda separada 12 horas. El estado vive en las propiedades privadas del evento (`estado` tentativo o confirmado, `vence`, `telefono`); al llegar el anticipo, `confirmarApartado` quita "TENTATIVO" del título. Si no llega, el cron borra el evento y la fecha vuelve a estar libre.
 
 Convención del calendario: cada fiesta es un evento con la hora de la fiesta (no la del montaje). Un evento de día completo bloquea la fecha.

@@ -3,6 +3,7 @@
  *
  * POST /admin/reindexar  reindexado incremental de conocimiento/ en Vectorize. Se corre después de cada deploy.
  * POST /admin/comparar   las mismas preguntas de prueba en modo "completo" y "busqueda". Gasta tokens.
+ * POST /admin/confirmar  {"telefono": "521..."}: llegó el anticipo; quita "TENTATIVO" del evento y lo marca confirmado.
  *
  * Ninguna ruta toca a clientas reales: comparar usa una agenda vacía y no avisa a Sant.
  */
@@ -11,11 +12,19 @@ import { responder } from './asistente';
 import { buscar, reindexar, type EnvBusqueda } from './busqueda';
 import { fuentesCitadas } from './conocimiento';
 import { preguntasDePrueba } from './preguntas';
+import { confirmarApartado } from './apartado';
+import type { EnvCalendario } from './calendario';
+import { apartadoPendiente, marcarApartado } from './db';
+import { evaluar, leerSolicitud, paraElModelo } from './negociacion';
+import { hoyISO } from './acciones';
 
 export interface EnvAdmin extends EnvBusqueda {
   ADMIN_TOKEN?: string;
   ANTHROPIC_API_KEY: string;
 }
+
+/** /admin/confirmar además necesita el calendario y D1. */
+type EnvRutas = EnvAdmin & EnvCalendario & { DB: D1Database };
 
 /** Comparación en tiempo constante para que el token no se adivine por latencia. */
 export function autorizado(cabecera: string | null, token: string | undefined): boolean {
@@ -43,7 +52,14 @@ export interface FilaComparacion {
 }
 
 export async function comparar(env: EnvAdmin, cliente = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })) {
-  const sinEfectos = { leerDia: async () => ({ fiestas: [], bloqueado: false }), pasarASant: async () => {} };
+  const sinEfectos = {
+    leerDia: async () => ({ fiestas: [], bloqueado: false }),
+    pasarASant: async () => {},
+    // Negocia como clienta nueva, sin guardar estado. Nunca aparta de verdad.
+    negociar: async (entrada: Record<string, unknown>) =>
+      paraElModelo(evaluar(leerSolicitud(entrada), { fecha: String(entrada.fecha), hoy: hoyISO(new Date()), comprasPrevias: 0 })),
+    apartar: async () => JSON.stringify({ apartado: false, motivo: 'prueba', alternativas: [] }),
+  };
   const conBusqueda = env.AI && env.VECTORIZE ? { AI: env.AI, VECTORIZE: env.VECTORIZE } : null;
   const filas: FilaComparacion[] = [];
 
@@ -88,7 +104,7 @@ export function resumir(filas: FilaComparacion[]) {
   return { completo: porModo('completo'), busqueda: porModo('busqueda') };
 }
 
-export async function rutaAdmin(req: Request, env: EnvAdmin, ruta: string): Promise<Response> {
+export async function rutaAdmin(req: Request, env: EnvRutas, ruta: string): Promise<Response> {
   if (req.method !== 'POST') return new Response('Método no permitido', { status: 405 });
   if (!autorizado(req.headers.get('authorization'), env.ADMIN_TOKEN)) return new Response('Prohibido', { status: 403 });
 
@@ -97,5 +113,17 @@ export async function rutaAdmin(req: Request, env: EnvAdmin, ruta: string): Prom
     return Response.json(await reindexar({ ...env, AI: env.AI, VECTORIZE: env.VECTORIZE, MODO_CONOCIMIENTO: env.MODO_CONOCIMIENTO ?? '' }));
   }
   if (ruta === '/admin/comparar') return Response.json(await comparar(env));
+  if (ruta === '/admin/confirmar') {
+    if (!env.GOOGLE_SA_KEY) return new Response('Falta el secreto GOOGLE_SA_KEY', { status: 409 });
+    const { telefono } = (await req.json().catch(() => ({}))) as { telefono?: unknown };
+    if (typeof telefono !== 'string' || !/^\d{10,15}$/.test(telefono)) {
+      return new Response('Manda {"telefono": "521..."} con el número completo, solo dígitos', { status: 400 });
+    }
+    const pendiente = await apartadoPendiente(env.DB, telefono);
+    if (!pendiente) return Response.json({ ok: false, motivo: 'sin-apartado-tentativo' }, { status: 404 });
+    const r = await confirmarApartado(env, pendiente.eventoId);
+    await marcarApartado(env.DB, pendiente.eventoId, r.ok ? 'confirmado' : 'liberado');
+    return Response.json(r.ok ? { ok: true, fecha: pendiente.fecha, hora: pendiente.hora, paquete: pendiente.paquete } : r);
+  }
   return new Response('No existe', { status: 404 });
 }

@@ -3,6 +3,7 @@
  *
  * GET  /webhook  verificación de Meta (hub.challenge)
  * POST /webhook  mensajes entrantes; responde 200 de inmediato y procesa en segundo plano
+ * POST /admin/*  rutas de Sant con ADMIN_TOKEN (reindexar, comparar, confirmar un anticipo)
  * cron           cada 30 minutos libera los apartados tentativos que pasaron sus 12 horas
  */
 import Anthropic from '@anthropic-ai/sdk';
@@ -15,6 +16,7 @@ import { buscar, modoDe, type EnvBusqueda } from './busqueda';
 import { rutaAdmin, type EnvAdmin } from './admin';
 import { identificar, marcarApartado, registrar } from './db';
 import { liberarVencidos, type Liberado } from './apartado';
+import { apartar, negociar } from './acciones';
 import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
 
@@ -33,6 +35,11 @@ export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin {
 
 async function avisarASant(env: Env, telefono: string, motivo: string, resumen: string) {
   await pausar(env.CONVERSACIONES, telefono, motivo);
+  await notificar(env, telefono, motivo, resumen);
+}
+
+/** Aviso a Sant sin pausar al asistente (apartados, fechas liberadas). */
+async function notificar(env: Env, telefono: string, motivo: string, resumen: string) {
   if (!env.AVISOS_WA) return;
   await enviarPlantilla(
     env,
@@ -84,6 +91,8 @@ async function procesar(evento: Evento, env: Env) {
     {
       leerDia: (fecha) => leerDia(env, fecha),
       pasarASant: (motivo, resumen) => avisarASant(env, evento.de, motivo, resumen),
+      negociar: (entrada) => negociar(env, evento.de, entrada),
+      apartar: (entrada) => apartar(env, evento.de, entrada, (resumen) => notificar(env, evento.de, 'apartado', resumen)),
     },
     { fuentes },
   );
@@ -122,7 +131,10 @@ async function procesar(evento: Evento, env: Env) {
 /** Borra del calendario los apartados vencidos y los marca como liberados en D1. Devuelve a quién avisar. */
 export async function liberarApartados(env: Env, ahora = new Date()): Promise<Liberado[]> {
   const liberados = await liberarVencidos(env, ahora);
-  for (const l of liberados) await marcarApartado(env.DB, l.eventoId, 'liberado');
+  for (const l of liberados) {
+    await marcarApartado(env.DB, l.eventoId, 'liberado');
+    await notificar(env, l.telefono, 'liberado', `Venció el apartado del ${l.fecha} sin anticipo; la fecha quedó libre.`);
+  }
   if (liberados.length) console.log(`Apartados liberados: ${liberados.length}`);
   return liberados;
 }

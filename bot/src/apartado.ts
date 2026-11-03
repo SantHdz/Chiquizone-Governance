@@ -35,6 +35,8 @@ export interface DatosApartado {
   /** Montos calculados en el servidor con cotizar(), nunca por el modelo. */
   precio: number;
   anticipo: number;
+  /** Descuento o cortesías que dio negociar, para que Sant los vea en el evento. */
+  ajustes?: string;
 }
 
 export type ResultadoApartado =
@@ -47,7 +49,7 @@ export interface Liberado {
   fecha: string;
 }
 
-const venceLegible = (vence: string) =>
+export const venceLegible = (vence: string) =>
   new Intl.DateTimeFormat('es-MX', { timeZone: ZONA, dateStyle: 'long', timeStyle: 'short' }).format(new Date(vence));
 
 /** Cuerpo del evento para events.insert. */
@@ -63,6 +65,7 @@ export function eventoTentativo(d: DatosApartado, vence: string) {
       `Paquete: ${d.paquete}`,
       `Precio: $${d.precio} MXN`,
       `Anticipo: $${d.anticipo} MXN`,
+      ...(d.ajustes ? [`Ajustes: ${d.ajustes}`] : []),
       `Estado: tentativo, vence ${venceLegible(vence)}. Si no llega el anticipo, el asistente libera la fecha.`,
     ].join('\n'),
     start: { dateTime: `${d.fecha}T${aHora(inicio)}:00${OFFSET}`, timeZone: ZONA },

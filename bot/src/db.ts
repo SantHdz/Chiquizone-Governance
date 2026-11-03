@@ -110,3 +110,12 @@ export async function apartadoPendiente(db: D1Database, telefono: string): Promi
     .bind(telefono)
     .first<Apartado>();
 }
+
+/** Fiestas que la clienta ya pagó: de aquí salen "clienta frecuente" y la quinta compra, nunca del chat. */
+export async function comprasConfirmadas(db: D1Database, telefono: string): Promise<number> {
+  const r = await db
+    .prepare("SELECT COUNT(*) AS n FROM apartados WHERE telefono = ?1 AND estado = 'confirmado'")
+    .bind(telefono)
+    .first<{ n: number }>();
+  return Number(r?.n ?? 0);
+}
