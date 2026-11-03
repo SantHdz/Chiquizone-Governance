@@ -1,0 +1,31 @@
+# Configuración de Netlify (ADR 0010).
+# Netlify la lee en cada publicación. Los cambios entran por PR, como el resto del repositorio.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# MIENTRAS NO SE LANCE: que los buscadores no indexen el sitio de prueba.
+# El día del lanzamiento este bloque se quita en su propio PR (ver docs/publicar.md).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Cabeceras de seguridad básicas.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Los archivos de /_astro llevan un código en el nombre: cambian de nombre si cambian de
+# contenido, así que el navegador puede guardarlos un año sin riesgo.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

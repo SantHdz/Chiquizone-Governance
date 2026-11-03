@@ -12,6 +12,7 @@ Cada decisión que cambia la marca, el design system o el sitio queda aquí, con
 | [0006](0006-tipografia-titulos.md) | Tipografía de títulos | Aceptada | 2026-11-02 |
 | [0007](0007-licencia.md) | Repositorio público con todos los derechos reservados | Aceptada | 2026-11-02 |
 | [0009](0009-logo-viaja-a-la-barra.md) | El logo del inicio viaja a la barra | Propuesta | 2026-11-02 |
+| [0010](0010-publicar-en-netlify.md) | Publicar el sitio en Netlify | Propuesta | 2026-11-03 |
 
 ## Cómo agregar una
 
