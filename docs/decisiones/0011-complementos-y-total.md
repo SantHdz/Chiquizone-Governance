@@ -6,7 +6,7 @@
 
 ## Contexto
 
-Quien arma su zona a veces quiere sumar algo: bocina, burbujas, un brincolín para los hermanos mayores, una hora más. Hasta ahora el sitio solo recomendaba un paquete y todo lo demás se hablaba por WhatsApp, sin precio a la vista. Sant aprobó los precios del documento "Precios de Baby baby y extras" (Baby baby sube a $1,970; ocho complementos y un combo por paquete). El apartado es del 50 % del total (issue #3), así que con complementos el cliente necesita ver el total para saber cuánto transferir.
+Quien arma su zona a veces quiere sumar algo: bocina, burbujas, un brincolín para los hermanos mayores, una hora más. Hasta ahora el sitio solo recomendaba un paquete y todo lo demás se hablaba por WhatsApp, sin precio a la vista. Sant aprobó los precios del documento "Precios de Baby baby y extras" (Baby baby sube a $1,970 y Pro Baby a $3,900; ocho complementos y un combo por paquete). El apartado es del 50 % del total (issue #3), así que con complementos el cliente necesita ver el total para saber cuánto transferir.
 
 ## Decisión
 
@@ -21,5 +21,6 @@ Quien arma su zona a veces quiere sumar algo: bocina, burbujas, un brincolín pa
 
 - Cambiar un precio, quitar un complemento o ampliar un combo se hace en `src/data/complementos.ts` sin tocar componentes.
 - Si no hay complementos disponibles, el paso desaparece y "Arma tu zona" vuelve a su forma anterior.
-- Pendientes de Sant: el precio de Pro Baby con 2 cuidadoras (por ahora sigue en $3,200), si "cuidadora extra" se llama así o "nana" en el sitio, y el espacio que pide el brincolín grande.
+- Precios finales: Baby baby $1,970 y Pro Baby $3,900 con 2 cuidadoras (elegido por Sant el 3 de noviembre).
+- Pendientes de Sant: si "cuidadora extra" se llama así o "nana" en el sitio, y el espacio que pide el brincolín grande.
 - El asistente de WhatsApp (PR #18) usa los precios de `paquetes.ts`; su guardia de montos y sus pruebas deben leer también `complementos.ts` para aceptar totales con complementos.
