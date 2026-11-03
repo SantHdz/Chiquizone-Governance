@@ -35,6 +35,9 @@ jobs:
       - run: npm ci
       - run: npm ci
         working-directory: bot
+      - name: Índice de conocimiento al día
+        run: npm run check
+        working-directory: bot
       - name: Tipos
         run: npm run typecheck
         working-directory: bot

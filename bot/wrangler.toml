@@ -16,3 +16,11 @@ id = "PENDIENTE"
 # Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
 # ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
 # GOOGLE_SA_EMAIL, GOOGLE_SA_KEY y, opcional, AVISOS_WA (número personal para avisos).
+
+# Clientas, registros y retroalimentación. Crear con `wrangler d1 create chiquizone`
+# y aplicar `wrangler d1 migrations apply chiquizone --remote`.
+[[d1_databases]]
+binding = "DB"
+database_name = "chiquizone"
+database_id = "PENDIENTE"
+migrations_dir = "migraciones"

@@ -9,6 +9,14 @@ import { responder } from './asistente';
 import { leerDia, type EnvCalendario } from './calendario';
 import { enPausa, guardarConversacion, leerConversacion, pausar, yaProcesado } from './memoria';
 import { enviarPlantilla, enviarTexto, firmaValida, leerEventos, type EnvWhatsApp, type Evento } from './whatsapp';
+import { conFuentes } from './conocimiento';
+import { identificar, registrar } from './db';
+import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
+import { dentroDelLimite } from './limite';
+
+/** Transparencia: la primera vez se aclara que es un asistente de IA. */
+export const AVISO_IA =
+  'Hola, soy el asistente virtual de Chiquizone, con inteligencia artificial. Te ayudo a elegir tu zona y revisar tu fecha; si prefieres, te paso con Sant en cualquier momento.';
 
 export interface Env extends EnvWhatsApp, EnvCalendario {
   ANTHROPIC_API_KEY: string;
@@ -17,6 +25,7 @@ export interface Env extends EnvWhatsApp, EnvCalendario {
   AVISOS_WA?: string;
   AVISOS_PLANTILLA?: string;
   CONVERSACIONES: KVNamespace;
+  DB: D1Database;
 }
 
 async function avisarASant(env: Env, telefono: string, motivo: string, resumen: string) {
@@ -48,17 +57,45 @@ async function procesar(evento: Evento, env: Env) {
     return;
   }
 
-  const cliente = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-  const historia = await leerConversacion(kv, evento.de);
-  const texto = evento.nombre ? `(${evento.nombre}) ${evento.texto}` : evento.texto;
+  if (!(await dentroDelLimite(kv, evento.de))) return;
 
-  const r = await responder(cliente, historia, texto, {
+  const inicio = Date.now();
+  const clienta = await identificar(env.DB, evento.de, evento.nombre);
+  const historia = await leerConversacion(kv, evento.de);
+  const texto = clienta.nombre ? `(${clienta.nombre}) ${evento.texto}` : evento.texto;
+
+  const r = await responder(new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }), historia, texto, {
     leerDia: (fecha) => leerDia(env, fecha),
     pasarASant: (motivo, resumen) => avisarASant(env, evento.de, motivo, resumen),
   });
-
   await guardarConversacion(kv, evento.de, r.mensajes);
-  if (r.respuesta) await enviarTexto(env, evento.de, r.respuesta);
+
+  // Guardia de salida: un monto que no salió del servidor no se envía.
+  const permitidos = new Set([...montosOficiales(), ...montosDeHerramientas(r.resultados)]);
+  const revision = revisarMontos(r.respuesta, permitidos);
+  let { texto: respuesta, usadas } = conFuentes(r.respuesta);
+  let bloqueado: string | undefined;
+  if (!revision.ok) {
+    bloqueado = `montos no oficiales: ${revision.noPermitidos.join(', ')}`;
+    respuesta = 'Déjame confirmar ese dato con Sant y te escribe en breve.';
+    usadas = [];
+    await avisarASant(env, evento.de, 'revision', `La guardia frenó una respuesta con ${bloqueado}.`);
+  }
+  if (historia.length === 0) respuesta = `${AVISO_IA}\n\n${respuesta}`;
+
+  if (respuesta) await enviarTexto(env, evento.de, respuesta);
+  await registrar(env.DB, {
+    telefono: evento.de,
+    pregunta: evento.texto,
+    respuesta,
+    herramientas: r.herramientas,
+    fuentes: usadas.map((f) => f.id),
+    pasoASant: r.pasoASant || Boolean(bloqueado),
+    bloqueado,
+    latenciaMs: Date.now() - inicio,
+    tokensEntrada: r.tokensEntrada,
+    tokensSalida: r.tokensSalida,
+  });
 }
 
 export default {

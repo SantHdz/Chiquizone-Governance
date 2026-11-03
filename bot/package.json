@@ -8,7 +8,10 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "conocimiento": "node scripts/conocimiento.mjs",
+    "check": "node scripts/conocimiento.mjs && git diff --exit-code -- src/conocimiento.generado.ts",
+    "eval": "EVALS=1 vitest run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.3.0"

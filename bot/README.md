@@ -13,7 +13,7 @@ flowchart LR
     A --> H["pasar_a_sant<br/>pausa el chat y avisa"]
 ```
 
-## Qué hace la fase 1
+## Qué hace (fases 1 y 1.5)
 
 | Pieza | Archivo | Qué hace |
 |---|---|---|
@@ -23,6 +23,22 @@ flowchart LR
 | Agenda | `src/agenda.ts` | Máximo 2 fiestas por día y 8 horas entre inicios |
 | Calendario | `src/calendario.ts` | Lee el día en Google Calendar con una cuenta de servicio |
 | Memoria | `src/memoria.ts` | Conversación, pausas y mensajes ya procesados en Cloudflare KV |
+| Identidad y registros | `src/db.ts`, `migraciones/` | Clientas por número de WhatsApp; cada respuesta con herramientas, fuentes, latencia y tokens en D1 |
+| Conocimiento | `conocimiento/`, `scripts/conocimiento.mjs`, `src/conocimiento.ts` | Archivos curados con metadatos, partidos por sección y citados como fuente |
+| Guardia de salida | `src/guardia.ts` | Ningún monto se envía si no salió del servidor |
+| Límite de uso | `src/limite.ts` | 30 mensajes por hora por número |
+
+## Seguridad
+
+- Solo se aceptan mensajes firmados por Meta; la identidad es el número del remitente, nunca lo que diga el texto.
+- El modelo no ejecuta código ni SQL: elige entre herramientas con esquema estricto y las consultas son fijas.
+- El mensaje de la clienta va dentro de `<mensaje_clienta>` como información; se quitan etiquetas que imitan las del sistema.
+- Fuera de Chiquizone, respuesta amable y fija; lo que no está en `conocimiento/` no se inventa.
+- `npm run eval` corre ataques reales contra el modelo (inyección, precios falsos, suplantar a Sant, temas ajenos). Gasta tokens, por eso no corre en CI.
+
+## Conocimiento (RAG)
+
+Hoy el material completo cabe en el prompt y cada fragmento lleva su id; el modelo marca `[[id]]` y el Worker lo convierte en "_Fuente: …_". La búsqueda vectorial con reranking se enciende cuando el material crezca (decisión de Sant pendiente). Para agregar o cambiar información: edita `conocimiento/`, corre `npm run conocimiento` y abre un PR.
 
 Reglas de convivencia con Sant:
 
@@ -55,6 +71,8 @@ Luego, en `bot/`:
 ```bash
 npx wrangler login
 npx wrangler kv namespace create CONVERSACIONES   # copia el id a wrangler.toml
+npx wrangler d1 create chiquizone                 # copia el id a wrangler.toml
+npx wrangler d1 migrations apply chiquizone --remote
 # en wrangler.toml, pon el id del calendario en GOOGLE_CALENDAR_ID
 for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_EMAIL GOOGLE_SA_KEY; do
   npx wrangler secret put $s
