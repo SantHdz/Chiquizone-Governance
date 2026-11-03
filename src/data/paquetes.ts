@@ -88,8 +88,8 @@ export const paquetes: Paquete[] = [
   },
   {
     id: 'pro-baby', nombre: 'Pro Baby', familia: 'baby', splash: false, pro: true, disponible: true,
-    // Subió de $3,200 a $3,900 con 2 cuidadoras (elegido por Sant, 3 nov 2026).
-    precio: 3900, incluye: babyBase, cuidadoras: 2,
+    // Subió de $3,200 a $3,750 con 2 cuidadoras (decidido por Sant, 3 nov 2026).
+    precio: 3750, incluye: babyBase, cuidadoras: 2,
     extras: ['2 cuidadoras', 'Montaña rusa', 'Máquina de burbujas'],
   },
   {

@@ -18,7 +18,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Íconos para los complementos (bocina, burbujas, letrero, picnic, montaña rusa, brincolín, hora extra y combo).
 
 ### Cambiado
-- Precios aprobados por Sant el 3 de noviembre: Baby baby sube de $1,870 a $1,970 (apartado de $985) y Pro Baby de $3,200 a $3,900 (apartado de $1,950), ahora con 2 cuidadoras.
+- Precios aprobados por Sant el 3 de noviembre: Baby baby sube de $1,870 a $1,970 (apartado de $985) y Pro Baby de $3,200 a $3,750 (apartado de $1,875), ahora con 2 cuidadoras.
 - Títulos en Fraunces con una palabra en cursiva; Fredoka queda para impacto puntual (ADR 0006, aceptada).
 - Secciones con ceja, título y entradilla; "Cómo funciona" junto a los requisitos del espacio; Splash dentro de Paquetes.
 - Tema oscuro (marino) automático según el sistema.
