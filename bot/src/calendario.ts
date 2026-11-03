@@ -14,6 +14,27 @@ export interface EnvCalendario {
   /** Llave privada PEM (PKCS#8) de la cuenta de servicio. */
   GOOGLE_SA_KEY: string;
   GOOGLE_CALENDAR_ID: string;
+  /**
+   * Plan B si Workspace no deja compartir el calendario con la cuenta de servicio:
+   * con delegación de todo el dominio, la cuenta actúa en nombre de este usuario (hola@chiquizone.com),
+   * solo con el permiso de eventos de Calendar.
+   */
+  GOOGLE_SUBJECT?: string;
+}
+
+/** Solo eventos: leer la agenda y apartar fechas. No puede cambiar ajustes ni compartir calendarios. */
+export const ALCANCE = 'https://www.googleapis.com/auth/calendar.events';
+
+/** Datos del JWT que la cuenta de servicio firma para pedir el token. */
+export function reclamos(env: EnvCalendario, ahora: number) {
+  return {
+    iss: env.GOOGLE_SA_EMAIL,
+    ...(env.GOOGLE_SUBJECT ? { sub: env.GOOGLE_SUBJECT } : {}),
+    scope: ALCANCE,
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: ahora,
+    exp: ahora + 3600,
+  };
 }
 
 interface EventoGoogle {
@@ -41,15 +62,7 @@ function pemADer(pem: string): ArrayBuffer {
 async function tokenDeAcceso(env: EnvCalendario): Promise<string> {
   const ahora = Math.floor(Date.now() / 1000);
   const cabecera = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const datos = b64url(
-    JSON.stringify({
-      iss: env.GOOGLE_SA_EMAIL,
-      scope: 'https://www.googleapis.com/auth/calendar',
-      aud: 'https://oauth2.googleapis.com/token',
-      iat: ahora,
-      exp: ahora + 3600,
-    }),
-  );
+  const datos = b64url(JSON.stringify(reclamos(env, ahora)));
   const llave = await crypto.subtle.importKey(
     'pkcs8',
     pemADer(env.GOOGLE_SA_KEY),

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { firmaValida, leerEventos } from '../src/whatsapp';
-import { eventosADia } from '../src/calendario';
+import { ALCANCE, eventosADia, reclamos } from '../src/calendario';
 
 describe('webhook de WhatsApp', () => {
   const cuerpo = JSON.stringify({ hola: 'mundo' });
@@ -42,6 +42,13 @@ describe('webhook de WhatsApp', () => {
 });
 
 describe('calendario', () => {
+  it('pide solo permiso de eventos, y actúa por hola@ solo si hay delegación', () => {
+    const base = { GOOGLE_SA_EMAIL: 'asistente@x.iam.gserviceaccount.com', GOOGLE_SA_KEY: '', GOOGLE_CALENDAR_ID: 'c' };
+    expect(reclamos(base, 0)).not.toHaveProperty('sub');
+    expect(reclamos(base, 0).scope).toBe(ALCANCE);
+    expect(reclamos({ ...base, GOOGLE_SUBJECT: 'hola@chiquizone.com' }, 0)).toMatchObject({ sub: 'hola@chiquizone.com' });
+  });
+
   it('convierte eventos a minutos en hora de México e ignora los cancelados', () => {
     const dia = eventosADia('2026-11-14', [
       { start: { dateTime: '2026-11-14T10:00:00-06:00' }, end: { dateTime: '2026-11-14T15:00:00-06:00' } },

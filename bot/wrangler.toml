@@ -29,7 +29,7 @@ index_name = "chiquizone-conocimiento"
 # Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
 # ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
 # GOOGLE_SA_EMAIL, GOOGLE_SA_KEY, ADMIN_TOKEN (rutas /admin, 24+ caracteres) y,
-# opcional, AVISOS_WA (número personal para avisos).
+# opcional, AVISOS_WA (número personal para avisos) y GOOGLE_SUBJECT (delegación, ver README).
 
 # Clientas, registros y retroalimentación. Crear con `wrangler d1 create chiquizone`
 # y aplicar `wrangler d1 migrations apply chiquizone --remote`.
