@@ -62,3 +62,51 @@ export async function registrar(db: D1Database, r: Registro, ahora = new Date())
     .run();
   return Number(res.meta.last_row_id);
 }
+
+export type EstadoApartado = 'tentativo' | 'confirmado' | 'liberado';
+
+export interface Apartado {
+  telefono: string;
+  eventoId: string;
+  fecha: string;
+  hora: string;
+  paquete: string;
+  precio: number;
+  anticipo: number;
+  vence: string;
+}
+
+export async function guardarApartado(db: D1Database, a: Apartado, ahora = new Date()): Promise<number> {
+  const res = await db
+    .prepare(
+      `INSERT INTO apartados (telefono, evento_id, fecha, hora, paquete, precio, anticipo, estado, vence, creado)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 'tentativo', ?8, ?9)`,
+    )
+    .bind(a.telefono, a.eventoId, a.fecha, a.hora, a.paquete, a.precio, a.anticipo, a.vence, ahora.toISOString())
+    .run();
+  return Number(res.meta.last_row_id);
+}
+
+/** Solo un apartado tentativo cambia de estado: uno confirmado o liberado ya no se mueve. */
+export async function marcarApartado(
+  db: D1Database,
+  eventoId: string,
+  estado: Exclude<EstadoApartado, 'tentativo'>,
+): Promise<boolean> {
+  const res = await db
+    .prepare("UPDATE apartados SET estado = ?2 WHERE evento_id = ?1 AND estado = 'tentativo'")
+    .bind(eventoId, estado)
+    .run();
+  return res.meta.changes > 0;
+}
+
+/** El apartado tentativo más reciente de una clienta, para confirmarlo cuando llegue el anticipo. */
+export async function apartadoPendiente(db: D1Database, telefono: string): Promise<Apartado | null> {
+  return db
+    .prepare(
+      `SELECT telefono, evento_id AS eventoId, fecha, hora, paquete, precio, anticipo, vence FROM apartados
+       WHERE telefono = ?1 AND estado = 'tentativo' ORDER BY creado DESC LIMIT 1`,
+    )
+    .bind(telefono)
+    .first<Apartado>();
+}

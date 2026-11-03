@@ -1,5 +1,5 @@
 /*
- * Lectura del calendario de montajes en Google Calendar con una cuenta de servicio.
+ * Lectura y escritura del calendario de montajes en Google Calendar con una cuenta de servicio.
  *
  * Convención: cada fiesta es un evento con la hora de la fiesta (no la del montaje).
  * Un evento de día completo bloquea la fecha (vacaciones, mantenimiento).
@@ -37,8 +37,14 @@ export function reclamos(env: EnvCalendario, ahora: number) {
   };
 }
 
-interface EventoGoogle {
+export interface EventoGoogle {
+  id?: string;
   status?: string;
+  summary?: string;
+  description?: string;
+  /** Cuándo se creó, en ISO; sirve para desempatar dos apartados al mismo tiempo. */
+  created?: string;
+  extendedProperties?: { private?: Record<string, string> };
   transparency?: string;
   start?: { date?: string; dateTime?: string };
   end?: { date?: string; dateTime?: string };
@@ -59,7 +65,8 @@ function pemADer(pem: string): ArrayBuffer {
   return out.buffer;
 }
 
-async function tokenDeAcceso(env: EnvCalendario): Promise<string> {
+/** Token OAuth de la cuenta de servicio (JWT firmado con RS256). Se pide uno por operación. */
+export async function tokenDeAcceso(env: EnvCalendario): Promise<string> {
   const ahora = Math.floor(Date.now() / 1000);
   const cabecera = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const datos = b64url(JSON.stringify(reclamos(env, ahora)));
@@ -103,7 +110,14 @@ export function eventosADia(fecha: string, eventos: EventoGoogle[]): Dia {
   return dia;
 }
 
-export async function leerDia(env: EnvCalendario, fecha: string): Promise<Dia> {
+/** URL de los eventos del calendario de montajes; con `id`, la de un evento. */
+export function urlEventos(env: EnvCalendario, id?: string): string {
+  const base = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(env.GOOGLE_CALENDAR_ID)}/events`;
+  return id ? `${base}/${encodeURIComponent(id)}` : base;
+}
+
+/** Eventos de un día tal como los devuelve Google, con id y propiedades privadas. */
+export async function eventosDelDia(env: EnvCalendario, fecha: string): Promise<EventoGoogle[]> {
   const token = await tokenDeAcceso(env);
   const params = new URLSearchParams({
     timeMin: `${fecha}T00:00:00${OFFSET}`,
@@ -111,9 +125,12 @@ export async function leerDia(env: EnvCalendario, fecha: string): Promise<Dia> {
     singleEvents: 'true',
     orderBy: 'startTime',
   });
-  const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(env.GOOGLE_CALENDAR_ID)}/events?${params}`;
-  const res = await fetch(url, { headers: { authorization: `Bearer ${token}` } });
+  const res = await fetch(`${urlEventos(env)}?${params}`, { headers: { authorization: `Bearer ${token}` } });
   if (!res.ok) throw new Error(`Google Calendar ${res.status}: ${await res.text()}`);
   const { items = [] } = (await res.json()) as { items?: EventoGoogle[] };
-  return eventosADia(fecha, items);
+  return items;
+}
+
+export async function leerDia(env: EnvCalendario, fecha: string): Promise<Dia> {
+  return eventosADia(fecha, await eventosDelDia(env, fecha));
 }

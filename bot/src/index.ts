@@ -3,6 +3,7 @@
  *
  * GET  /webhook  verificación de Meta (hub.challenge)
  * POST /webhook  mensajes entrantes; responde 200 de inmediato y procesa en segundo plano
+ * cron           cada 30 minutos libera los apartados tentativos que pasaron sus 12 horas
  */
 import Anthropic from '@anthropic-ai/sdk';
 import { responder } from './asistente';
@@ -12,7 +13,8 @@ import { enviarPlantilla, enviarTexto, firmaValida, leerEventos, type EnvWhatsAp
 import { conFuentes, fragmentos, type Fragmento } from './conocimiento';
 import { buscar, modoDe, type EnvBusqueda } from './busqueda';
 import { rutaAdmin, type EnvAdmin } from './admin';
-import { identificar, registrar } from './db';
+import { identificar, marcarApartado, registrar } from './db';
+import { liberarVencidos, type Liberado } from './apartado';
 import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
 
@@ -117,7 +119,19 @@ async function procesar(evento: Evento, env: Env) {
   });
 }
 
+/** Borra del calendario los apartados vencidos y los marca como liberados en D1. Devuelve a quién avisar. */
+export async function liberarApartados(env: Env, ahora = new Date()): Promise<Liberado[]> {
+  const liberados = await liberarVencidos(env, ahora);
+  for (const l of liberados) await marcarApartado(env.DB, l.eventoId, 'liberado');
+  if (liberados.length) console.log(`Apartados liberados: ${liberados.length}`);
+  return liberados;
+}
+
 export default {
+  async scheduled(_controlador: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    ctx.waitUntil(liberarApartados(env, new Date()).catch((e) => console.error('Error al liberar apartados', e)));
+  },
+
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname.startsWith('/admin/')) return rutaAdmin(req, env, url.pathname);

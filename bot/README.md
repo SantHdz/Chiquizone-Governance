@@ -13,7 +13,7 @@ flowchart LR
     A --> H["pasar_a_sant<br/>pausa el chat y avisa"]
 ```
 
-## Qué hace (fases 1 y 1.5)
+## Qué hace (fases 1, 1.5 y el inicio de la 2)
 
 | Pieza | Archivo | Qué hace |
 |---|---|---|
@@ -30,6 +30,7 @@ flowchart LR
 | Límite de uso | `src/limite.ts` | 30 mensajes por hora por número |
 | Búsqueda (apagada) | `src/busqueda.ts` | Embeddings `bge-m3`, Vectorize y reranker; reindexado incremental |
 | Administración | `src/admin.ts`, `src/preguntas.ts` | `/admin/reindexar` y `/admin/comparar`, con `ADMIN_TOKEN` |
+| Apartado tentativo (fase 2) | `src/apartado.ts`, `migraciones/0003_apartados.sql` | Evento `TENTATIVO · nombre · paquete` por 12 horas mientras llega el anticipo; revisa la agenda antes y después de insertar. Un cron cada 30 minutos (`scheduled` en `src/index.ts`) borra los vencidos y los marca `liberado` en D1. Herramienta `apartar_fecha` lista, aún sin conectar al asistente |
 
 ## Seguridad
 
@@ -65,7 +66,8 @@ Reglas de convivencia con Sant:
 
 - Si Sant contesta un chat desde la app, el asistente se calla 12 horas en ese chat.
 - Fotos, audios y comprobantes se los pasa a Sant.
-- El asistente no aparta: junta nombre, fecha, hora, municipio, paquete y niños, y se lo pasa a Sant.
+- Mientras `apartar_fecha` no esté conectada, el asistente no aparta: junta nombre, fecha, hora, municipio, paquete y niños, y se lo pasa a Sant.
+- Apartado tentativo (decisión de Sant, 2026-11-03): la fecha queda separada 12 horas. El estado vive en las propiedades privadas del evento (`estado` tentativo o confirmado, `vence`, `telefono`); al llegar el anticipo, `confirmarApartado` quita "TENTATIVO" del título. Si no llega, el cron borra el evento y la fecha vuelve a estar libre.
 
 Convención del calendario: cada fiesta es un evento con la hora de la fiesta (no la del montaje). Un evento de día completo bloquea la fecha.
 
@@ -96,7 +98,7 @@ Pendiente de confirmar con Sant (constantes al inicio de `src/negociacion.ts`):
 ```bash
 npm ci            # en la raíz: el asistente lee los precios del sitio
 cd bot && npm ci
-npm test          # agenda, precios, webhook, seguridad y búsqueda
+npm test          # agenda, precios, webhook, seguridad, búsqueda y apartados
 npm run typecheck
 ```
 
@@ -139,6 +141,6 @@ Avisos opcionales a un número personal: crea una plantilla de utilidad llamada 
 
 ## Siguientes fases
 
-2. Cierra solo: evento tentativo, cobro del anticipo (pasarela con tarjeta, OXXO y SPEI) y recordatorios.
+2. Cierra solo: evento tentativo de 12 horas (hecho, falta conectarlo al asistente), cobro del anticipo (pasarela con tarjeta, OXXO y SPEI) y recordatorios.
 3. Seguimiento: base de clientes en Google Sheets, seguimiento a cotizaciones y reseñas.
 4. Cartera: recontratación por cumpleaños y newsletter.

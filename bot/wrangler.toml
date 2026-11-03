@@ -14,6 +14,10 @@ GOOGLE_SUBJECT = "hola@chiquizone.com"
 # Decisión de Sant (2026-11-03): pasar a "busqueda" cuando el material pase de unas 50 páginas.
 MODO_CONOCIMIENTO = "completo"
 
+# Cada 30 minutos se liberan los apartados tentativos que pasaron sus 12 horas sin anticipo (Sant, 2026-11-03).
+[triggers]
+crons = ["*/30 * * * *"]
+
 # Conversaciones, pausas y mensajes ya procesados.
 [[kv_namespaces]]
 binding = "CONVERSACIONES"
