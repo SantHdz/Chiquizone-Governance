@@ -26,6 +26,7 @@ flowchart LR
 | Identidad y registros | `src/db.ts`, `migraciones/` | Clientas por número de WhatsApp; cada respuesta con herramientas, fuentes, latencia y tokens en D1 |
 | Conocimiento | `conocimiento/`, `scripts/conocimiento.mjs`, `src/conocimiento.ts` | Archivos curados con metadatos, partidos por sección y citados como fuente |
 | Guardia de salida | `src/guardia.ts` | Ningún monto se envía si no salió del servidor |
+| Negociación | `src/negociacion.ts` | Descuentos y concesiones con los límites de Sant; el modelo no decide |
 | Límite de uso | `src/limite.ts` | 30 mensajes por hora por número |
 | Búsqueda (apagada) | `src/busqueda.ts` | Embeddings `bge-m3`, Vectorize y reranker; reindexado incremental |
 | Administración | `src/admin.ts`, `src/preguntas.ts` | `/admin/reindexar` y `/admin/comparar`, con `ADMIN_TOKEN` |
@@ -67,6 +68,28 @@ Reglas de convivencia con Sant:
 - El asistente no aparta: junta nombre, fecha, hora, municipio, paquete y niños, y se lo pasa a Sant.
 
 Convención del calendario: cada fiesta es un evento con la hora de la fiesta (no la del montaje). Un evento de día completo bloquea la fecha.
+
+## Negociación
+
+`src/negociacion.ts` decide los descuentos, no el modelo. El asistente solo puede llamar la herramienta `negociar` (paquetes, fecha de la fiesta y si la clienta pide descuento o algo extra). El servidor responde con el precio final, el anticipo (50 %, igual que `cotizar`) y una guía de qué decir. Los límites son de Sant:
+
+| Regla | Valor |
+|---|---|
+| Descuento base | 10 % si aplica al menos una: fiesta entre semana, temporada baja, clienta que ya contrató (compras en D1) o 2 servicios o más en el mismo apartado |
+| Descuento máximo | 20 % solo en Black Friday, Buen Fin o la 5.ª compra de la clienta |
+| Concesiones, en orden | 1) máquina de burbujas, 2) media hora extra, 3) traslado sin costo |
+| Ajustes por conversación | Máximo 2. El 10 % se combina con una concesión; el 20 % va solo |
+| Piso | Precio del paquete menos 20 %; nunca abajo |
+| Arriba del límite | No se baja más: el asistente agradece, ofrece una alternativa (otra fecha entre semana, un paquete más sencillo o guardar el contacto) y deja la puerta abierta |
+
+Si la clienta pide descuento sin motivo, el servidor da la siguiente concesión en vez de bajar el precio. El estado (ajustes ya dados) vive en KV en `neg:<telefono>` por 3 días. Los montos que devuelve la herramienta pasan la guardia de salida, como los de `cotizar`.
+
+Pendiente de confirmar con Sant (constantes al inicio de `src/negociacion.ts`):
+
+- `DIAS_ENTRE_SEMANA`: hoy de lunes a jueves.
+- `MESES_TEMPORADA_BAJA`: hoy ninguno.
+- `BUEN_FIN` y `BLACK_FRIDAY`: hoy del 13 al 16 y del 27 al 30 de noviembre de 2026. Cuentan por el día en que se aparta, no por la fecha de la fiesta.
+- Lecturas de las reglas que conviene confirmar: el 20 % no se suma a ninguna concesión; la 5.ª compra es exactamente la quinta (de la sexta en adelante vuelve al 10 % de clienta frecuente); con una concesión ya dada, una clienta con derecho al 20 % recibe 10 % para no pasar el límite.
 
 ## Probar en local
 
