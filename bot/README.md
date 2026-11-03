@@ -27,6 +27,8 @@ flowchart LR
 | Conocimiento | `conocimiento/`, `scripts/conocimiento.mjs`, `src/conocimiento.ts` | Archivos curados con metadatos, partidos por sección y citados como fuente |
 | Guardia de salida | `src/guardia.ts` | Ningún monto se envía si no salió del servidor |
 | Límite de uso | `src/limite.ts` | 30 mensajes por hora por número |
+| Búsqueda (apagada) | `src/busqueda.ts` | Embeddings `bge-m3`, Vectorize y reranker; reindexado incremental |
+| Administración | `src/admin.ts`, `src/preguntas.ts` | `/admin/reindexar` y `/admin/comparar`, con `ADMIN_TOKEN` |
 
 ## Seguridad
 
@@ -38,7 +40,25 @@ flowchart LR
 
 ## Conocimiento (RAG)
 
-Hoy el material completo cabe en el prompt y cada fragmento lleva su id; el modelo marca `[[id]]` y el Worker lo convierte en "_Fuente: …_". La búsqueda vectorial con reranking se enciende cuando el material pase de unas 50 páginas (decisión de Sant, 2026-11-03). Para agregar o cambiar información: edita `conocimiento/`, corre `npm run conocimiento` y abre un PR.
+Cada fragmento lleva su id; el modelo marca `[[id]]` y el Worker lo convierte en "_Fuente: …_". Hay dos modos, con un interruptor en `wrangler.toml` (`MODO_CONOCIMIENTO`):
+
+| Modo | Cómo funciona | Cuándo |
+|---|---|---|
+| `completo` (hoy) | Todo el material va en el prompt, en caché | Mientras quepa (unas 50 páginas) |
+| `busqueda` | La pregunta se convierte en vector (`@cf/baai/bge-m3`), Vectorize trae 20 candidatos, el reranker (`@cf/baai/bge-reranker-base`) deja los 5 mejores y solo esos van con el mensaje | Al crecer el material (decisión de Sant, 2026-11-03) |
+
+En los dos modos el texto sale del repositorio: el índice solo guarda vectores e ids, así que un vector viejo no mete información que ya se quitó. Si la búsqueda falla, el asistente usa todo el material. Cada registro en D1 guarda el modo y los fragmentos que encontró la búsqueda.
+
+Para agregar o cambiar información:
+
+1. Edita `conocimiento/`, corre `npm run conocimiento` y abre un PR. CI revisa que el índice esté al día.
+2. Después del deploy, reindexa. Solo se calculan los fragmentos nuevos o cambiados y se borran los que ya no existen:
+
+   ```bash
+   curl -X POST -H "authorization: Bearer $ADMIN_TOKEN" https://chiquizone-asistente.<tu-cuenta>.workers.dev/admin/reindexar
+   ```
+
+Para decidir cuándo cambiar de modo, `/admin/comparar` corre las preguntas de `src/preguntas.ts` en los dos modos y devuelve, por modo, cuántas citaron la fuente correcta, cuántas encontró el buscador, tokens y latencia. Gasta tokens: se corre a mano.
 
 Reglas de convivencia con Sant:
 
@@ -53,7 +73,7 @@ Convención del calendario: cada fiesta es un evento con la hora de la fiesta (n
 ```bash
 npm ci            # en la raíz: el asistente lee los precios del sitio
 cd bot && npm ci
-npm test          # agenda, precios y webhook
+npm test          # agenda, precios, webhook, seguridad y búsqueda
 npm run typecheck
 ```
 
@@ -73,8 +93,9 @@ npx wrangler login
 npx wrangler kv namespace create CONVERSACIONES   # copia el id a wrangler.toml
 npx wrangler d1 create chiquizone                 # copia el id a wrangler.toml
 npx wrangler d1 migrations apply chiquizone --remote
+npx wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine
 # en wrangler.toml, pon el id del calendario en GOOGLE_CALENDAR_ID
-for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_EMAIL GOOGLE_SA_KEY; do
+for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_EMAIL GOOGLE_SA_KEY ADMIN_TOKEN; do
   npx wrangler secret put $s
 done
 npm run deploy

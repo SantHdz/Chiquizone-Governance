@@ -16,7 +16,7 @@ Las clientas deciden y apartan por WhatsApp (decisión 0004), pero cada cotizaci
 - Agenda en Google Calendar: máximo 2 fiestas por día y 8 horas entre el inicio de una y otra (5 de fiesta, 1 de recogida, 1 de traslado, 1 de montaje).
 - Apartado con 50 % de anticipo y 500 MXN de garantía.
 - Se construye en fases. La fase 1 cotiza y revisa fechas; el apartado lo cierra Sant.
-- Conocimiento curado en `bot/conocimiento/`, completo en el prompt y citado como fuente. La búsqueda vectorial con reranking se enciende al pasar de unas 50 páginas (Sant, 2026-11-03).
+- Conocimiento curado en `bot/conocimiento/`, completo en el prompt y citado como fuente. La búsqueda vectorial con reranking ya está construida detrás del interruptor `MODO_CONOCIMIENTO` y se enciende al pasar de unas 50 páginas (Sant, 2026-11-03). Se decide con `/admin/comparar`, que corre las mismas preguntas en los dos modos.
 - Una fecha queda apartada 12 horas mientras llega el anticipo (Sant, 2026-11-03).
 
 ## Consecuencias

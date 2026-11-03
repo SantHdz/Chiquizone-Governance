@@ -32,14 +32,17 @@ export interface Registro {
   latenciaMs: number;
   tokensEntrada: number;
   tokensSalida: number;
+  modo?: 'completo' | 'busqueda';
+  /** Ids que trajo la búsqueda, solo en modo "busqueda". */
+  encontradas?: string[];
 }
 
 export async function registrar(db: D1Database, r: Registro, ahora = new Date()): Promise<number> {
   const res = await db
     .prepare(
       `INSERT INTO registros (telefono, pregunta, respuesta, herramientas, fuentes, paso_a_sant, bloqueado,
-         latencia_ms, tokens_entrada, tokens_salida, creado)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
+         latencia_ms, tokens_entrada, tokens_salida, creado, modo_conocimiento, fuentes_encontradas)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)`,
     )
     .bind(
       r.telefono,
@@ -53,6 +56,8 @@ export async function registrar(db: D1Database, r: Registro, ahora = new Date())
       r.tokensEntrada,
       r.tokensSalida,
       ahora.toISOString(),
+      r.modo ?? 'completo',
+      r.encontradas ? JSON.stringify(r.encontradas) : null,
     )
     .run();
   return Number(res.meta.last_row_id);

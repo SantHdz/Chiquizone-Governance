@@ -7,15 +7,29 @@ compatibility_flags = ["nodejs_compat"]
 # Calendario de montajes (correo de la cuenta de Google o id del calendario).
 GOOGLE_CALENDAR_ID = "PENDIENTE@chiquizone.com"
 GRAPH_VERSION = "v23.0"
+# Interruptor del conocimiento: "completo" (todo en el prompt) o "busqueda" (Vectorize + reranker).
+# Decisión de Sant (2026-11-03): pasar a "busqueda" cuando el material pase de unas 50 páginas.
+MODO_CONOCIMIENTO = "completo"
 
 # Conversaciones, pausas y mensajes ya procesados.
 [[kv_namespaces]]
 binding = "CONVERSACIONES"
 id = "PENDIENTE"
 
+# Embeddings y reranker del modo "busqueda" (Workers AI).
+[ai]
+binding = "AI"
+
+# Índice de conocimiento. Crear una vez con
+# `wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine`.
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "chiquizone-conocimiento"
+
 # Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
 # ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
-# GOOGLE_SA_EMAIL, GOOGLE_SA_KEY y, opcional, AVISOS_WA (número personal para avisos).
+# GOOGLE_SA_EMAIL, GOOGLE_SA_KEY, ADMIN_TOKEN (rutas /admin, 24+ caracteres) y,
+# opcional, AVISOS_WA (número personal para avisos).
 
 # Clientas, registros y retroalimentación. Crear con `wrangler d1 create chiquizone`
 # y aplicar `wrangler d1 migrations apply chiquizone --remote`.

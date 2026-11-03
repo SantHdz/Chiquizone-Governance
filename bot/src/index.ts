@@ -9,7 +9,9 @@ import { responder } from './asistente';
 import { leerDia, type EnvCalendario } from './calendario';
 import { enPausa, guardarConversacion, leerConversacion, pausar, yaProcesado } from './memoria';
 import { enviarPlantilla, enviarTexto, firmaValida, leerEventos, type EnvWhatsApp, type Evento } from './whatsapp';
-import { conFuentes } from './conocimiento';
+import { conFuentes, fragmentos, type Fragmento } from './conocimiento';
+import { buscar, modoDe, type EnvBusqueda } from './busqueda';
+import { rutaAdmin, type EnvAdmin } from './admin';
 import { identificar, registrar } from './db';
 import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
@@ -18,8 +20,7 @@ import { dentroDelLimite } from './limite';
 export const AVISO_IA =
   'Hola, soy el asistente virtual de Chiquizone, con inteligencia artificial. Te ayudo a elegir tu zona y revisar tu fecha; si prefieres, te paso con Sant en cualquier momento.';
 
-export interface Env extends EnvWhatsApp, EnvCalendario {
-  ANTHROPIC_API_KEY: string;
+export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin {
   WA_VERIFY_TOKEN: string;
   /** Número personal de Sant para avisos (opcional). */
   AVISOS_WA?: string;
@@ -64,10 +65,26 @@ async function procesar(evento: Evento, env: Env) {
   const historia = await leerConversacion(kv, evento.de);
   const texto = clienta.nombre ? `(${clienta.nombre}) ${evento.texto}` : evento.texto;
 
-  const r = await responder(new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }), historia, texto, {
-    leerDia: (fecha) => leerDia(env, fecha),
-    pasarASant: (motivo, resumen) => avisarASant(env, evento.de, motivo, resumen),
-  });
+  // Interruptor del conocimiento: "completo" manda todo en el prompt; "busqueda" solo lo que encuentra.
+  const modo = modoDe(env);
+  let fuentes: Fragmento[] | undefined;
+  if (modo === 'busqueda' && env.AI && env.VECTORIZE) {
+    fuentes = await buscar({ AI: env.AI, VECTORIZE: env.VECTORIZE }, evento.texto).catch((e) => {
+      console.error('Búsqueda no disponible, mando todo el conocimiento', e);
+      return fragmentos;
+    });
+  }
+
+  const r = await responder(
+    new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }),
+    historia,
+    texto,
+    {
+      leerDia: (fecha) => leerDia(env, fecha),
+      pasarASant: (motivo, resumen) => avisarASant(env, evento.de, motivo, resumen),
+    },
+    { fuentes },
+  );
   await guardarConversacion(kv, evento.de, r.mensajes);
 
   // Guardia de salida: un monto que no salió del servidor no se envía.
@@ -95,12 +112,15 @@ async function procesar(evento: Evento, env: Env) {
     latenciaMs: Date.now() - inicio,
     tokensEntrada: r.tokensEntrada,
     tokensSalida: r.tokensSalida,
+    modo,
+    encontradas: fuentes?.map((f) => f.id),
   });
 }
 
 export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
+    if (url.pathname.startsWith('/admin/')) return rutaAdmin(req, env, url.pathname);
     if (url.pathname !== '/webhook') return new Response('Chiquizone', { status: 404 });
 
     if (req.method === 'GET') {
