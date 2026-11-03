@@ -4,8 +4,8 @@ compatibility_date = "2026-10-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-# Calendario de montajes (correo de la cuenta de Google o id del calendario).
-GOOGLE_CALENDAR_ID = "PENDIENTE@chiquizone.com"
+# Calendario "Montajes Chiquizone" de hola@chiquizone.com (Sant, 2026-11-03).
+GOOGLE_CALENDAR_ID = "c_63130522674bd17871ef3eebad2e1c635e9b371016938f035bcb4d0747c1c8a4@group.calendar.google.com"
 GRAPH_VERSION = "v23.0"
 # Interruptor del conocimiento: "completo" (todo en el prompt) o "busqueda" (Vectorize + reranker).
 # Decisión de Sant (2026-11-03): pasar a "busqueda" cuando el material pase de unas 50 páginas.
