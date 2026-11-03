@@ -14,7 +14,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Skill ui-ux-pro-max para guiar decisiones de UX y movimiento (PR #16).
 - Logo grande en el inicio que viaja al centro de la barra al hacer scroll, con colores por tokens y versión para tema marino (ADR 0009, propuesta).
 - Logo vectorizado provisional (`scripts/vectorizar-logo.py`) hasta tener el SVG oficial.
-- Configuración de Netlify (`netlify.toml`) y guía de publicación (`docs/publicar.md`). El sitio queda sin indexar hasta el lanzamiento (ADR 0010, propuesta).
+- Configuración de Netlify (`netlify.toml`) y guía de publicación (`docs/publicar.md`). El sitio queda sin indexar hasta el lanzamiento (ADR 0010, aceptada).
 
 ### Cambiado
 - Títulos en Fraunces con una palabra en cursiva; Fredoka queda para impacto puntual (ADR 0006, aceptada).

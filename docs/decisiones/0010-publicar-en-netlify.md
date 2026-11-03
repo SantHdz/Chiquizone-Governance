@@ -1,6 +1,6 @@
 # 0010 · Publicar el sitio en Netlify
 
-- **Estado:** Propuesta (pendiente de la decisión de Sant)
+- **Estado:** Aceptada
 - **Fecha:** 2026-11-03
 - **Decide:** Sant
 

@@ -11,10 +11,13 @@ El sitio se publica en **Netlify** (plan gratis). La decisión y las opciones qu
 
 ## Primera vez (solo una vez)
 
+Antes de empezar, `netlify.toml` tiene que estar en `main`. Así la primera publicación ya sale con la configuración correcta y sin indexar.
+
 1. Crear la cuenta en [netlify.com](https://www.netlify.com/) entrando con GitHub.
 2. Agregar un proyecto nuevo (*Add new project*), elegir *Import an existing project*, después GitHub, autorizar y elegir `SantHdz/Chiquizone-Governance`.
-3. Netlify lee `netlify.toml`. Confirmar que el comando es `npm run build` y la carpeta es `dist`, y publicar.
-4. Abrir la dirección `.netlify.app` que muestra Netlify y revisar el sitio completo: celular y computadora, tema claro y oscuro.
+3. Poner de nombre al proyecto `chiquizone` (si está ocupado, `chiquizone-web`). Ese nombre forma la dirección de prueba (`chiquizone.netlify.app`) y es el destino del registro CNAME `www` del lanzamiento. La rama de producción es `main`.
+4. Netlify lee `netlify.toml`. Confirmar que el comando es `npm run build` y la carpeta es `dist`, y publicar.
+5. Abrir la dirección `.netlify.app` que muestra Netlify y revisar el sitio completo: celular y computadora, tema claro y oscuro.
 
 Los nombres de los botones de Netlify pueden cambiar un poco. Si no encuentras uno, pide ayuda con una captura.
 
@@ -28,7 +31,7 @@ Solo cuando Sant lo apruebe. En este orden:
 - [ ] En Squarespace (*Domains* → `chiquizone.com` → *DNS*): un registro **A** con host `@` y valor `75.2.60.5`, y un **CNAME** con host `www` que apunte a `<sitio>.netlify.app`. Si ya hay registros A o CNAME para `@` o `www` que apunten a Squarespace, se reemplazan. No se tocan los demás registros, por ejemplo los de correo. Netlify muestra los valores exactos; si difieren de estos, valen los de Netlify.
 - [ ] Esperar a que cambien los DNS, de unas horas hasta 48 horas. Netlify activa el candado HTTPS por su cuenta.
 - [ ] Probar `chiquizone.com` y `www.chiquizone.com`, el botón de WhatsApp y el formulario desde un celular.
-- [ ] PR de lanzamiento: quitar el bloque `X-Robots-Tag` de `netlify.toml` y marcar como aceptado el ADR 0010.
+- [ ] PR de lanzamiento: quitar el bloque `X-Robots-Tag` de `netlify.toml`.
 
 ## Créditos del plan gratis
 
