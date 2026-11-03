@@ -1,28 +1,47 @@
 ---
+/*
+ * Sección de página. El título admite *palabra* para marcarla en cursiva (una por título).
+ * Cada sección dice una sola cosa: ceja + título + entradilla corta.
+ */
 interface Props {
   id?: string;
   tone?: 'default' | 'salvia' | 'sol' | 'marino' | 'frambuesa';
+  eyebrow?: string;
   title?: string;
   lead?: string;
   align?: 'left' | 'center';
+  narrow?: boolean;
 }
-const { id, tone = 'default', title, lead, align = 'left' } = Astro.props;
+const { id, tone = 'default', eyebrow, title, lead, align = 'left', narrow = false } = Astro.props;
+const partes = title ? title.split('*') : [];
 ---
-<section id={id} class:list={['section', `tone-${tone}`, `align-${align}`]}>
+<section id={id} class:list={['section', `tone-${tone}`, `align-${align}`, { narrow }]}>
   <div class="wrap">
-    {title && <h2>{title}</h2>}
-    {lead && <p class="lead">{lead}</p>}
+    {(eyebrow || title || lead) && (
+      <header class="head">
+        {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+        {title && <h2 data-reveal style="--i:1">{partes.map((t, i) => (i % 2 ? <em>{t}</em> : t))}</h2>}
+        {lead && <p class="lead" data-reveal style="--i:2">{lead}</p>}
+      </header>
+    )}
     <slot />
   </div>
 </section>
 <style>
-  .section { padding: var(--space-9) 0; scroll-margin-top: 64px; }
+  .section { padding: var(--section-gap) 0; scroll-margin-top: 72px; }
+  .section + .section.tone-default { padding-top: 0; }
   .tone-salvia { background: var(--salvia-100); }
   .tone-sol { background: var(--sol-100); }
   .tone-marino { background: var(--marino-50); }
   .tone-frambuesa { background: var(--frambuesa-50); }
-  h2 { margin-bottom: var(--space-3); }
-  .lead { color: var(--color-text-muted); max-width: 58ch; margin-bottom: var(--space-7); }
+  :global([data-theme="marino"]) .tone-salvia { background: var(--salvia-noche); }
+  :global([data-theme="marino"]) .tone-sol { background: var(--marino-900); }
+  :global([data-theme="marino"]) .tone-marino { background: var(--marino-900); }
+  :global([data-theme="marino"]) .tone-frambuesa { background: var(--frambuesa-noche); }
+  .head { display: grid; gap: var(--space-3); margin-bottom: var(--space-7); max-width: 640px; }
+  .lead { color: var(--color-text-muted); font-size: var(--text-lg); max-width: 52ch; }
   .align-center { text-align: center; }
-  .align-center .lead { margin-inline: auto; }
+  .align-center .head { margin-inline: auto; justify-items: center; }
+  .narrow .wrap { max-width: calc(var(--container-narrow) + 2 * var(--gutter)); }
+  @media (max-width: 640px) { .section { padding: var(--section-gap-mobile) 0; } .head { margin-bottom: var(--space-6); } }
 </style>

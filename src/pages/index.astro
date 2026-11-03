@@ -10,12 +10,37 @@ import Button from '../components/Button.astro';
 import ArmaTuZona from '../components/ArmaTuZona.astro';
 import Incluye from '../components/Incluye.astro';
 import Faq from '../components/Faq.astro';
-import { paquetes, familias } from '../data/paquetes';
-import { site, mxn, whatsappLink } from '../data/site';
+import Icon from '../components/Icon.astro';
+import Chispas from '../components/decor/Chispas.astro';
+import { publicados, preguntasActivas, hayPro, haySplash, familiasPublicadas, unico, familias } from '../data/paquetes';
+import { site, mxn, pct, whatsappLink } from '../data/site';
 
-const secos = paquetes.filter((p) => !p.splash);
-const splash = paquetes.filter((p) => p.splash);
-const porFamilia = (lista: typeof paquetes, f: 'baby' | 'terreneitor') => lista.filter((p) => p.familia === f);
+/* Todo lo que depende de los paquetes sale de `publicados`: con un solo kit el sitio se simplifica solo
+ * y, cuando se active otro, vuelven las preguntas, el bloque Splash y los paquetes Pro (src/data/paquetes.ts). */
+const secos = publicados.filter((p) => !p.splash);
+const splash = publicados.filter((p) => p.splash);
+const porFamilia = (lista: typeof publicados, f: 'baby' | 'terreneitor') => lista.filter((p) => p.familia === f);
+const familiasSecas = familiasPublicadas.filter((f) => porFamilia(secos, f).length > 0);
+const familiasSplash = familiasPublicadas.filter((f) => porFamilia(splash, f).length > 0);
+const unaFamilia = familiasPublicadas.length === 1;
+const unica = familias[familiasPublicadas[0]];
+
+const numeros: Record<number, string> = { 2: 'dos', 3: 'tres' };
+const proPorFamilia = familiasPublicadas
+  .map((f) => publicados.filter((p) => p.pro && p.familia === f).sort((a, b) => Number(a.splash) - Number(b.splash))[0])
+  .filter((p) => p !== undefined);
+const partesPro = proPorFamilia.map((p, i) => (i === 0 ? `${p.nombre} lleva ${numeros[p.cuidadoras!]} cuidadoras` : `${p.nombre}, ${numeros[p.cuidadoras!]}`));
+const cuidadoras = publicados.filter((p) => p.pro).map((p) => p.cuidadoras!);
+const cuidadorasMin = Math.min(...cuidadoras);
+const cuidadorasMax = Math.max(...cuidadoras);
+
+const pasosArma = ['un paso', 'dos pasos', 'tres pasos'][preguntasActivas - 1];
+const preguntasArma = ['una pregunta', 'dos preguntas', 'tres preguntas'][preguntasActivas - 1];
+const leadPaquetes = unico
+  ? unica.resumen
+  : unaFamilia
+    ? (hayPro ? 'Tú cuidas a los niños o se quedan las cuidadoras toda la fiesta.' : `Pensada para niños de ${unica.edades}.`)
+    : 'Dos zonas pensadas para cada etapa.' + (hayPro ? ' Cada una tiene su versión Pro, con cuidadoras toda la fiesta.' : '');
 
 const requisitos = [
   { title: 'Zona techada o con sombra', text: 'El sol directo calienta el material y cansa a los niños.' },
@@ -26,23 +51,23 @@ const requisitos = [
 
 const pasos = [
   { title: 'Nos escribes', text: 'Fecha, hora de inicio, dirección y edades de los niños.' },
-  { title: 'Te cotizamos', text: 'Confirmamos disponibilidad y el paquete ideal para tu fiesta.' },
-  { title: `Apartas con ${mxn(site.bookingDeposit)}`, text: 'Por transferencia. Se descuenta del total.' },
+  { title: 'Te cotizamos', text: unico ? 'Confirmamos que tu fecha esté libre.' : 'Confirmamos disponibilidad y el paquete ideal para tu fiesta.' },
+  { title: `Apartas con el ${pct(site.bookingDepositPct)}`, text: 'Por transferencia. Se descuenta del total.' },
   { title: 'Firmamos contrato', text: `Con copia de INE y depósito de ${mxn(site.guaranteeDeposit)} en garantía.` },
   { title: 'Montamos y recogemos', text: 'Llegamos una hora antes. El depósito se devuelve al terminar.' },
 ];
 
 const incluye = [
-  { icon: 'horario', title: `${site.serviceHours} horas de juego`, text: 'De juego supervisado o libre, según tu paquete.', wide: true },
-  { icon: 'casa', title: `${site.spaceNeeded} de zona`, text: 'El espacio que necesitamos en tu casa, jardín o salón.', wide: true },
-  { icon: 'fecha-confirmada', title: 'Montaje', text: 'Llegamos una hora antes de la fiesta.' },
-  { icon: 'traslado', title: 'Traslado', text: 'Incluido dentro de San Juan del Río.' },
-  { icon: 'brillo', title: 'Sanitización', text: 'Pieza por pieza, antes de cada fiesta.' },
-  { icon: 'listo', title: 'Desmontaje', text: 'Recogemos todo al terminar.' },
+  { icon: 'horario', title: `${site.serviceHours} horas de juego`, text: hayPro ? 'Supervisado o libre, según tu paquete.' : 'Los papás cuidan a los niños; nosotros montamos y recogemos.', wide: true, tone: 'sol' as const },
+  { icon: 'casa', title: `${site.spaceNeeded} de zona`, text: 'Es todo el espacio que pedimos en tu casa, jardín o salón.', wide: true, tone: 'salvia' as const },
+  { icon: 'fecha-confirmada', title: 'Montaje', text: 'Llegamos una hora antes de la fiesta.', tone: 'frambuesa' as const },
+  { icon: 'traslado', title: 'Traslado', text: 'Incluido dentro de San Juan del Río.', tone: 'marino' as const },
+  { icon: 'brillo', title: 'Sanitización', text: 'Pieza por pieza, antes de cada fiesta.', tone: 'sol' as const },
+  { icon: 'listo', title: 'Desmontaje', text: 'Recogemos todo al terminar.', tone: 'salvia' as const },
 ];
 
 const semanas = [
-  { title: '4 semanas antes', text: `Define fecha, hora e invitados, y aparta tu zona con ${mxn(site.bookingDeposit)}.` },
+  { title: '4 semanas antes', text: `Define fecha, hora e invitados, y aparta tu zona con el ${pct(site.bookingDepositPct)}.` },
   { title: '3 semanas antes', text: 'Manda las invitaciones y pide que confirmen cuántos niños van.' },
   { title: '1 semana antes', text: 'Revisa el espacio: sombra, piso plano y un contacto a menos de diez metros.' },
   { title: 'El día de la fiesta', text: 'Llegamos una hora antes a montar. Tú recibes a tus invitados.' },
@@ -52,10 +77,12 @@ const faq = [
   { q: '¿En qué zonas dan servicio?', a: `En ${site.areas.join(' y ')}. El traslado dentro de San Juan del Río está incluido; Tequisquiapan y otros municipios se cotizan.` },
   { q: '¿Cuánto espacio necesito?', a: `Un área de ${site.spaceNeeded}, techada o con sombra, con piso plano y un contacto eléctrico a menos de diez metros.` },
   { q: '¿Cuánto dura el servicio?', a: `${site.serviceHours} horas. Llegamos una hora antes a montar y recogemos todo al terminar.` },
-  { q: '¿Cómo aparto mi fecha?', a: `Con un anticipo de ${mxn(site.bookingDeposit)} por transferencia, que se descuenta del total. Firmamos contrato con copia de INE y un depósito de ${mxn(site.guaranteeDeposit)} en garantía, que se devuelve al terminar.` },
-  { q: '¿Qué hacen las cuidadoras de los paquetes Pro?', a: 'Se quedan toda la fiesta en la zona: cuidan y organizan el juego. Pro Baby lleva dos cuidadoras y Terreneitor Pro, tres. Nunca sacan a un niño del área ni dan alimentos.' },
+  { q: '¿Cómo aparto mi fecha?', a: `Con un anticipo del ${pct(site.bookingDepositPct)} por transferencia, que se descuenta del total. Firmamos contrato con copia de INE y un depósito de ${mxn(site.guaranteeDeposit)} en garantía, que se devuelve al terminar.` },
+  ...(hayPro ? [{ q: '¿Qué hacen las cuidadoras de los paquetes Pro?', a: `Se quedan toda la fiesta en la zona: cuidan y organizan el juego. ${partesPro.join(' y ')}. Nunca sacan a un niño del área ni dan alimentos.` }] : []),
   { q: '¿El material está limpio?', a: 'Sí. Sanitizamos pieza por pieza antes de cada fiesta.' },
-  { q: '¿Y si hay niños de distintas edades?', a: 'Escríbenos por WhatsApp con las edades y te armamos la combinación que mejor funcione.' },
+  unaFamilia
+    ? { q: '¿Para qué edades es?', a: `La zona ${unica.nombre} es para niños de ${unica.edades}. Si hay invitados más grandes, escríbenos por WhatsApp con las edades y te decimos si les funciona.` }
+    : { q: '¿Y si hay niños de distintas edades?', a: 'Escríbenos por WhatsApp con las edades y te armamos la combinación que mejor funcione.' },
 ];
 
 const serviceLd = {
@@ -64,103 +91,163 @@ const serviceLd = {
   serviceType: 'Renta de zonas de juego para fiestas infantiles',
   provider: { '@type': 'LocalBusiness', name: site.name, url: site.url },
   areaServed: site.areas.map((name) => ({ '@type': 'City', name })),
-  offers: paquetes.map((p) => ({ '@type': 'Offer', name: p.nombre, price: p.precio, priceCurrency: 'MXN', availability: 'https://schema.org/InStock', url: `${site.url}/#${p.id}` })),
+  offers: publicados.map((p) => ({ '@type': 'Offer', name: p.nombre, price: p.precio, priceCurrency: 'MXN', availability: 'https://schema.org/InStock', url: `${site.url}/#${p.id}` })),
 };
 ---
-<Base>
+<Base heroLogo>
   <Hero />
 
-  <Section id="arma" title="Arma tu zona en 3 pasos" lead="Responde tres preguntas y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha por WhatsApp.">
-    <ArmaTuZona />
-  </Section>
+  {preguntasActivas > 0 && (
+    <Section id="arma" eyebrow={`En ${pasosArma}`} title="Arma tu *zona*" lead={`Responde ${preguntasArma} y te decimos qué zona va con tu fiesta. Al final revisamos tu fecha.`}>
+      <ArmaTuZona />
+    </Section>
+  )}
 
-  <Section id="paquetes" title="Elige tu zona" lead="Dos zonas pensadas para cada etapa. Cada una tiene su versión Pro, con cuidadoras que se quedan toda la fiesta.">
-    {(['baby', 'terreneitor'] as const).map((f) => (
-      <div class="family">
-        <div class="family-head">
-          <h3>{familias[f].nombre}</h3>
-          <p>{familias[f].resumen}</p>
-        </div>
-        <div class="grid">{porFamilia(secos, f).map((p) => <PackageCard paquete={p} />)}</div>
+  <Section
+    id="paquetes"
+    tone="salvia"
+    eyebrow={unico ? 'Tu paquete' : 'Paquetes'}
+    title={unico ? `La zona *${publicados[0].nombre}*` : 'Elige tu *zona*'}
+    lead={leadPaquetes}
+    align={unico ? 'center' : 'left'}
+  >
+    {familiasSecas.map((f) => (
+      <div class:list={['family', `fam-${f}`]}>
+        {!unico && (
+          <div class="family-head" data-reveal>
+            <span class="fam-ico"><Icon name={f === 'baby' ? 'bebe' : 'ninos'} size={24} /></span>
+            <div>
+              <h3 class="display">{familias[f].nombre} <span class="edad">{familias[f].edades}</span></h3>
+              <p>{familias[f].resumen}</p>
+            </div>
+          </div>
+        )}
+        <div class:list={['grid', { solo: unico }]}>{porFamilia(secos, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
       </div>
     ))}
+
+    {haySplash && (
+      <div class="splash">
+        <div class="splash-head" data-reveal>
+          <span class="fam-ico agua"><Icon name="agua" size={24} /></span>
+          <div>
+            <p class="eyebrow">Para días de calor</p>
+            <h3>Las mismas zonas, <em>con agua</em></h3>
+            <p class="sub">Mesa de agua, tapete fuente y alberca con patitos.{familiasSplash.length > 1 ? ' Elige Baby o Terreneitor en versión Splash.' : ''}</p>
+          </div>
+        </div>
+        {familiasSplash.map((f) => (
+          <div class="family">
+            <div class="family-head small" data-reveal><h3 class="display">{familias[f].nombre} Splash</h3></div>
+            <div class="grid">{porFamilia(splash, f).map((p, i) => <PackageCard paquete={p} index={i} />)}</div>
+          </div>
+        ))}
+      </div>
+    )}
   </Section>
 
-  <Section id="incluye" title="Lo que llega a tu fiesta" lead="Todos los paquetes incluyen esto, sin costo extra.">
+  <Section id="incluye" eyebrow="Sin costo extra" title="Lo que llega a tu *fiesta*" lead={unico ? 'Tu paquete incluye todo esto.' : 'Todos los paquetes incluyen esto.'}>
     <Incluye items={incluye} />
   </Section>
 
-  <Section id="supervision" tone="sol">
-    <div class="nanny">
-      <div>
-        <h2>Supervisión en los paquetes Pro</h2>
-        <p class="sub">Nuestras cuidadoras se quedan las cinco horas en la zona de juego, para que tú puedas estar con tus invitados.</p>
-        <ul class="rings">
-          <li>Cuidan y organizan el juego dentro del área</li>
-          <li>Pro Baby lleva dos cuidadoras; Terreneitor Pro, tres</li>
-          <li>Nunca sacan a un niño del área ni dan alimentos</li>
-        </ul>
+  {hayPro && (
+    <Section id="supervision" tone="sol">
+      <div class="nanny">
+        <div>
+          <p class="eyebrow" data-reveal>{cuidadoras.length > 1 ? 'Paquetes Pro' : 'Paquete Pro'}</p>
+          <h2 data-reveal style="--i:1">Cuidadoras que se quedan <em>toda</em> la fiesta</h2>
+          <p class="sub" data-reveal style="--i:2">Se quedan las cinco horas en la zona de juego, para que tú puedas estar con tus invitados.</p>
+          <ul class="rings">
+            <li data-reveal style="--i:3">Cuidan y organizan el juego dentro del área</li>
+            <li data-reveal style="--i:4">{partesPro.join('; ')}</li>
+            <li data-reveal style="--i:5">Nunca sacan a un niño del área ni dan alimentos</li>
+          </ul>
+        </div>
+        <div class="nanny-card" data-reveal style="--i:2">
+          <Chispas class="chispa" size={34} color="var(--sol-600)" />
+          <div class="big">{cuidadorasMin === cuidadorasMax ? cuidadorasMin : <>{cuidadorasMin}<em>–</em>{cuidadorasMax}</>}</div>
+          <p>cuidadoras incluidas<br />{cuidadoras.length > 1 ? 'en cada paquete Pro' : 'en el paquete Pro'}</p>
+        </div>
       </div>
-      <div class="nanny-card">
-        <div class="big">2–3</div>
-        <p>cuidadoras incluidas<br />en cada paquete Pro</p>
-      </div>
+    </Section>
+  )}
+
+  <Section id="como-funciona" eyebrow="Cómo funciona" title="Apartar tu fecha es *fácil*" lead="Todo se resuelve por WhatsApp en menos de un día.">
+    <div class="como">
+      <Steps items={pasos} />
+      <Checks title="Lo que necesitamos del espacio" items={requisitos} />
+    </div>
+    <div class="semanas">
+      <h3 data-reveal>Tu fiesta, <em>semana a semana</em></h3>
+      <Steps items={semanas} horizontal />
     </div>
   </Section>
 
-  <Section id="splash" tone="marino" title="Splash: juego con agua" lead="Las mismas zonas con mesa de agua, tapete fuente y alberca con patitos. Para los días de calor.">
-    {(['baby', 'terreneitor'] as const).map((f) => (
-      <div class="family">
-        <div class="family-head"><h3>{familias[f].nombre} Splash</h3></div>
-        <div class="grid">{porFamilia(splash, f).map((p) => <PackageCard paquete={p} />)}</div>
-      </div>
-    ))}
-  </Section>
-
-  <Section id="antes" title="Antes del evento" lead="Cuatro cosas que necesitamos del espacio para que el montaje salga perfecto y los niños jueguen seguros.">
-    <Checks items={requisitos} />
-  </Section>
-
-  <Section id="como-funciona" tone="salvia" title="Cómo apartar tu fecha" lead="Todo se resuelve por WhatsApp en menos de un día.">
-    <Steps items={pasos} />
-  </Section>
-
-  <Section id="semanas" title="Tu fiesta, semana a semana" lead="Una guía corta para llegar al día sin prisas.">
-    <Steps items={semanas} />
-  </Section>
-
-  <Section id="preguntas" tone="frambuesa" title="Preguntas frecuentes">
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title="Preguntas *frecuentes*" narrow>
     <Faq items={faq} />
   </Section>
 
-  <Section id="cotiza" title="¿Apartamos tu fecha?" lead="Llena estos datos y te llega el mensaje listo en WhatsApp. También puedes escribirnos directo.">
-    <QuoteForm />
-    <p class="alt">
-      <Button href={whatsappLink()} variant="text" icon="whatsapp" external>WhatsApp {site.phoneDisplay}</Button>
-      <span aria-hidden="true">·</span>
-      <Button href={`mailto:${site.email}`} variant="text" icon="correo">{site.email}</Button>
-    </p>
+  <Section id="cotiza" eyebrow="Cotiza" title="¿Apartamos tu *fecha*?" lead="Llena estos datos y te llega el mensaje listo en WhatsApp. También puedes escribirnos directo.">
+    <div class="cotiza">
+      <QuoteForm />
+      <div class="directo" data-reveal style="--i:2">
+        <h3>O escríbenos directo</h3>
+        <p>Respondemos el mismo día. Si tu fecha está libre, la apartas con el {pct(site.bookingDepositPct)}.</p>
+        <Button href={whatsappLink()} variant="secondary" icon="whatsapp" external>WhatsApp {site.phoneDisplay}</Button>
+        <Button href={`mailto:${site.email}`} variant="text" icon="correo">{site.email}</Button>
+      </div>
+    </div>
   </Section>
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} />
 </Base>
 
 <style>
   .family + .family { margin-top: var(--space-8); }
-  .family-head { display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-4); }
-  .family-head h3 { font-size: var(--text-xl); }
-  .family-head p { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .family-head { display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-5); }
+  .family-head.small { margin-bottom: var(--space-4); }
+  .family-head h3 { font-size: 30px; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .fam-baby .family-head h3 { color: var(--family-baby-ink); }
+  .fam-terreneitor .family-head h3 { color: var(--family-terreneitor-ink); }
+  .edad { font-family: var(--font-body); font-size: var(--text-label); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--color-text-muted); }
+  .family-head p { color: var(--color-text-muted); max-width: 52ch; }
+  .fam-ico { flex: none; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-raised); color: var(--color-text); box-shadow: var(--shadow-card); }
+  .fam-ico.agua { color: var(--family-splash-ink); }
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+  .grid.solo { grid-template-columns: minmax(0, 480px); justify-content: center; text-align: left; }
+  .splash {
+    margin-top: var(--space-8); padding: var(--space-7); border-radius: var(--radius-lg);
+    background: var(--marino-50); border: 1.5px solid var(--marino-100);
+  }
+  :global([data-theme="marino"]) .splash { background: var(--marino-900); border-color: var(--marino-700); }
+  .splash-head { display: flex; gap: var(--space-4); align-items: flex-start; margin-bottom: var(--space-6); }
+  .splash-head h3 { font-size: clamp(26px, 3vw, 34px); margin: var(--space-2) 0; }
+  .splash-head .sub { color: var(--color-text-muted); max-width: 52ch; }
+  .splash .family + .family { margin-top: var(--space-6); }
+
   .nanny { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-8); align-items: center; }
-  .sub { color: var(--color-text-muted); margin-top: var(--space-3); }
-  .rings { list-style: none; margin-top: var(--space-5); }
-  .rings li { padding: 6px 0 6px 22px; position: relative; }
-  .rings li::before { content: ''; position: absolute; left: 0; top: 13px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--frambuesa-500); }
-  .nanny-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-7); text-align: center; }
-  .big { font-family: var(--font-display); font-size: 56px; font-weight: var(--weight-display); line-height: 1; color: var(--color-accent); }
+  .nanny h2 { margin-top: var(--space-3); }
+  .sub { color: var(--color-text-muted); margin-top: var(--space-3); font-size: var(--text-lg); }
+  .rings { list-style: none; margin-top: var(--space-5); display: grid; gap: var(--space-2); }
+  .rings li { padding-left: 24px; position: relative; }
+  .rings li::before { content: ''; position: absolute; left: 0; top: 9px; width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid var(--frambuesa-500); }
+  .nanny-card { position: relative; background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-arch); padding: var(--space-8) var(--space-7) var(--space-7); text-align: center; box-shadow: var(--shadow-card); }
+  .nanny-card .chispa { position: absolute; top: 22px; right: 26px; transform: rotate(20deg); }
+  .big { font-family: var(--font-headline); font-size: clamp(72px, 9vw, 104px); font-weight: var(--weight-display); line-height: 1; color: var(--color-accent); letter-spacing: -.03em; }
+  .big em { font-style: italic; font-weight: 500; color: var(--sol-600); }
   .nanny-card p { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-3); }
-  .alt { margin-top: var(--space-5); display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; color: var(--color-text-muted); }
-  @media (max-width: 820px) {
-    .grid, .nanny { grid-template-columns: 1fr; }
+
+  .como { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: start; }
+  .semanas { margin-top: var(--space-9); padding-top: var(--space-7); border-top: 1.5px dashed var(--color-border-strong); }
+  .semanas h3 { font-size: var(--text-xl); margin-bottom: var(--space-5); }
+
+  .cotiza { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-8); align-items: start; }
+  .directo { display: grid; gap: var(--space-3); justify-items: start; padding-top: var(--space-2); }
+  .directo p { color: var(--color-text-muted); }
+
+  @media (max-width: 860px) {
+    .grid, .nanny, .como, .cotiza { grid-template-columns: 1fr; }
     .nanny { gap: var(--space-6); }
+    .splash { padding: var(--space-5); }
+    .nanny-card { max-width: 360px; margin-inline: auto; }
   }
 </style>

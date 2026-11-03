@@ -12,13 +12,17 @@ export const site = {
   region: 'Querétaro',
   serviceHours: 5,
   spaceNeeded: '4 × 4 m',
-  bookingDeposit: 500,
+  /* Confirmado por Sant: anticipo del 50 % del total + $500 de garantía que se devuelve (issue #3). */
+  bookingDepositPct: 50,
   guaranteeDeposit: 500,
 };
 
 export function whatsappLink(text = 'Hola Chiquizone, quiero cotizar una zona de juego.') {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 }
+
+/* "50 %" con espacio duro: el número y el signo no se separan al cortar línea. */
+export const pct = (n: number) => `${n}\u00a0%`;
 
 export const mxn = (n: number) =>
   new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 })

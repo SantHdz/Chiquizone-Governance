@@ -1,51 +1,108 @@
 ---
+/*
+ * Inicio: a la izquierda el titular y las dos llamadas a la acción; a la derecha el logo grande y la foto real
+ * del montaje. El logo viaja a la barra al hacer scroll (src/scripts/logo-viaje.ts).
+ * Los datos de precio, horas y espacio esperan su momento más abajo en la página.
+ */
 import Button from './Button.astro';
-import { site, mxn, whatsappLink } from '../data/site';
-import { precioDesde } from '../data/paquetes';
+import Logo from './Logo.astro';
+import Globos from './decor/Globos.astro';
+import { whatsappLink } from '../data/site';
+import { preguntasActivas } from '../data/paquetes';
 ---
 <div class="hero">
-  <div class="wrap">
-    <div class="arch">
-      <img class="mark" src="/brand/chiquizone-vertical.png" alt="Chiquizone" width="220" height="150" />
-      <h1>La zona de juego <em>crece con</em> tus hijos</h1>
-      <p class="lede">Montamos, supervisamos y recogemos. Ustedes disfrutan la fiesta.</p>
-      <div class="ctas">
-        <Button href={whatsappLink()} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
-        <Button href="#arma" variant="text" icon="siguiente">Arma tu zona</Button>
+  <div class="wrap grid">
+    <div class="logo-slot" data-logo-slot>
+      <div class="rise" data-reveal>
+        <Logo class="hero-logo" label="Chiquizone" />
       </div>
     </div>
-    <dl class="meta">
-      <div><dt>{site.areas.join(' y ')}</dt><dd>Querétaro</dd></div>
-      <div><dt>{site.serviceHours} horas</dt><dd>de servicio</dd></div>
-      <div><dt>{site.spaceNeeded}</dt><dd>espacio necesario</dd></div>
-      <div><dt>Desde {mxn(precioDesde)}</dt><dd>montaje incluido</dd></div>
-    </dl>
+
+    <div class="copy">
+      <p class="eyebrow" data-reveal style="--i:1">Zonas de juego para fiestas</p>
+      <h1 data-reveal style="--i:2">La zona de juego que <em>crece</em> con tus hijos</h1>
+      <p class="lede" data-reveal style="--i:3">Montamos, cuidamos y recogemos. Tú disfrutas la fiesta.</p>
+      <div class="ctas" data-reveal style="--i:4">
+        <Button href={whatsappLink()} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
+        {preguntasActivas > 0
+          ? <Button href="#arma" variant="outline" size="md" iconRight="siguiente">Arma tu zona</Button>
+          : <Button href="#paquetes" variant="outline" size="md" iconRight="siguiente">Ver la zona</Button>}
+      </div>
+    </div>
+
+    <figure class="photo" data-reveal style="--i:3">
+      <div class="frame">
+        <img
+          src="/fotos/montaje-jardin-1000.webp"
+          srcset="/fotos/montaje-jardin-640.webp 640w, /fotos/montaje-jardin-1000.webp 1000w"
+          sizes="(max-width: 900px) 92vw, 400px"
+          width="1000" height="750"
+          alt="Zona de juego Chiquizone montada en un jardín: corral de colores, brincolín, carritos y mesas infantiles."
+          fetchpriority="high"
+        />
+      </div>
+      <Globos class="globos" size={104} />
+      <figcaption><span class="display">Montaje real</span></figcaption>
+    </figure>
   </div>
 </div>
+
 <style>
-  .hero { padding: var(--space-9) 0 var(--space-8); text-align: center; }
-  .arch {
-    position: relative; max-width: 580px; margin: 0 auto; background: var(--color-surface);
-    border: 1px solid var(--color-border); border-radius: var(--radius-arch); box-shadow: var(--shadow-card);
-    padding: 74px 46px 46px;
+  .hero { position: relative; padding: var(--space-6) 0 var(--space-9); overflow: clip; }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-areas: "copy logo" "copy photo";
+    column-gap: var(--space-7);
+    row-gap: var(--space-4);
+    align-items: start;
   }
-  .arch::before {
-    content: ''; position: absolute; inset: 14px; border: 2px dashed var(--color-border);
-    border-radius: 266px 266px 24px 24px; pointer-events: none;
+
+  /* El hueco conserva el tamaño del logo aunque viaje; el logo real y el que viaja miden lo mismo. */
+  .logo-slot { grid-area: logo; justify-self: center; width: clamp(290px, 30vw, 400px); aspect-ratio: 640 / 437; }
+  .hero-logo { --chispa-anim: chispa-in; }
+  .js .rise[data-reveal] { transform: translateY(18px) scale(0.96); transition-duration: 800ms; }
+  .js .rise[data-reveal].is-in { transform: none; }
+
+  .copy { grid-area: copy; align-self: center; display: grid; gap: var(--space-5); justify-items: start; }
+  /* 11ch: el titular termina antes de donde queda el logo ya en la barra (centro de la página) */
+  h1 { font-size: clamp(42px, 5.2vw, 68px); max-width: 11ch; }
+  .lede { font-size: var(--text-body-l); color: var(--color-text-muted); max-width: 34ch; }
+  .ctas { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: var(--space-2); }
+
+  .photo { grid-area: photo; position: relative; margin: 0; justify-self: center; width: min(100%, 400px); }
+  .frame {
+    position: relative; border-radius: var(--radius-arch); overflow: hidden; aspect-ratio: 1 / 0.86;
+    box-shadow: var(--shadow-raised);
+    transform: rotate(1.5deg);
   }
-  .mark { position: relative; width: 220px; height: auto; margin: 0 auto var(--space-5); }
-  .lede { max-width: 36ch; margin: var(--space-5) auto 0; color: var(--color-text-muted); }
-  .ctas { position: relative; margin-top: var(--space-6); display: flex; gap: var(--space-5); justify-content: center; flex-wrap: wrap; }
-  .meta { margin-top: var(--space-7); display: flex; justify-content: center; gap: var(--space-7); flex-wrap: wrap; font-size: var(--text-sm); color: var(--color-text-muted); }
-  dt { font-family: var(--font-display); font-weight: var(--weight-display); color: var(--color-text); font-size: var(--text-lg); }
-  @media (max-width: 640px) {
-    .arch { padding: 58px 26px 36px; border-radius: 200px 200px 28px 28px; }
-    .arch::before { border-radius: 186px 186px 20px 20px; }
-    .meta { gap: var(--space-5) var(--space-6); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 62%; }
+  .photo::before {
+    /* bloque de color detrás, como un globo apoyado */
+    content: ''; position: absolute; inset: 14px -14px -14px 14px; border-radius: var(--radius-arch);
+    background: var(--sol-200); z-index: -1; transform: rotate(-2deg);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .arch { animation: rise var(--duration) var(--ease-out) both; }
-    .meta { animation: rise var(--duration) .25s var(--ease-out) both; }
-    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  :global([data-theme="marino"]) .photo::before { background: var(--marino-700); }
+  .globos { position: absolute; left: -52px; bottom: 44px; }
+  figcaption {
+    position: absolute; right: 18px; bottom: 18px; padding: 8px 14px; border-radius: var(--radius-pill);
+    background: var(--surface-raised); color: var(--ink); font-size: var(--text-small); box-shadow: var(--shadow-card);
+  }
+  figcaption .display { color: var(--color-accent); }
+
+  @media (max-width: 900px) {
+    .hero { padding-top: var(--space-5); }
+    .grid { grid-template-columns: 1fr; grid-template-areas: "logo" "copy" "photo"; row-gap: var(--space-6); }
+    .logo-slot { width: min(74vw, 300px); }
+    .copy { justify-items: center; text-align: center; }
+    .copy :global(.eyebrow)::before { display: none; }
+    h1 { max-width: 14ch; font-size: clamp(38px, 10.4vw, 54px); }
+    .lede { max-width: 30ch; }
+    .ctas { justify-content: center; }
+    .photo { width: min(100%, 360px); margin-top: var(--space-3); }
+    .globos { left: -20px; bottom: 30px; width: 86px; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .ctas :global(.btn) { width: 100%; }
   }
 </style>

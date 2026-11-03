@@ -9,9 +9,10 @@ Cada decisión que cambia la marca, el design system o el sitio queda aquí, con
 | [0003](0003-iconos-phosphor.md) | Íconos Phosphor en peso Bold | Aceptada | 2026-10-30 |
 | [0004](0004-servicio-local-whatsapp.md) | Servicio local y WhatsApp como cierre | Aceptada | 2026-10-30 |
 | [0005](0005-imagenes-de-ninos.md) | Caras de niños modificadas con IA | Aceptada | 2026-10-29 |
-| [0006](0006-tipografia-titulos.md) | Tipografía de títulos | Propuesta | 2026-10-30 |
+| [0006](0006-tipografia-titulos.md) | Tipografía de títulos | Aceptada | 2026-11-02 |
 | [0007](0007-licencia.md) | Repositorio público con todos los derechos reservados | Aceptada | 2026-11-02 |
 | [0008](0008-asistente-whatsapp.md) | Un asistente de WhatsApp atiende, cotiza y revisa la agenda | Aceptada (fase 1) | 2026-11-02 |
+| [0009](0009-logo-viaja-a-la-barra.md) | El logo del inicio viaja a la barra | Propuesta | 2026-11-02 |
 
 ## Cómo agregar una
 

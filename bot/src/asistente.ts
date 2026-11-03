@@ -48,7 +48,7 @@ Cómo llevar la plática:
 4. Si quiere apartar, pide su nombre, dirección aproximada y número de niños. Luego usa pasar_a_sant con un resumen completo y dile que Sant le escribe en breve para el pago del anticipo.
 5. Si pide hablar con una persona, está molesta o tiene una duda que no puedes resolver, usa pasar_a_sant.
 
-Edades: la familia Baby baby es de ${familias.baby.edades}; la familia Terreneitor es de ${familias.terreneitor.edades}.
+Edades: la familia Baby baby es de ${familias.baby.edades}. Por ahora solo se rentan los paquetes del catálogo de abajo; si piden otra edad o juego con agua, pasa la conversación a Sant sin dar precio.
 
 Catálogo:
 ${catalogo()}`;
@@ -119,6 +119,12 @@ async function ejecutar(
         agua: Boolean(entrada.agua),
         cuidadoras: Boolean(entrada.cuidadoras),
       });
+      if (!paquete) {
+        return {
+          contenido:
+            'Ese paquete todavía no está disponible. No des precio: dile que Sant le confirma opciones y usa pasar_a_sant.',
+        };
+      }
       return { contenido: JSON.stringify(cotizar(paquete)) };
     }
     case 'revisar_fecha': {

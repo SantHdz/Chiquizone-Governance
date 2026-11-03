@@ -19,7 +19,7 @@ flowchart LR
 |---|---|---|
 | Webhook | `src/index.ts` | Verifica la firma de Meta, contesta 200 y procesa en segundo plano |
 | Asistente | `src/asistente.ts` | Prompt con la voz de la marca y tres herramientas |
-| Precios | `src/cotizar.ts` | Misma lógica que "Arma tu zona"; 50 % de anticipo y 500 MXN de garantía |
+| Precios | `src/cotizar.ts` | Misma lógica que "Arma tu zona", solo con paquetes publicados (`disponible: true`); anticipo y garantía desde `site.ts` |
 | Agenda | `src/agenda.ts` | Máximo 2 fiestas por día y 8 horas entre inicios |
 | Calendario | `src/calendario.ts` | Lee el día en Google Calendar con una cuenta de servicio |
 | Memoria | `src/memoria.ts` | Conversación, pausas y mensajes ya procesados en Cloudflare KV |

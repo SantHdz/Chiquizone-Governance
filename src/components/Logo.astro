@@ -1,0 +1,17 @@
+---
+/*
+ * Logo vertical de Chiquizone. Usa el <symbol id="cz-logo"> de LogoSprite, que se define una vez por página.
+ * Con `label` se anuncia como imagen; sin él es decorativo (por ejemplo, el que viaja con el scroll).
+ */
+interface Props { class?: string; label?: string }
+const { class: cls, label, ...rest } = Astro.props;
+---
+<svg
+  {...rest}
+  class:list={['logo', cls]}
+  viewBox="0 0 640 437"
+  focusable="false"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+><use href="#cz-logo" /></svg>

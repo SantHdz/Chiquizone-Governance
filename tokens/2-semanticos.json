@@ -208,6 +208,38 @@
     "usage": "Texto de Splash sobre superficies (≥7:1)."
    },
    {
+    "name": "logo-marino",
+    "value": {
+     "claro": "{marino-500}",
+     "marino": "{crema}"
+    },
+    "usage": "Letras y trazos marino del logo. Sobre fondo marino pasan a crema para no perderse."
+   },
+   {
+    "name": "logo-frambuesa",
+    "value": {
+     "claro": "{frambuesa-500}",
+     "marino": "{frambuesa-400}"
+    },
+    "usage": "Letra C, pin y carita de niña del logo."
+   },
+   {
+    "name": "logo-sol",
+    "value": {
+     "claro": "{sol-500}",
+     "marino": "{sol-500}"
+    },
+    "usage": "Letras amarillas del logo."
+   },
+   {
+    "name": "logo-salvia",
+    "value": {
+     "claro": "{salvia-500}",
+     "marino": "{salvia-500}"
+    },
+    "usage": "Letras verdes del logo."
+   },
+   {
     "name": "success",
     "value": {
      "claro": "{salvia-800}",
@@ -402,15 +434,15 @@
  },
  "estilos-texto": [
   {
-   "name": "Display",
-   "family": "display",
+   "name": "Títulos",
+   "family": "headline",
    "styles": [
     {
      "name": "display-xl",
      "fontSize": "56px",
      "lineHeight": 1.05,
      "fontWeight": 600,
-     "letterSpacing": "-0.01em",
+     "letterSpacing": "-0.015em",
      "sample": "¡La fiesta llega a tu casa!",
      "usage": "Portadas, hero del sitio y posts de lanzamiento. Una vez por pieza."
     },
@@ -420,7 +452,8 @@
      "lineHeight": 1.1,
      "fontWeight": 600,
      "sample": "Elige tu zona de juego",
-     "usage": "Títulos de sección y titulares de post."
+     "usage": "Títulos de sección y titulares de post.",
+     "letterSpacing": "-0.015em"
     },
     {
      "name": "title",
@@ -444,7 +477,21 @@
      "lineHeight": 1,
      "fontWeight": 600,
      "sample": "$2,900",
-     "usage": "Precios. Cifras tabulares."
+     "usage": "Precios en Fraunces. Cifras tabulares."
+    }
+   ]
+  },
+  {
+   "name": "Impacto",
+   "family": "display",
+   "styles": [
+    {
+     "name": "impact",
+     "fontSize": "28px",
+     "lineHeight": 1.1,
+     "fontWeight": 600,
+     "sample": "¡Promo de lanzamiento!",
+     "usage": "Fredoka, solo para titulares muy potentes o específicos: promos, nombres de paquete, etiquetas grandes."
     }
    ]
   },

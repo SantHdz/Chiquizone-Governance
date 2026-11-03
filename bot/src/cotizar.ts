@@ -2,11 +2,12 @@
  * Cotización con los mismos datos que el sitio: src/data/paquetes.ts es la única fuente de precios.
  * La lógica de recomendación es la misma que "Arma tu zona".
  */
-import { paquetes, familias, incluidoSiempre, type Familia, type Paquete } from '../../src/data/paquetes';
+import { publicados, familias, incluidoSiempre, type Familia, type Paquete } from '../../src/data/paquetes';
+import { site } from '../../src/data/site';
 
-/** Decisión de Sant (2026-11-02): 50 % de anticipo y 500 MXN de garantía. */
-export const ANTICIPO = 0.5;
-export const GARANTIA_MXN = 500;
+/** Decisión de Sant (issue #3): anticipo del 50 % y garantía de 500 MXN que se devuelve. */
+export const ANTICIPO = site.bookingDepositPct / 100;
+export const GARANTIA_MXN = site.guaranteeDeposit;
 
 export interface Preferencias {
   edad: Familia;
@@ -27,12 +28,9 @@ export interface Cotizacion {
   siempre: string[];
 }
 
-export function recomendar(p: Preferencias): Paquete {
-  const paquete = paquetes.find(
-    (x) => x.familia === p.edad && x.splash === p.agua && x.pro === p.cuidadoras,
-  );
-  if (!paquete) throw new Error(`No hay paquete para ${JSON.stringify(p)}`);
-  return paquete;
+/** Solo recomienda paquetes publicados. Si ninguno encaja, devuelve null y el asistente pasa a Sant. */
+export function recomendar(p: Preferencias): Paquete | null {
+  return publicados.find((x) => x.familia === p.edad && x.splash === p.agua && x.pro === p.cuidadoras) ?? null;
 }
 
 export function cotizar(paquete: Paquete): Cotizacion {
@@ -53,7 +51,7 @@ export function cotizar(paquete: Paquete): Cotizacion {
 
 /** Catálogo en texto para el prompt del asistente. Cambia solo cuando cambia paquetes.ts. */
 export function catalogo(): string {
-  return paquetes
+  return publicados
     .map((p) => {
       const c = cotizar(p);
       const extras = c.extras.length ? ` Suma: ${c.extras.join(', ')}.` : '';
