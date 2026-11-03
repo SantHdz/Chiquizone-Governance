@@ -14,6 +14,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Skill ui-ux-pro-max para guiar decisiones de UX y movimiento (PR #16).
 - Logo grande en el inicio que viaja al centro de la barra al hacer scroll, con colores por tokens y versión para tema marino (ADR 0009, propuesta).
 - Logo vectorizado provisional (`scripts/vectorizar-logo.py`) hasta tener el SVG oficial.
+- Configuración de Netlify (`netlify.toml`) y guía de publicación (`docs/publicar.md`). El sitio queda sin indexar hasta el lanzamiento (ADR 0010, aceptada).
 
 ### Cambiado
 - Títulos en Fraunces con una palabra en cursiva; Fredoka queda para impacto puntual (ADR 0006, aceptada).
@@ -23,6 +24,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Barra con el logo al centro y enlaces a los lados; menú móvil con ícono de tres rayas.
 - Anticipo confirmado: 50 % del total por transferencia, más $500 de garantía que se devuelve (issue #3). `site.ts` guarda el porcentaje y no un monto fijo.
 - Al lanzar solo se muestran Baby baby y Pro Baby (issue #5). Cada paquete tiene `disponible` en `src/data/paquetes.ts`; el resto del sitio se arma con los publicados: las preguntas de "Arma tu zona", el bloque Splash, la sección Pro, el formulario y los datos estructurados. Si falta un paquete para alguna respuesta, el build falla con un aviso claro.
+- Fuera del repositorio la caché de Python (`__pycache__`) que entró con la skill ui-ux-pro-max; ahora `.gitignore` la ignora.
 
 ## [0.1.0] · 2026-10-30
 

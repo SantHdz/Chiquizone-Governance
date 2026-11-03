@@ -281,9 +281,11 @@ flowchart LR
 │   ├── pages/                     # index.astro y design-system.astro (guía viva)
 │   └── styles/                    # tokens.css (generado) y base.css
 ├── public/brand/                  # logos y pin
+├── netlify.toml                   # cómo publica Netlify el sitio
 ├── docs/
 │   ├── benchmark.md               # resumen del benchmark y cómo se aplicó
 │   ├── decisiones/                # registro de decisiones de diseño (ADR)
+│   ├── publicar.md                # cómo se publica y qué se hace el día del lanzamiento
 │   └── assets/readme/             # imágenes de este README
 └── .github/                       # CI, plantillas de PR e issues, CODEOWNERS
 ```
@@ -304,7 +306,7 @@ Se siguen como [issues del milestone Fase 2](https://github.com/SantHdz/Chiquizo
 - **Activar los demás paquetes.** Al lanzar solo se muestran Baby baby y Pro Baby; Terreneitor y Splash vuelven con `disponible: true` en `src/data/paquetes.ts`.
 - **Datos del negocio.** Capacidad por zona y costo de traslado fuera de San Juan del Río. El anticipo (50 %) y la garantía ($500) ya están confirmados.
 - **Componentes restantes en Figma**: Etiqueta, Campo, Paso, Tarjeta y Loader.
-- **Publicación** en el dominio `chiquizone.com`.
+- **Publicación** en Netlify y en el dominio `chiquizone.com`. La decisión está en el [ADR 0010](docs/decisiones/0010-publicar-en-netlify.md) y el paso a paso en [docs/publicar.md](docs/publicar.md).
 
 ---
 
