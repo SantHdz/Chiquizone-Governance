@@ -2,6 +2,10 @@ name = "chiquizone-asistente"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
 compatibility_flags = ["nodejs_compat"]
+# El webhook de Meta llega a chiquizone-asistente.<cuenta>.workers.dev. Sin URLs de versiones de prueba:
+# cada una sería otra puerta al webhook y a /admin.
+workers_dev = true
+preview_urls = false
 
 [vars]
 # Calendario "Montajes Chiquizone" de hola@chiquizone.com (Sant, 2026-11-03).

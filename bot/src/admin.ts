@@ -3,6 +3,7 @@
  *
  * POST /admin/reindexar  reindexado incremental de conocimiento/ en Vectorize. Se corre después de cada deploy.
  * POST /admin/comparar   las mismas preguntas de prueba en modo "completo" y "busqueda". Gasta tokens.
+ * POST /admin/calendario {"fecha": "AAAA-MM-DD"} (opcional): lee ese día de Google Calendar. Solo lectura.
  * POST /admin/confirmar  {"telefono": "521..."}: llegó el anticipo; quita "TENTATIVO" del evento y lo marca confirmado.
  *
  * Ninguna ruta toca a clientas reales: comparar usa una agenda vacía y no avisa a Sant.
@@ -13,7 +14,7 @@ import { buscar, reindexar, type EnvBusqueda } from './busqueda';
 import { fuentesCitadas } from './conocimiento';
 import { preguntasDePrueba } from './preguntas';
 import { confirmarApartado } from './apartado';
-import type { EnvCalendario } from './calendario';
+import { leerDia, type EnvCalendario } from './calendario';
 import { apartadoPendiente, marcarApartado } from './db';
 import { evaluar, leerSolicitud, paraElModelo } from './negociacion';
 import { hoyISO } from './acciones';
@@ -113,6 +114,18 @@ export async function rutaAdmin(req: Request, env: EnvRutas, ruta: string): Prom
     return Response.json(await reindexar({ ...env, AI: env.AI, VECTORIZE: env.VECTORIZE, MODO_CONOCIMIENTO: env.MODO_CONOCIMIENTO ?? '' }));
   }
   if (ruta === '/admin/comparar') return Response.json(await comparar(env));
+  if (ruta === '/admin/calendario') {
+    // Prueba de solo lectura: ¿el Worker entra a Google Calendar? No crea ni cambia eventos.
+    const { fecha = hoyISO(new Date()) } = (await req.json().catch(() => ({}))) as { fecha?: unknown };
+    if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+      return new Response('Manda {"fecha": "AAAA-MM-DD"} o nada para hoy', { status: 400 });
+    }
+    try {
+      return Response.json({ ok: true, fecha, dia: await leerDia(env, fecha) });
+    } catch (e) {
+      return Response.json({ ok: false, fecha, error: (e as Error).message }, { status: 502 });
+    }
+  }
   if (ruta === '/admin/confirmar') {
     if (!env.GOOGLE_SA_KEY) return new Response('Falta el secreto GOOGLE_SA_KEY', { status: 409 });
     const { telefono } = (await req.json().catch(() => ({}))) as { telefono?: unknown };
