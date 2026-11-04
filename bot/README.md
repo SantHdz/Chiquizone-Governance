@@ -107,27 +107,25 @@ npm run typecheck
 
 Lo que necesita Sant, una sola vez:
 
-1. **Google.** Ya hecho con hola@chiquizone.com (Sant, 2026-11-03): calendario "Chiquizone" (su id está en `wrangler.toml`), proyecto `chiquizone-asistente` con Google Calendar API y cuenta de servicio `asistente@chiquizone-asistente.iam.gserviceaccount.com`. Delegación de todo el dominio autorizada (ID de cliente 111809709629376066934, alcance `calendar.events`): la cuenta actúa en nombre de hola@chiquizone.com (`GOOGLE_SUBJECT` en `wrangler.toml`). Falta la llave JSON: su campo `private_key` se carga como secreto `GOOGLE_SA_KEY`.
+1. **Google.** Ya hecho con hola@chiquizone.com (Sant, 2026-11-03): calendario "Chiquizone" (su id está en `wrangler.toml`), proyecto `chiquizone-asistente` con Google Calendar API y cuenta de servicio `asistente@chiquizone-asistente.iam.gserviceaccount.com`. Delegación de todo el dominio autorizada (ID de cliente 111809709629376066934, alcance `calendar.events`): la cuenta actúa en nombre de hola@chiquizone.com (`GOOGLE_SUBJECT` en `wrangler.toml`). Llave JSON descargada por Sant: su campo `private_key` se carga como secreto `GOOGLE_SA_KEY`.
    - El calendario se comparte con la cuenta de servicio con "Realizar cambios y ver los detalles de todos los eventos". Para eso, en admin.google.com › Apps › Google Workspace › Calendar › Configuración de uso compartido, el uso compartido externo debe permitir "que los usuarios externos cambien los calendarios".
    - Plan B si Workspace no deja compartirlo: en admin.google.com › Seguridad › Acceso y control de datos › Controles de API › Delegación de todo el dominio, agrega el ID de cliente de la cuenta de servicio con el alcance `https://www.googleapis.com/auth/calendar.events`, y guarda `GOOGLE_SUBJECT=hola@chiquizone.com` como secreto. La cuenta actúa en nombre de hola@ solo para eventos de Calendar.
 2. **Meta.** En developers.facebook.com crea una app de tipo Business con el producto WhatsApp y conecta el número existente con la opción de la app de WhatsApp Business (coexistencia). Anota el Phone number ID, el App secret y un token permanente de usuario del sistema.
 3. **Anthropic.** Crea una API key en platform.claude.com.
-4. **Cloudflare.** Crea una cuenta gratuita.
+4. **Cloudflare.** Cuenta gratuita con hola@chiquizone.com (Sant, 2026-11-03). Ya creados desde el panel y con su id en `wrangler.toml`: KV `CONVERSACIONES` y D1 `chiquizone`. Vectorize no se crea desde el panel y queda fuera mientras la búsqueda esté apagada.
 
-Luego, en `bot/`:
+Publicación con Workers Builds (Cloudflare publica solo con cada cambio en GitHub). En el panel: Compute › Workers & Pages › Create › Import a repository, elige este repositorio y llena:
 
-```bash
-npx wrangler login
-npx wrangler kv namespace create CONVERSACIONES   # copia el id a wrangler.toml
-npx wrangler d1 create chiquizone                 # copia el id a wrangler.toml
-npx wrangler d1 migrations apply chiquizone --remote
-npx wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine
-# en wrangler.toml, pon el id del calendario en GOOGLE_CALENDAR_ID
-for s in ANTHROPIC_API_KEY WA_TOKEN WA_PHONE_NUMBER_ID WA_APP_SECRET WA_VERIFY_TOKEN GOOGLE_SA_KEY ADMIN_TOKEN; do
-  npx wrangler secret put $s
-done
-npm run deploy
-```
+| Campo | Valor |
+|---|---|
+| Nombre del Worker | `chiquizone-asistente` (igual que `name` en `wrangler.toml`) |
+| Root directory | `bot` |
+| Build command | `npm ci --prefix .. && npm ci` (el asistente lee los precios del sitio) |
+| Deploy command | `npx wrangler d1 migrations apply chiquizone --remote && npx wrangler deploy` (crea las tablas que falten) |
+
+Después, en el Worker › Settings › Variables and Secrets, agrega como **Secret**: `ANTHROPIC_API_KEY`, `WA_TOKEN`, `WA_PHONE_NUMBER_ID`, `WA_APP_SECRET`, `WA_VERIFY_TOKEN`, `GOOGLE_SA_KEY` (solo el campo `private_key` del JSON, pegado tal cual) y `ADMIN_TOKEN` (24 caracteres o más). Las llaves no pasan por el chat ni por el repositorio.
+
+Alternativa por terminal, en `bot/`: `npx wrangler login`, `npx wrangler secret put <NOMBRE>` por cada secreto y `npm run deploy`.
 
 Por último, en la app de Meta configura el webhook con la URL `https://chiquizone-asistente.<tu-cuenta>.workers.dev/webhook`, el mismo `WA_VERIFY_TOKEN`, y suscríbelo a los campos `messages` y `smb_message_echoes`.
 
@@ -142,6 +140,6 @@ Avisos opcionales a un número personal: crea una plantilla de utilidad llamada 
 
 ## Siguientes fases
 
-2. Cierra solo: evento tentativo de 12 horas (hecho, falta conectarlo al asistente), cobro del anticipo (pasarela con tarjeta, OXXO y SPEI) y recordatorios.
+2. Cierra solo: evento tentativo de 12 horas (hecho y conectado), cobro del anticipo (pasarela con tarjeta, OXXO y SPEI) y recordatorios.
 3. Seguimiento: base de clientes en Google Sheets, seguimiento a cotizaciones y reseñas.
 4. Cartera: recontratación por cumpleaños y newsletter.
