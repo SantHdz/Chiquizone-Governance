@@ -43,5 +43,5 @@ index_name = "chiquizone-conocimiento"
 [[d1_databases]]
 binding = "DB"
 database_name = "chiquizone"
-database_id = "PENDIENTE"
+database_id = "161169fa-3bc6-4378-b026-acf204601267"
 migrations_dir = "migraciones"
