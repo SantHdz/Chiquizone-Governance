@@ -22,3 +22,25 @@ jobs:
           git diff --exit-code -- src/styles/tokens.css tokens/build || (echo "::error::tokens.css no está al día: corre npm run tokens y sube el resultado" && exit 1)
       - name: Build del sitio
         run: npx astro build
+
+  asistente:
+    name: Asistente de WhatsApp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # El asistente lee los precios de src/data, así que también necesita las dependencias del sitio.
+      - run: npm ci
+      - run: npm ci
+        working-directory: bot
+      - name: Índice de conocimiento al día
+        run: npm run check
+        working-directory: bot
+      - name: Tipos
+        run: npm run typecheck
+        working-directory: bot
+      - name: Pruebas de agenda, precios y webhook
+        run: npm test
+        working-directory: bot

@@ -1,0 +1,49 @@
+name = "chiquizone-asistente"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Calendario "Montajes Chiquizone" de hola@chiquizone.com (Sant, 2026-11-03).
+GOOGLE_CALENDAR_ID = "c_63130522674bd17871ef3eebad2e1c635e9b371016938f035bcb4d0747c1c8a4@group.calendar.google.com"
+GRAPH_VERSION = "v23.0"
+# Cuenta de servicio y delegación de dominio autorizada por Sant (2026-11-03, alcance calendar.events).
+GOOGLE_SA_EMAIL = "asistente@chiquizone-asistente.iam.gserviceaccount.com"
+GOOGLE_SUBJECT = "hola@chiquizone.com"
+# Interruptor del conocimiento: "completo" (todo en el prompt) o "busqueda" (Vectorize + reranker).
+# Decisión de Sant (2026-11-03): pasar a "busqueda" cuando el material pase de unas 50 páginas.
+MODO_CONOCIMIENTO = "completo"
+
+# Cada 30 minutos se liberan los apartados tentativos que pasaron sus 12 horas sin anticipo (Sant, 2026-11-03).
+[triggers]
+crons = ["*/30 * * * *"]
+
+# Conversaciones, pausas y mensajes ya procesados.
+[[kv_namespaces]]
+binding = "CONVERSACIONES"
+id = "2d16e013c79c4c69b12c21e348cbf843"
+
+# Embeddings y reranker del modo "busqueda" (Workers AI).
+[ai]
+binding = "AI"
+
+# Índice de conocimiento: apagado mientras MODO_CONOCIMIENTO = "completo" (sin él, el Worker usa ese modo).
+# El panel de Cloudflare no crea índices; para encender la búsqueda, crearlo una vez con
+# `wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine`
+# y quitar el # de estas tres líneas.
+# [[vectorize]]
+# binding = "VECTORIZE"
+# index_name = "chiquizone-conocimiento"
+
+# Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
+# ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
+# GOOGLE_SA_KEY (campo private_key del JSON), ADMIN_TOKEN (rutas /admin, 24+ caracteres) y,
+# opcional, AVISOS_WA (número personal para avisos).
+
+# Clientas, registros y retroalimentación. Crear con `wrangler d1 create chiquizone`
+# y aplicar `wrangler d1 migrations apply chiquizone --remote`.
+[[d1_databases]]
+binding = "DB"
+database_name = "chiquizone"
+database_id = "161169fa-3bc6-4378-b026-acf204601267"
+migrations_dir = "migraciones"
