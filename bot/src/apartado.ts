@@ -10,7 +10,7 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import { aHora, deHora, revisar, REGLAS, type Motivo } from './agenda';
 import { eventosADia, eventosDelDia, leerDia, OFFSET, tokenDeAcceso, urlEventos, type EnvCalendario, type EventoGoogle } from './calendario';
-import { cotizar } from './cotizar';
+import { cotizar, OPCIONES_COMPLEMENTO } from './cotizar';
 import { publicados } from '../../src/data/paquetes';
 import { site } from '../../src/data/site';
 
@@ -37,6 +37,8 @@ export interface DatosApartado {
   anticipo: number;
   /** Descuento o cortesías que dio negociar, para que Sant los vea en el evento. */
   ajustes?: string;
+  /** Complementos cobrados, en texto para el evento: "Bocina con música infantil $250, …". */
+  complementos?: string;
 }
 
 export type ResultadoApartado =
@@ -63,6 +65,7 @@ export function eventoTentativo(d: DatosApartado, vence: string) {
       `Municipio: ${d.municipio}`,
       `Niños: ${d.ninos}`,
       `Paquete: ${d.paquete}`,
+      ...(d.complementos ? [`Complementos: ${d.complementos}`] : []),
       `Precio: $${d.precio} MXN`,
       `Anticipo: $${d.anticipo} MXN`,
       ...(d.ajustes ? [`Ajustes: ${d.ajustes}`] : []),
@@ -189,8 +192,13 @@ export const herramientaApartar: Anthropic.Beta.BetaTool = {
       municipio: { type: 'string', enum: [...site.areas], description: 'Municipio de la fiesta.' },
       paquete: { type: 'string', enum: publicados.map((p) => p.id), description: 'Id del paquete que eligió.' },
       ninos: { type: 'integer', description: 'Número aproximado de niños.' },
+      complementos: {
+        type: 'array',
+        items: { type: 'string', enum: OPCIONES_COMPLEMENTO },
+        description: 'Los mismos complementos que cotizaste, o lista vacía.',
+      },
     },
-    required: ['nombre', 'fecha', 'hora_inicio', 'municipio', 'paquete', 'ninos'],
+    required: ['nombre', 'fecha', 'hora_inicio', 'municipio', 'paquete', 'ninos', 'complementos'],
     additionalProperties: false,
   },
 };

@@ -7,7 +7,7 @@
  */
 import Anthropic from '@anthropic-ai/sdk';
 import { aHora, deHora, revisar, type Dia } from './agenda';
-import { catalogo, cotizar, recomendar, ANTICIPO, GARANTIA_MXN } from './cotizar';
+import { catalogo, cotizar, cotizarConComplementos, recomendar, ANTICIPO, GARANTIA_MXN, OPCIONES_COMPLEMENTO } from './cotizar';
 import { familias } from '../../src/data/paquetes';
 import { site } from '../../src/data/site';
 import { bloqueDeFuentes, type Fragmento } from './conocimiento';
@@ -62,7 +62,8 @@ Cómo llevar la plática:
 1. Pregunta lo que falte, de una o dos cosas a la vez: edad del festejado, si quieren juego con agua, si quieren cuidadoras, fecha, hora de inicio y municipio.
 2. Con edad, agua y cuidadoras, usa cotizar y recomienda ese paquete con su precio y su anticipo.
 3. Con fecha y hora, usa revisar_fecha. Si no está libre, ofrece las alternativas que te dé.
-4. Si pide descuento o algo extra, usa negociar con el paquete y la fecha. Da los montos exactamente como vienen.
+3b. Si pregunta qué más puede sumar, menciona los complementos de su paquete del catálogo. Para dar un total con complementos, usa cotizar con la lista de complementos; nunca sumes tú.
+4. Si pide descuento o algo extra sin costo, usa negociar con el paquete y la fecha. Da los montos exactamente como vienen.
 5. Si quiere apartar, pide su nombre y número de niños, y usa apartar_fecha. Si queda apartada, dile que la fecha está separada ${HORAS_APARTADO} horas, hasta la hora que te devuelve, con el precio y el anticipo que te devuelve, y que Sant le escribe en breve con los datos para pagar el anticipo. Si ya no está libre, ofrece las alternativas.
 6. Si pide hablar con una persona, está molesta o tiene una duda que no puedes resolver, usa pasar_a_sant.
 
@@ -91,7 +92,7 @@ const herramientas: Anthropic.Beta.BetaTool[] = [
   {
     name: 'cotizar',
     description:
-      'Recomienda el paquete según edad, agua y cuidadoras, y devuelve precio, anticipo, saldo, garantía y lo que incluye. Úsala siempre antes de dar un precio.',
+      'Recomienda el paquete según edad, agua y cuidadoras, y devuelve precio, anticipo, saldo, garantía y lo que incluye. Si la clienta quiere complementos, pásalos y devuelve también el total con ellos. Úsala siempre antes de dar un precio o un total.',
     strict: true,
     input_schema: {
       type: 'object',
@@ -99,8 +100,13 @@ const herramientas: Anthropic.Beta.BetaTool[] = [
         edad: { type: 'string', enum: ['baby', 'terreneitor'], description: 'baby: 4 meses a 3 años. terreneitor: niños que ya corren.' },
         agua: { type: 'boolean', description: 'true si quieren juego con agua (Splash).' },
         cuidadoras: { type: 'boolean', description: 'true si quieren cuidadoras Chiquizone toda la fiesta (Pro).' },
+        complementos: {
+          type: 'array',
+          items: { type: 'string', enum: OPCIONES_COMPLEMENTO },
+          description: 'Complementos que pidió, o lista vacía. "x:opcion" elige la opción (por ejemplo brincolin:grande); "combo:id" es el combo.',
+        },
       },
-      required: ['edad', 'agua', 'cuidadoras'],
+      required: ['edad', 'agua', 'cuidadoras', 'complementos'],
       additionalProperties: false,
     },
   },
@@ -161,7 +167,12 @@ async function ejecutar(
             'Ese paquete todavía no está disponible. No des precio: dile que Sant le confirma opciones y usa pasar_a_sant.',
         };
       }
-      return { contenido: JSON.stringify(cotizar(paquete)) };
+      const lista = Array.isArray(entrada.complementos) ? entrada.complementos.map(String) : [];
+      return {
+        contenido: JSON.stringify(
+          lista.length ? { ...cotizar(paquete), conComplementos: cotizarConComplementos(paquete.id, lista) } : cotizar(paquete),
+        ),
+      };
     }
     case 'revisar_fecha': {
       const fecha = String(entrada.fecha);

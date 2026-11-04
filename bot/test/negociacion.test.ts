@@ -197,7 +197,7 @@ describe('negociación: entrada, guardia y memoria', () => {
     for (const m of montosDeNegociacion(r)) expect(permitidos.has(m)).toBe(true);
     const fmt = (n: number) => n.toLocaleString('en-US');
     expect(revisarMontos(`Queda en $${fmt(r.precioFinal)} y apartas con $${fmt(r.anticipo)}.`, permitidos).ok).toBe(true);
-    expect(revisarMontos('Te lo dejo en $1,000.', permitidos).ok).toBe(false);
+    expect(revisarMontos('Te lo dejo en $1,111.', permitidos).ok).toBe(false);
     // La guía no usa separador de miles: "1,683" no debe colar "683".
     expect(permitidos.has(r.precioFinal % 1000)).toBe(false);
   });
