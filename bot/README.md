@@ -114,14 +114,15 @@ Lo que necesita Sant, una sola vez:
 3. **Anthropic.** Crea una API key en platform.claude.com.
 4. **Cloudflare.** Cuenta gratuita con hola@chiquizone.com (Sant, 2026-11-03). Ya creados desde el panel y con su id en `wrangler.toml`: KV `CONVERSACIONES` y D1 `chiquizone`. Vectorize no se crea desde el panel y queda fuera mientras la búsqueda esté apagada.
 
-Publicación con Workers Builds (Cloudflare publica solo con cada cambio en GitHub). En el panel: Compute › Workers & Pages › Create › Import a repository, elige este repositorio y llena:
+Publicación con Workers Builds: Cloudflare publica solo con cada cambio en `main`. Ya conectado (Sant, 2026-11-03). Vive en `https://chiquizone-asistente.hola-0dc.workers.dev` y la revisión de apartados corre cada 30 minutos. Así quedó la configuración (Compute › Workers & Pages › chiquizone-asistente › Settings › Build):
 
 | Campo | Valor |
 |---|---|
 | Nombre del Worker | `chiquizone-asistente` (igual que `name` en `wrangler.toml`) |
-| Root directory | `bot` |
-| Build command | `npm ci --prefix .. && npm ci` (el asistente lee los precios del sitio) |
-| Deploy command | `npx wrangler d1 migrations apply chiquizone --remote && npx wrangler deploy` (crea las tablas que falten) |
+| Root directory | vacío (los comandos entran a `bot`) |
+| Build command | `npm ci && cd bot && npm ci` (el asistente lee los precios del sitio) |
+| Deploy command | `cd bot && npx wrangler d1 migrations apply chiquizone --remote && npx wrangler deploy` (crea las tablas que falten) |
+| Preview builds | Apagado (el repositorio tiene ramas del sitio) |
 
 Después, en el Worker › Settings › Variables and Secrets, agrega como **Secret**: `ANTHROPIC_API_KEY`, `WA_TOKEN`, `WA_PHONE_NUMBER_ID`, `WA_APP_SECRET`, `WA_VERIFY_TOKEN`, `GOOGLE_SA_KEY` (solo el campo `private_key` del JSON, pegado tal cual) y `ADMIN_TOKEN` (24 caracteres o más). Las llaves no pasan por el chat ni por el repositorio.
 
