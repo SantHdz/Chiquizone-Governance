@@ -128,6 +128,12 @@ Después, en el Worker › Settings › Variables and Secrets, agrega como **Sec
 
 Alternativa por terminal, en `bot/`: `npx wrangler login`, `npx wrangler secret put <NOMBRE>` por cada secreto y `npm run deploy`.
 
+Prueba de Google sin WhatsApp (solo lectura, no crea eventos). Devuelve las fiestas de ese día o el error exacto de Google:
+
+```bash
+curl -X POST -H "authorization: Bearer $ADMIN_TOKEN" -d '{"fecha":"2026-11-08"}' https://chiquizone-asistente.hola-0dc.workers.dev/admin/calendario
+```
+
 Por último, en la app de Meta configura el webhook con la URL `https://chiquizone-asistente.<tu-cuenta>.workers.dev/webhook`, el mismo `WA_VERIFY_TOKEN`, y suscríbelo a los campos `messages` y `smb_message_echoes`.
 
 Avisos opcionales a un número personal: crea una plantilla de utilidad llamada `aviso_conversacion` con un parámetro (por ejemplo, "Chiquizone: un chat necesita tu atención. {{1}}") y guarda el número en el secreto `AVISOS_WA`.
