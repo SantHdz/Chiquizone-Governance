@@ -27,11 +27,13 @@ id = "2d16e013c79c4c69b12c21e348cbf843"
 [ai]
 binding = "AI"
 
-# Índice de conocimiento. Crear una vez con
-# `wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine`.
-[[vectorize]]
-binding = "VECTORIZE"
-index_name = "chiquizone-conocimiento"
+# Índice de conocimiento: apagado mientras MODO_CONOCIMIENTO = "completo" (sin él, el Worker usa ese modo).
+# El panel de Cloudflare no crea índices; para encender la búsqueda, crearlo una vez con
+# `wrangler vectorize create chiquizone-conocimiento --dimensions=1024 --metric=cosine`
+# y quitar el # de estas tres líneas.
+# [[vectorize]]
+# binding = "VECTORIZE"
+# index_name = "chiquizone-conocimiento"
 
 # Secretos (se cargan con `wrangler secret put NOMBRE`, nunca en este archivo):
 # ANTHROPIC_API_KEY, WA_TOKEN, WA_PHONE_NUMBER_ID, WA_APP_SECRET, WA_VERIFY_TOKEN,
