@@ -1,0 +1,66 @@
+---
+/*
+ * Cabecera de las páginas por tema: ceja, titular, entradilla, llamadas a la acción y la foto real del montaje.
+ * Es el mismo lenguaje del inicio (arco, bloque de color detrás, globos) sin el logo que viaja a la barra.
+ * El titular admite *palabra* para marcarla en cursiva, igual que Section.
+ */
+import Button from './Button.astro';
+import Globos from './decor/Globos.astro';
+import { whatsappLink } from '../data/site';
+import { preguntasActivas } from '../data/paquetes';
+
+interface Props { eyebrow: string; title: string; lead: string; mensaje?: string; alt?: string }
+const {
+  eyebrow, title, lead,
+  mensaje = 'Hola Chiquizone, quiero cotizar una zona de juego para mi fiesta.',
+  alt = 'Zona de juego Chiquizone montada en un jardín: corral de colores, brincolín, carritos y mesas infantiles.',
+} = Astro.props;
+const partes = title.split('*');
+---
+<div class="hero">
+  <div class="wrap grid">
+    <div class="copy">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{partes.map((t, i) => (i % 2 ? <em>{t}</em> : t))}</h1>
+      <p class="lede">{lead}</p>
+      <div class="ctas">
+        <Button href={whatsappLink(mensaje)} size="lg" icon="whatsapp" external>Cotizar por WhatsApp</Button>
+        <Button href={preguntasActivas > 0 ? '/#arma' : '/#paquetes'} variant="outline" size="md" iconRight="siguiente">Arma tu zona</Button>
+      </div>
+    </div>
+    <figure class="photo">
+      <div class="frame">
+        <img
+          src="/fotos/montaje-jardin-1000.webp"
+          srcset="/fotos/montaje-jardin-640.webp 640w, /fotos/montaje-jardin-1000.webp 1000w"
+          sizes="(max-width: 900px) 92vw, 400px"
+          width="1000" height="750" alt={alt} fetchpriority="high"
+        />
+      </div>
+      <Globos class="globos" size={92} />
+      <figcaption><span class="display">Montaje real</span></figcaption>
+    </figure>
+  </div>
+</div>
+<style>
+  .hero { position: relative; padding: var(--space-6) 0 var(--space-9); overflow: clip; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: var(--space-8); align-items: center; }
+  .copy { display: grid; gap: var(--space-5); justify-items: start; }
+  h1 { font-size: clamp(36px, 4.6vw, 58px); max-width: 16ch; }
+  .lede { font-size: var(--text-body-l); color: var(--color-text-muted); max-width: 46ch; }
+  .ctas { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: var(--space-2); }
+  .photo { position: relative; margin: 0; justify-self: center; width: min(100%, 380px); }
+  .frame { position: relative; border-radius: var(--radius-arch); overflow: hidden; aspect-ratio: 1 / 0.86; box-shadow: var(--shadow-raised); transform: rotate(1.5deg); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 62%; }
+  .photo::before { content: ''; position: absolute; inset: 14px -14px -14px 14px; border-radius: var(--radius-arch); background: var(--sol-200); z-index: -1; transform: rotate(-2deg); }
+  :global([data-theme="marino"]) .photo::before { background: var(--marino-700); }
+  .globos { position: absolute; left: -44px; bottom: 40px; }
+  figcaption { position: absolute; right: 18px; bottom: 18px; padding: 8px 14px; border-radius: var(--radius-pill); background: var(--surface-raised); color: var(--ink); font-size: var(--text-small); box-shadow: var(--shadow-card); }
+  figcaption .display { color: var(--color-accent); }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; gap: var(--space-7); }
+    h1 { max-width: 18ch; }
+    .globos { left: -18px; width: 76px; height: auto; }
+  }
+  @media (max-width: 480px) { .ctas :global(.btn) { width: 100%; } }
+</style>

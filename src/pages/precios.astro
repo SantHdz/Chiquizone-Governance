@@ -1,0 +1,100 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { publicados, familias } from '../data/paquetes';
+import { complementosPublicados, combosPublicados, trae, ahorro } from '../data/complementos';
+import { pasos } from '../data/contenido';
+import { mxn, pct, apartado, lista, site } from '../lib/tema';
+
+const nombreDe = (id: string) => publicados.find((p) => p.id === id)?.nombre;
+const dondeSe = (ids: string[]) => {
+  const n = ids.map(nombreDe).filter((x): x is string => Boolean(x));
+  return n.length === publicados.length ? 'Todos los paquetes' : n.join(' y ');
+};
+const precioComplemento = (c: (typeof complementosPublicados)[number]) =>
+  c.opciones ? c.opciones.map((o) => `${o.etiqueta}: ${mxn(o.precio)}`).join(' · ') : mxn(c.precio!);
+
+const faq = [
+  { q: '¿Qué incluye el precio del paquete?', a: `${site.serviceHours} horas de servicio, ${lista(['montaje una hora antes', 'desmontaje al terminar', 'sanitización pieza por pieza', `traslado dentro de ${site.areas[0]}`])}.` },
+  { q: '¿Cuánto es el apartado?', a: `El ${pct(site.bookingDepositPct)} del total, por transferencia. Si sumas complementos, el apartado se calcula sobre el total con complementos.` },
+  { q: '¿Y la garantía?', a: `Firmamos contrato con copia de INE y dejas ${mxn(site.guaranteeDeposit)} en garantía. Se devuelven al terminar la fiesta.` },
+  { q: '¿Cobran traslado?', a: `El traslado dentro de ${site.areas[0]} está incluido. Para ${site.areas[1]} y otros municipios, lo cotizamos según la dirección.` },
+  { q: '¿Cómo sé cuánto va a costar mi fiesta?', a: 'Usa Arma tu zona: marcas lo que quieres sumar y ves el total y el apartado al momento. Después te confirmamos la fecha por WhatsApp.' },
+];
+---
+<Landing
+  id="precios"
+  eyebrow="Precios"
+  titulo="Precios de las zonas de *juego*"
+  lead={`Cada paquete incluye montaje, desmontaje y traslado dentro de ${site.areas[0]}. Lo que quieras sumar tiene su precio más abajo.`}
+  mensaje="Hola Chiquizone, quiero cotizar una zona de juego. ¿Me confirman precio y disponibilidad?"
+>
+  <Section id="paquetes" eyebrow="Paquetes" title="Elige tu *zona*">
+    <div class="tabla-wrap" data-reveal>
+      <table>
+        <caption class="sr-only">Precio, apartado y contenido de cada paquete</caption>
+        <thead><tr><th scope="col">Paquete</th><th scope="col">Precio</th><th scope="col">Para apartar ({pct(site.bookingDepositPct)})</th><th scope="col">Incluye</th></tr></thead>
+        <tbody>
+          {publicados.map((p) => (
+            <tr id={`precio-${p.id}`}>
+              <th scope="row">{p.nombre}<span class="edad">{familias[p.familia].edades}</span></th>
+              <td class="precio">{mxn(p.precio)}</td>
+              <td>{apartado(p.precio)}</td>
+              <td>{p.pro ? `Todo lo de ${familias[p.familia].nombre}, más ${lista(p.extras ?? [])}.` : `${lista(p.incluye)}.`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="pie">Servicio de {site.serviceHours} horas. Los precios son en pesos mexicanos. La garantía de {mxn(site.guaranteeDeposit)} se devuelve al terminar la fiesta.</p>
+  </Section>
+
+  <Section id="complementos" tone="salvia" eyebrow="Complementos" title="Suma lo que *quieras*" lead="Se agregan a tu paquete. El apartado se calcula sobre el total con complementos.">
+    <div class="tabla-wrap" data-reveal>
+      <table>
+        <caption class="sr-only">Precio de cada complemento y paquetes donde se ofrece</caption>
+        <thead><tr><th scope="col">Complemento</th><th scope="col">Precio</th><th scope="col">Se ofrece en</th></tr></thead>
+        <tbody>
+          {combosPublicados.map((k) => (
+            <tr>
+              <th scope="row">{k.nombre}<span class="edad">{trae(k)}</span></th>
+              <td class="precio">{mxn(k.precio)}<span class="edad">Ahorras {mxn(ahorro(k))}</span></td>
+              <td>{dondeSe(k.paquetes)}</td>
+            </tr>
+          ))}
+          {complementosPublicados.map((c) => (
+            <tr>
+              <th scope="row">{c.nombre}{c.detalle && <span class="edad">{c.detalle}</span>}</th>
+              <td class="precio">{precioComplemento(c)}</td>
+              <td>{dondeSe(c.paquetes)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="cta"><Button href="/#arma" iconRight="siguiente">Arma tu zona y mira tu total</Button></div>
+  </Section>
+
+  <Section id="como-se-paga" eyebrow="Cómo se paga" title={`Apartas con el *${pct(site.bookingDepositPct)}*`}>
+    <Steps items={pasos} />
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title="Preguntas sobre los *precios*" narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .tabla-wrap { overflow-x: auto; border: 1.5px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-card); }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th, td { padding: var(--space-4) var(--space-5); text-align: left; vertical-align: top; border-bottom: 1.5px dashed var(--color-border); font-size: var(--text-sm); }
+  thead th { font-weight: var(--weight-bold); font-size: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--color-text-muted); border-bottom: 1.5px solid var(--color-border); }
+  tbody th { font-family: var(--font-headline); font-weight: var(--weight-display); font-size: var(--text-lg); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  .precio { font-family: var(--font-headline); font-weight: var(--weight-display); font-size: var(--text-lg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .edad { display: block; margin-top: 2px; font-family: var(--font-body); font-weight: var(--weight-regular); font-size: var(--text-sm); color: var(--color-text-muted); letter-spacing: 0; text-transform: none; white-space: normal; }
+  .pie { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted); }
+  .cta { margin-top: var(--space-6); }
+</style>

@@ -9,6 +9,9 @@ export const site = {
   phoneDisplay: '427 150 3500',
   whatsapp: '524271503500',
   areas: ['San Juan del Río', 'Tequisquiapan'],
+  /* Perfiles oficiales (Facebook, Instagram, TikTok, Perfil de Negocio de Google). Cuando Sant pase los enlaces
+   * reales se agregan aquí y salen solos en los datos estructurados; sin enlaces no se inventa ninguno. */
+  sameAs: [] as string[],
   region: 'Querétaro',
   serviceHours: 5,
   spaceNeeded: '4 × 4 m',

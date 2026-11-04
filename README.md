@@ -226,7 +226,8 @@ npm run dev        # http://localhost:4321
 | `npm run tokens` | Valida los tokens y genera `src/styles/tokens.css` |
 | `npm run dev` | Tokens + servidor de desarrollo |
 | `npm run build` | Tokens + sitio estático en `dist/` |
-| `npm run check` | Lo mismo que corre CI: tokens al día y build |
+| `npm run seo` | Revisa el SEO del último build (títulos, canonical, datos estructurados, enlaces, mapa del sitio) |
+| `npm run check` | Lo mismo que corre CI: tokens al día, build y SEO |
 
 ### Dónde se cambia cada cosa
 
@@ -234,6 +235,8 @@ npm run dev        # http://localhost:4321
 |---|---|
 | Precios, paquetes, lo que incluyen y cuáles se muestran (`disponible`) | `src/data/paquetes.ts` |
 | Complementos, combos, sus precios y en qué paquete se ofrecen | `src/data/complementos.ts` |
+| Páginas por tema, sus títulos y descripciones (SEO), mapa del sitio y `llms.txt` | `src/data/seo.ts` |
+| Datos estructurados (schema.org) | `src/lib/schema.ts` |
 | Teléfono, WhatsApp, zonas, anticipo | `src/data/site.ts` |
 | Colores, espacios, componentes | `tokens/*.json` (nunca `tokens.css` a mano) |
 | Componentes | `src/components/` |

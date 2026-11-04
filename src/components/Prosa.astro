@@ -1,0 +1,17 @@
+---
+/* Texto corrido con la tipografía del sitio: párrafos, listas y enlaces con una medida cómoda de leer. */
+interface Props { class?: string }
+const { class: extra } = Astro.props;
+---
+<div class:list={['prosa', extra]} data-reveal><slot /></div>
+<style>
+  .prosa { max-width: 68ch; display: grid; gap: var(--space-4); color: var(--color-text); }
+  .prosa :global(h3) { font-size: var(--text-xl); margin-top: var(--space-3); }
+  .prosa :global(p) { color: var(--color-text); }
+  .prosa :global(p.nota) { color: var(--color-text-muted); font-size: var(--text-sm); }
+  .prosa :global(ul) { list-style: none; display: grid; gap: var(--space-2); }
+  .prosa :global(ul li) { padding-left: 24px; position: relative; }
+  .prosa :global(ul li)::before { content: ''; position: absolute; left: 0; top: 9px; width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid var(--frambuesa-500); }
+  .prosa :global(a) { color: var(--link); text-underline-offset: 3px; font-weight: var(--weight-medium); }
+  .prosa :global(a:hover) { text-decoration-thickness: 2px; }
+</style>
