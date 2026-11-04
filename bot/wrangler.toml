@@ -21,7 +21,7 @@ crons = ["*/30 * * * *"]
 # Conversaciones, pausas y mensajes ya procesados.
 [[kv_namespaces]]
 binding = "CONVERSACIONES"
-id = "PENDIENTE"
+id = "2d16e013c79c4c69b12c21e348cbf843"
 
 # Embeddings y reranker del modo "busqueda" (Workers AI).
 [ai]
