@@ -87,12 +87,12 @@ Convención del calendario: cada fiesta es un evento con la hora de la fiesta (n
 
 Si la clienta pide descuento sin motivo, el servidor da la siguiente concesión en vez de bajar el precio. El estado (ajustes ya dados) vive en KV en `neg:<telefono>` por 3 días. Los montos que devuelve la herramienta pasan la guardia de salida, como los de `cotizar`.
 
-Pendiente de confirmar con Sant (constantes al inicio de `src/negociacion.ts`):
+Constantes al inicio de `src/negociacion.ts`:
 
-- `DIAS_ENTRE_SEMANA`: hoy de lunes a jueves.
-- `MESES_TEMPORADA_BAJA`: hoy ninguno.
-- `BUEN_FIN` y `BLACK_FRIDAY`: hoy del 13 al 16 y del 27 al 30 de noviembre de 2026. Cuentan por el día en que se aparta, no por la fecha de la fiesta.
-- Lecturas de las reglas que conviene confirmar: el 20 % no se suma a ninguna concesión; la 5.ª compra es exactamente la quinta (de la sexta en adelante vuelve al 10 % de clienta frecuente); con una concesión ya dada, una clienta con derecho al 20 % recibe 10 % para no pasar el límite.
+- `DIAS_ENTRE_SEMANA`: lunes a jueves (confirmado por Sant).
+- `MESES_TEMPORADA_BAJA`: enero, febrero y junio. Es una propuesta de investigación mientras no haya historial propio: enero y febrero por la cuesta de enero y porque son los meses con menos nacimientos según INEGI (menos cumpleaños de bebés); junio queda entre el Día del Niño y las vacaciones, que con diciembre son los meses de más demanda de inflables y zonas de juego. Revisar con las reservas reales al cumplir un año.
+- `BUEN_FIN`: 13 al 17 de noviembre de 2026 (fechas oficiales, cinco días). `BLACK_FRIDAY`: 27 al 30 de noviembre de 2026. Cuentan por el día en que se aparta, no por la fecha de la fiesta. Hay que agregar las fechas de cada año.
+- Lecturas de las reglas que conviene confirmar con Sant: el 20 % no se suma a ninguna concesión; la 5.ª compra es exactamente la quinta (de la sexta en adelante vuelve al 10 % de clienta frecuente); con una concesión ya dada, una clienta con derecho al 20 % recibe 10 % para no pasar el límite.
 
 ## Probar en local
 

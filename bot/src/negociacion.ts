@@ -21,14 +21,16 @@ export interface Rango {
   hasta: string;
 }
 
-// PENDIENTE de confirmar con Sant: qué días cuentan como "entre semana" (0 = domingo … 6 = sábado). Hoy: lunes a jueves.
+// "Entre semana" = lunes a jueves (0 = domingo … 6 = sábado). Confirmado por Sant, 2026-11-04.
 export const DIAS_ENTRE_SEMANA: readonly number[] = [1, 2, 3, 4];
 
-// PENDIENTE de confirmar con Sant: meses de temporada baja (1 = enero … 12 = diciembre). Hoy: ninguno.
-export const MESES_TEMPORADA_BAJA: readonly number[] = [];
+// Temporada baja (1 = enero … 12 = diciembre): enero, febrero y junio. Propuesta de investigación del 2026-11-04,
+// hasta tener historial propio: cuesta de enero, meses con menos nacimientos (INEGI) y junio entre el Día del Niño
+// y las vacaciones de verano. Revisar con las reservas reales al cumplir un año.
+export const MESES_TEMPORADA_BAJA: readonly number[] = [1, 2, 6];
 
-// PENDIENTE de confirmar con Sant: fechas del Buen Fin 2026 (la del calendario oficial; se cuenta por el día en que se aparta).
-export const BUEN_FIN: readonly Rango[] = [{ desde: '2026-11-13', hasta: '2026-11-16' }];
+// Buen Fin 2026: 13 al 17 de noviembre, cinco días (calendario oficial). Se cuenta por el día en que se aparta.
+export const BUEN_FIN: readonly Rango[] = [{ desde: '2026-11-13', hasta: '2026-11-17' }];
 
 // PENDIENTE de confirmar con Sant: fechas de Black Friday 2026 (viernes 27 al Cyber Monday 30; se cuenta por el día en que se aparta).
 export const BLACK_FRIDAY: readonly Rango[] = [{ desde: '2026-11-27', hasta: '2026-11-30' }];

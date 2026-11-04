@@ -218,3 +218,17 @@ describe('negociación: entrada, guardia y memoria', () => {
     expect(await leerNegociacion(kv, '521')).toEqual(r.siguienteEstado);
   });
 });
+
+describe('calendario comercial', () => {
+  it('temporada baja: enero, febrero y junio', async () => {
+    const { esTemporadaBaja } = await import('../src/negociacion');
+    expect(['2027-01-20', '2027-02-10', '2027-06-15'].map(esTemporadaBaja)).toEqual([true, true, true]);
+    expect(['2026-12-12', '2027-04-30', '2027-09-18'].map(esTemporadaBaja)).toEqual([false, false, false]);
+  });
+
+  it('el Buen Fin 2026 dura del 13 al 17 de noviembre', async () => {
+    const { enRango, BUEN_FIN } = await import('../src/negociacion');
+    expect(enRango('2026-11-17', BUEN_FIN)).toBe(true);
+    expect(enRango('2026-11-18', BUEN_FIN)).toBe(false);
+  });
+});
