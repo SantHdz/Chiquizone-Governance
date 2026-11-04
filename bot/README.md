@@ -20,7 +20,7 @@ flowchart LR
 | Webhook | `src/index.ts` | Verifica la firma de Meta, contesta 200 y procesa en segundo plano |
 | Asistente | `src/asistente.ts` | Prompt con la voz de la marca y cinco herramientas: `cotizar`, `revisar_fecha`, `negociar`, `apartar_fecha` y `pasar_a_sant` |
 | Acciones del servidor | `src/acciones.ts` | `negociar` y `apartar_fecha` con el estado de la conversación (KV) y las compras confirmadas (D1). El apartado usa el precio negociado, nunca uno del modelo, y avisa a Sant sin pausar el chat |
-| Precios | `src/cotizar.ts` | Misma lógica que "Arma tu zona", solo con paquetes publicados (`disponible: true`); anticipo y garantía desde `site.ts` |
+| Precios | `src/cotizar.ts` | Misma lógica que "Arma tu zona", solo con paquetes publicados (`disponible: true`); anticipo y garantía desde `site.ts`. Complementos y combos con `calcular()` de `src/data/complementos.ts`: el total y el anticipo (sobre el total) salen igual que en el sitio. El descuento de `negociar` aplica solo al paquete |
 | Agenda | `src/agenda.ts` | Máximo 2 fiestas por día y 8 horas entre inicios |
 | Calendario | `src/calendario.ts` | Lee el día en Google Calendar con una cuenta de servicio |
 | Memoria | `src/memoria.ts` | Conversación, pausas y mensajes ya procesados en Cloudflare KV |

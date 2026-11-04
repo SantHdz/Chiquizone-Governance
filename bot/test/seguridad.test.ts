@@ -20,7 +20,7 @@ describe('guardia de montos', () => {
     const c = cotizar(publicados[0]);
     const fmt = (n: number) => n.toLocaleString('en-US');
     expect(revisarMontos(`${c.nombre} cuesta $${fmt(c.precio)} y apartas con $${fmt(c.anticipo)}.`, permitidos).ok).toBe(true);
-    expect(revisarMontos('Te lo dejo en $1,000, solo por hoy.', permitidos)).toEqual({ ok: false, noPermitidos: [1000] });
+    expect(revisarMontos('Te lo dejo en $1,111, solo por hoy.', permitidos)).toEqual({ ok: false, noPermitidos: [1111] });
   });
 
   it('acepta montos que devolvió una herramienta', () => {

@@ -4,7 +4,7 @@
  */
 import { apartarTentativo, datosDeHerramienta, venceLegible, HORAS_APARTADO } from './apartado';
 import type { EnvCalendario } from './calendario';
-import { GARANTIA_MXN } from './cotizar';
+import { cotizarConComplementos, GARANTIA_MXN } from './cotizar';
 import { comprasConfirmadas, guardarApartado } from './db';
 import { evaluar, guardarNegociacion, leerNegociacion, leerSolicitud, paraElModelo, tratoVigente } from './negociacion';
 
@@ -46,7 +46,16 @@ export async function apartar(
 ): Promise<string> {
   const base = datosDeHerramienta(entrada, telefono);
   const trato = tratoVigente(await leerNegociacion(env.CONVERSACIONES, telefono), base.precio);
-  const d = { ...base, precio: trato.precio, anticipo: trato.anticipo, ...(trato.ajustes ? { ajustes: trato.ajustes } : {}) };
+  // El descuento negociado aplica al paquete; los complementos se suman a precio de lista y el anticipo es sobre el total.
+  const lista = Array.isArray(entrada.complementos) ? entrada.complementos.map(String) : [];
+  const cuenta = cotizarConComplementos(String(entrada.paquete), lista, trato.precio);
+  const d = {
+    ...base,
+    precio: cuenta.total,
+    anticipo: cuenta.anticipo,
+    ...(trato.ajustes ? { ajustes: trato.ajustes } : {}),
+    ...(cuenta.complementos.length ? { complementos: cuenta.complementos.map((l) => `${l.nombre} $${l.precio}`).join(', ') } : {}),
+  };
 
   const r = await apartarTentativo(env, d, ahora);
   if (!r.ok) return JSON.stringify({ apartado: false, motivo: r.motivo, alternativas: r.alternativas });
@@ -70,6 +79,7 @@ export async function apartar(
     anticipo: d.anticipo,
     garantia: GARANTIA_MXN,
     ...(d.ajustes ? { ajustes: d.ajustes } : {}),
+    ...(cuenta.complementos.length ? { complementos: cuenta.complementos } : {}),
     vence,
   });
 }

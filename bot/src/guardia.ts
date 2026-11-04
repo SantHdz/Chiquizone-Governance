@@ -4,7 +4,7 @@
  * cualquier monto que devolvió una herramienta en esta conversación.
  */
 import { publicados } from '../../src/data/paquetes';
-import { cotizar, GARANTIA_MXN } from './cotizar';
+import { cotizar, GARANTIA_MXN, preciosDeComplementos } from './cotizar';
 
 export function montosOficiales(): Set<number> {
   const s = new Set<number>([GARANTIA_MXN]);
@@ -12,6 +12,7 @@ export function montosOficiales(): Set<number> {
     const c = cotizar(p);
     s.add(c.precio).add(c.anticipo).add(c.saldo);
   }
+  for (const n of preciosDeComplementos()) s.add(n);
   return s;
 }
 

@@ -267,10 +267,10 @@ describe('liberar vencidos', () => {
 });
 
 describe('herramienta apartar_fecha', () => {
-  it('es estricta y pide los seis datos', () => {
+  it('es estricta y pide los siete datos', () => {
     expect(herramientaApartar.strict).toBe(true);
     expect(herramientaApartar.input_schema.additionalProperties).toBe(false);
-    expect(herramientaApartar.input_schema.required).toEqual(['nombre', 'fecha', 'hora_inicio', 'municipio', 'paquete', 'ninos']);
+    expect(herramientaApartar.input_schema.required).toEqual(['nombre', 'fecha', 'hora_inicio', 'municipio', 'paquete', 'ninos', 'complementos']);
   });
 
   it('los montos salen de cotizar y el teléfono del webhook, no del modelo', () => {

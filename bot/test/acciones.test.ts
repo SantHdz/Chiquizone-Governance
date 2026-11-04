@@ -124,6 +124,18 @@ describe('apartar en el servidor', () => {
     expect(avisar).toHaveBeenCalledOnce();
   });
 
+  it('suma los complementos a precio de lista y cobra el anticipo sobre el total', async () => {
+    const { kv, datos } = kvFalso();
+    datos.set('neg:521', JSON.stringify({ ajustes: [{ tipo: 'descuento', pct: 10, razones: ['entre-semana'] }] }));
+    const { db } = dbFalsa();
+    const r = JSON.parse(
+      await apartar(env(kv, db), '521', { ...entradaApartar, paquete: 'baby-baby', complementos: ['bocina'] }, async () => {}),
+    );
+    const total = Math.ceil(1970 * 0.9) + 250;
+    expect(r).toMatchObject({ apartado: true, precio: total, anticipo: Math.ceil(total / 2) });
+    expect(apartarTentativo.mock.calls[0][1].complementos).toMatch(/Bocina.*\$250/);
+  });
+
   it('si el horario ya no está libre devuelve alternativas y no guarda ni avisa', async () => {
     apartarTentativo.mockResolvedValue({ ok: false, motivo: 'choca', alternativas: ['18:00'] });
     const { kv } = kvFalso();
