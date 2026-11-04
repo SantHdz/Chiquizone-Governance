@@ -22,6 +22,8 @@ jobs:
           git diff --exit-code -- src/styles/tokens.css tokens/build || (echo "::error::tokens.css no está al día: corre npm run tokens y sube el resultado" && exit 1)
       - name: Build del sitio
         run: npx astro build
+      - name: SEO (títulos, canonical, datos estructurados, enlaces y mapa del sitio)
+        run: npm run seo
 
   asistente:
     name: Asistente de WhatsApp

@@ -1,0 +1,53 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Section from '../components/Section.astro';
+import Prosa from '../components/Prosa.astro';
+import Checks from '../components/Checks.astro';
+import Faq from '../components/Faq.astro';
+import Button from '../components/Button.astro';
+import { requisitos } from '../data/contenido';
+import { base, pro, edades, mxn, pct, site } from '../lib/tema';
+
+const [origen, ciudad] = site.areas;
+const faq = [
+  { q: `¿Dan servicio en ${ciudad}?`, a: `Sí. Llevamos la zona de juego a tu fiesta en ${ciudad}. El traslado se cotiza según la dirección; escríbenos y te respondemos el mismo día.` },
+  { q: '¿Qué necesitan para cotizar el traslado?', a: 'La dirección, la fecha, la hora de inicio y las edades de los niños. Con eso te decimos el costo total.' },
+  { q: `¿El precio es el mismo que en ${origen}?`, a: `El precio de la zona es el mismo: ${base.nombre} ${mxn(base.precio)} y ${pro.nombre} ${mxn(pro.precio)}. En ${origen} el traslado va incluido; en ${ciudad} se suma según la dirección.` },
+  { q: '¿Puedo montarla en una quinta, jardín o salón?', a: `Sí, en cualquier lugar donde haya ${site.spaceNeeded} techados o con sombra, piso plano y libre, y un contacto eléctrico a menos de diez metros.` },
+  { q: '¿Cómo aparto mi fecha?', a: `Con el ${pct(site.bookingDepositPct)} del total por transferencia. Firmamos contrato con copia de INE y dejas ${mxn(site.guaranteeDeposit)} en garantía, que se devuelven al terminar.` },
+];
+---
+<Landing
+  id="tequis"
+  eyebrow="Tequisquiapan, Querétaro"
+  titulo={`Zonas de juego para fiestas en *${ciudad}*`}
+  lead={`Llevamos la zona de juego a tu fiesta en ${ciudad}. Montamos antes, cuidamos si lo pides y recogemos al terminar.`}
+  mensaje="Hola Chiquizone, quiero cotizar una zona de juego para una fiesta en Tequisquiapan."
+>
+  <Section id="servicio" eyebrow="El servicio" title={`Una zona de juego para tu fiesta en *${ciudad}*`}>
+    <Prosa>
+      <p>Es la misma zona que montamos en {origen}: {base.nombre}, para niños de {edades}, o {pro.nombre}, con {pro.cuidadoras} cuidadoras toda la fiesta. Incluye {site.serviceHours} horas de servicio, montaje una hora antes, sanitización pieza por pieza y desmontaje al terminar.</p>
+      <p>La diferencia es el traslado: dentro de {origen} va incluido y para {ciudad} lo cotizamos según la dirección, antes de apartar. <a href="/precios/">Ver precios</a>.</p>
+    </Prosa>
+  </Section>
+
+  <Section id="cotizar" tone="salvia" eyebrow="Cómo cotizar" title="Pide tu cotización en *un* mensaje">
+    <div class="dos">
+      <Prosa>
+        <p>Escríbenos por WhatsApp con la dirección, la fecha, la hora de inicio y las edades de los niños. Te respondemos el mismo día con el total, y la disponibilidad de la fecha la confirma una persona.</p>
+        <p>Si ya sabes qué quieres sumar, arma tu zona en <a href="/#arma">Arma tu zona</a> y te llega el mensaje listo en WhatsApp.</p>
+      </Prosa>
+      <Checks title="Lo que necesitamos del espacio" items={requisitos} />
+    </div>
+    <div class="cta"><Button href="/#arma" iconRight="siguiente">Arma tu zona</Button></div>
+  </Section>
+
+  <Section id="preguntas" tone="frambuesa" eyebrow="Dudas" title={`Preguntas sobre ${ciudad}`} narrow>
+    <Faq items={faq} />
+  </Section>
+</Landing>
+<style>
+  .dos { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: start; }
+  .cta { margin-top: var(--space-6); }
+  @media (max-width: 860px) { .dos { grid-template-columns: 1fr; } }
+</style>

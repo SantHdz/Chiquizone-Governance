@@ -1,0 +1,26 @@
+---
+/*
+ * Molde de las páginas por tema (playground móvil, bebés, cuidadoras, precios y cada zona de servicio).
+ * Pone migas, cabecera y, al final, "Sigue leyendo". El título y la descripción salen de src/data/seo.ts.
+ * El contenido de cada página va en el slot, como secciones.
+ */
+import Base from './Base.astro';
+import Migas from '../components/Migas.astro';
+import PaginaHero from '../components/PaginaHero.astro';
+import Section from '../components/Section.astro';
+import Relacionadas from '../components/Relacionadas.astro';
+import { paginas, type PaginaId } from '../data/seo';
+
+interface Props { id: PaginaId; eyebrow: string; titulo: string; lead: string; mensaje?: string; alt?: string; schema?: object[] }
+const { id, eyebrow, titulo, lead, mensaje, alt, schema } = Astro.props;
+const p = paginas[id];
+const migas = [{ nombre: 'Inicio', ruta: '/' }, { nombre: p.nombre, ruta: p.ruta }];
+---
+<Base title={p.titulo} description={p.descripcion} migas={migas} schema={schema}>
+  <div class="wrap"><Migas items={migas} /></div>
+  <PaginaHero eyebrow={eyebrow} title={titulo} lead={lead} mensaje={mensaje} alt={alt} />
+  <slot />
+  <Section id="sigue" eyebrow="Sigue leyendo" title="Más sobre las *zonas* de juego">
+    <Relacionadas actual={p.ruta} />
+  </Section>
+</Base>

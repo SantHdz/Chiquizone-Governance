@@ -83,11 +83,13 @@ const terreneitorSplashBase = [
 export const paquetes: Paquete[] = [
   {
     id: 'baby-baby', nombre: 'Baby baby', familia: 'baby', splash: false, pro: false, disponible: true,
-    precio: 1870, incluye: babyBase,
+    // Subió de $1,870 a $1,970 (aprobado por Sant, 3 nov 2026).
+    precio: 1970, incluye: babyBase,
   },
   {
     id: 'pro-baby', nombre: 'Pro Baby', familia: 'baby', splash: false, pro: true, disponible: true,
-    precio: 3200, incluye: babyBase, cuidadoras: 2,
+    // Subió de $3,200 a $3,800 con 2 cuidadoras (decidido por Sant, 3 nov 2026).
+    precio: 3800, incluye: babyBase, cuidadoras: 2,
     extras: ['2 cuidadoras', 'Montaña rusa', 'Máquina de burbujas'],
   },
   {
