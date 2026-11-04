@@ -2,3 +2,6 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+arte/salida/
+.env
+arte/fotos-ia/

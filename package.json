@@ -9,7 +9,9 @@
     "build": "npm run tokens && astro build",
     "preview": "astro preview",
     "check": "npm run tokens && git diff --exit-code -- src/styles/tokens.css tokens/build && astro build && npm run seo",
-    "seo": "node scripts/verificar-seo.mjs"
+    "seo": "node scripts/verificar-seo.mjs",
+    "arte": "node scripts/arte/generar.mjs",
+    "prompt": "node scripts/arte/prompt.mjs"
   },
   "dependencies": {
     "astro": "5.18.2"

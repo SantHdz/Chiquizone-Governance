@@ -1,0 +1,63 @@
+{
+  "version": "1.0.0",
+  "marca": "Chiquizone",
+  "descripcion": "Reglas de identidad en formato que leen las máquinas. La fuente de los colores es tokens/1-primitivos.json; aquí solo se dice qué combinaciones están permitidas. La explicación para personas está en el Manual de identidad visual.",
+  "esencia": "Festiva pero elegante, con un sentido de alto valor casi de lujo. Divertida, fresca y alegre, con un alto sentido estético y minimalista.",
+
+  "paleta": {
+    "frambuesa": { "hex": "#B5456F", "rol": "Acción y calidez. La niña, la C y el pin. Palabra en cursiva de los títulos, botones." },
+    "marino":    { "hex": "#253D78", "rol": "Confianza. El niño, la q y la z. Texto de títulos (en su tono 700) y fondos de noche." },
+    "sol":       { "hex": "#FFD235", "rol": "Alegría. La h, la u y la n. Realces y bloques; nunca texto sobre fondo claro." },
+    "salvia":    { "hex": "#A2C298", "rol": "Calma, lo baby. La i y la e. Fondos y rellenos; nunca texto sobre fondo claro." },
+    "crema":     { "hex": "#FFF9F1", "rol": "Lienzo de la marca. Fondo por defecto." },
+    "hueso":     { "hex": "#FFFCF7", "rol": "Superficies elevadas: tarjetas, etiquetas. Sustituye al blanco puro." },
+    "tinta":     { "hex": "#172851", "rol": "Marino 700. Color de texto principal." },
+    "pizarra":   { "hex": "#545E7C", "rol": "Texto secundario." }
+  },
+  "proporcion_color": "70 % crema o tinte suave, 20 % marino (texto), 10 % acentos del logo (frambuesa, sol, salvia). Los cuatro colores del logo aparecen juntos solo en el logo, banderines y globos.",
+
+  "temas": {
+    "crema":     { "fondo": "#FFF9F1", "texto": "#172851", "secundario": "#545E7C", "acento": "#B5456F", "bloque": "#FFEFB6", "superficie": "#FFFCF7", "logo": "vertical-color" },
+    "sol":       { "fondo": "#FFF7DB", "texto": "#172851", "secundario": "#545E7C", "acento": "#B5456F", "bloque": "#F2DEE5", "superficie": "#FFFCF7", "logo": "vertical-color" },
+    "salvia":    { "fondo": "#EEF4EC", "texto": "#172851", "secundario": "#545E7C", "acento": "#B5456F", "bloque": "#FFEFB6", "superficie": "#FFFCF7", "logo": "vertical-color" },
+    "frambuesa": { "fondo": "#F9F0F3", "texto": "#172851", "secundario": "#545E7C", "acento": "#B5456F", "bloque": "#D8DCE7", "superficie": "#FFFCF7", "logo": "vertical-color" },
+    "marino":    { "fondo": "#172851", "texto": "#FFFCF7", "secundario": "#B1B9CE", "acento": "#FFD235", "bloque": "#253D78", "superficie": "#1D3164", "logo": "vertical-blanco" }
+  },
+
+  "tipografia": {
+    "titulos":  { "familia": "Fraunces", "pesos": [500, 600, 700], "ejes": "opsz 9–144, SOFT 50", "uso": "Títulos y precios. Una sola palabra en cursiva, en el color de acento." },
+    "impacto":  { "familia": "Fredoka", "pesos": [500, 600], "uso": "Nombres de paquete, promos, botones y etiquetas. Nunca párrafos." },
+    "texto":    { "familia": "Nunito", "pesos": [400, 600, 800], "uso": "Texto corrido. 800 en mayúsculas espaciadas solo para la etiqueta superior (eyebrow)." },
+    "google_fonts": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,500..700,50;1,9..144,500..700,50&family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap"
+  },
+
+  "formas": {
+    "arco": "Marco de foto con la parte de arriba en arco (radio 280/44). Firma visual del hero.",
+    "burbuja": "Píldora (radio 999) para botones y etiquetas.",
+    "tarjeta": "Radio 28 px, fondo hueso, sombra suave marino.",
+    "inclinacion": "Fotos inclinadas entre 1° y 2.5°; el bloque de color detrás, inclinado al lado contrario.",
+    "decorativos": ["globos (sol, frambuesa, salvia, con hilo marino)", "banderines (los cuatro colores en orden frambuesa, sol, salvia, marino)", "chispas (tres trazos redondeados, como junto a las caritas del logo)"]
+  },
+
+  "formatos": {
+    "post":     { "ancho": 1080, "alto": 1350, "uso": "Feed de Instagram y Facebook (4:5)." },
+    "cuadrado": { "ancho": 1080, "alto": 1080, "uso": "Feed, anuncios y catálogo." },
+    "historia": { "ancho": 1080, "alto": 1920, "uso": "Historias y reels. Zona segura: 250 px arriba y 340 px abajo sin texto." }
+  },
+
+  "reglas_texto": {
+    "titulo_max_caracteres": { "post": 48, "cuadrado": 40, "historia": 48 },
+    "cursivas_por_titulo": 1,
+    "eyebrow_max_caracteres": 32,
+    "voz": "Tú, cercano y tranquilo. Frases cortas. Promesa de que los papás disfrutan la fiesta. Sin signos de exclamación dobles, sin MAYÚSCULAS en frases, sin emojis dentro del arte."
+  },
+
+  "ia": {
+    "principio": "La IA genera solo la imagen de fondo o la ilustración. El logo, los textos, los precios y los decorativos de marca los pone siempre la plantilla. Nunca se le pide a la IA que escriba ni que dibuje el logo.",
+    "bloque_estilo_foto": "Fotografía editorial luminosa de una zona de juego infantil premium montada en un jardín mexicano de día. Luz natural cálida de media tarde, sombras suaves. Paleta dominante: crema, blanco hueso, rosa frambuesa apagado, amarillo sol suave, verde salvia y toques de azul marino. Mobiliario infantil de colores pastel, limpio y ordenado, pasto bien cortado. Composición minimalista con espacio libre para texto, profundidad de campo media, lente de 35 mm, aspecto de revista de decoración, nítida, sin saturación excesiva.",
+    "bloque_estilo_ilustracion": "Ilustración vectorial plana con formas redondeadas y gruesas, como letras de burbuja, bordes suaves sin contorno negro. Solo estos colores planos: frambuesa #B5456F, marino #253D78, sol #FFD235, salvia #A2C298 sobre fondo crema #FFF9F1. Sin degradados, sin texturas, sin sombras duras. Mucho espacio vacío, estilo minimalista y alegre, con un toque elegante.",
+    "negativo": "texto, letras, números, logotipos, marcas de agua, firmas, caras de niños reconocibles, personas mirando a cámara, colores neón, rojo puro, morado, negro como color dominante, plástico brillante barato, saturación excesiva, desorden, basura, cielo gris, flash directo, estilo 3D de caricatura, fondo blanco puro, bordes deformados, manos deformadas",
+    "personas": "Si aparecen niños: de espaldas, de perfil lejano o desenfocados, sin cara reconocible (decisión 0005). Adultos de fondo, desenfocados.",
+    "etiqueta_montaje_real": "La etiqueta \"Montaje real\" solo va sobre fotos reales de un montaje de Chiquizone, nunca sobre imágenes generadas."
+  }
+}
