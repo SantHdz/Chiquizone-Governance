@@ -71,11 +71,19 @@ export function leerEventos(payload: Payload): Evento[] {
   return eventos;
 }
 
+/**
+ * WhatsApp entrega los números móviles de México como 521XXXXXXXXXX, pero para enviarles hay
+ * que usar 52XXXXXXXXXX (así quedan registrados en la lista de destinatarios de prueba).
+ */
+export function destinoWhatsApp(waId: string): string {
+  return waId.replace(/^521(\d{10})$/, '52$1');
+}
+
 export async function enviarTexto(env: EnvWhatsApp, para: string, texto: string): Promise<void> {
   const res = await fetch(`https://graph.facebook.com/${env.GRAPH_VERSION}/${env.WA_PHONE_NUMBER_ID}/messages`, {
     method: 'POST',
     headers: { authorization: `Bearer ${env.WA_TOKEN}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ messaging_product: 'whatsapp', to: para, type: 'text', text: { body: texto } }),
+    body: JSON.stringify({ messaging_product: 'whatsapp', to: destinoWhatsApp(para), type: 'text', text: { body: texto } }),
   });
   if (!res.ok) throw new Error(`WhatsApp ${res.status}: ${await res.text()}`);
 }
@@ -95,7 +103,7 @@ export async function enviarPlantilla(
     headers: { authorization: `Bearer ${env.WA_TOKEN}`, 'content-type': 'application/json' },
     body: JSON.stringify({
       messaging_product: 'whatsapp',
-      to: para,
+      to: destinoWhatsApp(para),
       type: 'template',
       template: {
         name: plantilla,

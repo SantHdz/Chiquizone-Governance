@@ -68,3 +68,12 @@ describe('calendario', () => {
     expect(eventosADia('2026-11-14', [{ start: { date: '2026-11-14' }, end: { date: '2026-11-15' } }]).bloqueado).toBe(true);
   });
 });
+
+describe('destinoWhatsApp', () => {
+  it('quita el 1 de los celulares de México', async () => {
+    const { destinoWhatsApp } = await import('../src/whatsapp');
+    expect(destinoWhatsApp('5215544704470')).toBe('525544704470');
+    expect(destinoWhatsApp('525544704470')).toBe('525544704470');
+    expect(destinoWhatsApp('15551595692')).toBe('15551595692');
+  });
+});
