@@ -1,6 +1,7 @@
 /*
  * Worker de Cloudflare que recibe el webhook de WhatsApp y contesta con el asistente.
  *
+ * GET  /privacidad  aviso de privacidad del asistente (lo pide Meta para publicar la app)
  * GET  /webhook  verificación de Meta (hub.challenge)
  * POST /webhook  mensajes entrantes; responde 200 de inmediato y procesa en segundo plano
  * POST /admin/*  rutas de Sant con ADMIN_TOKEN (reindexar, comparar, confirmar un anticipo)
@@ -19,10 +20,11 @@ import { liberarVencidos, type Liberado } from './apartado';
 import { apartar, negociar } from './acciones';
 import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
+import { PRIVACIDAD_HTML } from './privacidad';
 
 /** Transparencia: la primera vez se aclara que es un asistente de IA. */
 export const AVISO_IA =
-  'Hola, soy el asistente virtual de Chiquizone, con inteligencia artificial. Te ayudo a elegir tu zona y revisar tu fecha; si prefieres, te paso con Sant en cualquier momento.';
+  '¡Hola! Te atiende Chiquiz, la asistente virtual de Chiquizone 🎉🎈 Soy inteligencia artificial: te ayudo a elegir tu zona y revisar tu fecha, y si prefieres, te paso con Sant en cualquier momento.';
 
 export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin {
   WA_VERIFY_TOKEN: string;
@@ -147,6 +149,9 @@ export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname.startsWith('/admin/')) return rutaAdmin(req, env, url.pathname);
+    if (url.pathname === '/privacidad' && req.method === 'GET') {
+      return new Response(PRIVACIDAD_HTML, { headers: { 'content-type': 'text/html; charset=utf-8' } });
+    }
     if (url.pathname !== '/webhook') return new Response('Chiquizone', { status: 404 });
 
     if (req.method === 'GET') {
