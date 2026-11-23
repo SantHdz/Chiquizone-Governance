@@ -52,3 +52,34 @@ describe('reglas de agenda', () => {
     expect(horariosLibres(conDesayuno).map(aHora)).toEqual(['18:00']);
   });
 });
+
+describe('fechas cercanas', () => {
+  it('suma días cruzando meses y años', async () => {
+    const { sumarDias } = await import('../src/agenda');
+    expect(sumarDias('2026-12-31', 1)).toBe('2027-01-01');
+    expect(sumarDias('2027-02-28', 1)).toBe('2027-03-01');
+  });
+
+  it('salta días llenos o bloqueados y devuelve las dos más cercanas', async () => {
+    const { fechasCercanas } = await import('../src/agenda');
+    const dias: Record<string, { fiestas: { inicio: number; fin: number }[]; bloqueado: boolean }> = {
+      '2027-02-06': { fiestas: [], bloqueado: true },
+      '2027-02-07': { fiestas: [{ inicio: 600, fin: 900 }, { inicio: 1080, fin: 1380 }], bloqueado: false },
+    };
+    const leidos: string[] = [];
+    const leerDia = async (f: string) => {
+      leidos.push(f);
+      return dias[f] ?? { fiestas: [], bloqueado: false };
+    };
+    const r = await fechasCercanas(leerDia, '2027-02-06');
+    expect(r.map((f) => f.fecha)).toEqual(['2027-02-08', '2027-02-09']);
+    expect(r[0]).toMatchObject({ primerInicio: 9 * 60, ultimoInicio: 18 * 60 });
+    expect(leidos).toHaveLength(4);
+  });
+
+  it('no busca más allá del límite de días', async () => {
+    const { fechasCercanas } = await import('../src/agenda');
+    const r = await fechasCercanas(async () => ({ fiestas: [], bloqueado: true }), '2027-02-01', 2, 10);
+    expect(r).toEqual([]);
+  });
+});

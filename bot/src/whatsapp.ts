@@ -79,6 +79,15 @@ export function destinoWhatsApp(waId: string): string {
   return waId.replace(/^521(\d{10})$/, '52$1');
 }
 
+/** WhatsApp rechaza parámetros de plantilla con saltos de línea, tabuladores o 4+ espacios seguidos. */
+export function parametroDePlantilla(texto: string): string {
+  return texto
+    .replace(/\s*[\r\n\t]+\s*/g, ' · ')
+    .replace(/ {2,}/g, ' ')
+    .trim()
+    .slice(0, 1000);
+}
+
 export async function enviarTexto(env: EnvWhatsApp, para: string, texto: string): Promise<void> {
   const res = await fetch(`https://graph.facebook.com/${env.GRAPH_VERSION}/${env.WA_PHONE_NUMBER_ID}/messages`, {
     method: 'POST',
@@ -108,7 +117,7 @@ export async function enviarPlantilla(
       template: {
         name: plantilla,
         language: { code: 'es_MX' },
-        components: [{ type: 'body', parameters: [{ type: 'text', text: parametro.slice(0, 1000) }] }],
+        components: [{ type: 'body', parameters: [{ type: 'text', text: parametroDePlantilla(parametro) }] }],
       },
     }),
   });

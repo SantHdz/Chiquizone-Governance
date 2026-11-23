@@ -24,7 +24,7 @@ import { PRIVACIDAD_HTML } from './privacidad';
 
 /** Transparencia: la primera vez se aclara que es un asistente de IA. */
 export const AVISO_IA =
-  '¡Hola! Te atiende Chiquiz, la asistente virtual de Chiquizone 🎉🎈 Soy inteligencia artificial: te ayudo a elegir tu zona y revisar tu fecha, y si prefieres, te paso con Sant en cualquier momento.';
+  '¡Hola! Te atiende Chiquiz, la asistente virtual de Chiquizone 🎉🎈 Soy inteligencia artificial: te ayudo a elegir tu zona y revisar tu fecha, y si prefieres, te paso con Sant, el encargado de Chiquizone, en cualquier momento.';
 
 export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin {
   WA_VERIFY_TOKEN: string;

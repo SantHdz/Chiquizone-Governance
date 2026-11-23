@@ -77,3 +77,11 @@ describe('destinoWhatsApp', () => {
     expect(destinoWhatsApp('15551595692')).toBe('15551595692');
   });
 });
+
+describe('parametroDePlantilla', () => {
+  it('quita saltos de línea, tabuladores y espacios de más', async () => {
+    const { parametroDePlantilla } = await import('../src/whatsapp');
+    expect(parametroDePlantilla('Ana\n\nsábado 6\tfebrero    10:00 ')).toBe('Ana · sábado 6 · febrero 10:00');
+    expect(parametroDePlantilla('x'.repeat(1200))).toHaveLength(1000);
+  });
+});

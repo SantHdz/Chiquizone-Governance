@@ -48,12 +48,13 @@ describe('conocimiento', () => {
     }
   });
 
-  it('convierte las marcas [[id]] en una línea de fuente y descarta ids inventados', () => {
+  it('quita las marcas [[id]] sin mostrar la fuente y descarta ids inventados', () => {
     const id = fragmentos.find((f) => f.archivo === 'apartado.md')!.id;
     const r = conFuentes(`Apartas con el 50 %. [[${id}]] Y te regalo un pastel. [[inventado#x]]`);
     expect(r.usadas.map((f) => f.id)).toEqual([id]);
     expect(r.texto).not.toContain('[[');
-    expect(r.texto).toMatch(/_Fuente: Apartado, pagos y garantía, .+_$/);
+    expect(r.texto).not.toContain('Fuente');
+    expect(r.texto).toBe('Apartas con el 50 %. Y te regalo un pastel.');
   });
 });
 
