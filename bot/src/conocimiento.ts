@@ -36,11 +36,9 @@ export function fuentesCitadas(texto: string): Fragmento[] {
   return fragmentos.filter((f) => ids.has(f.id));
 }
 
-/** Quita las marcas [[id]] y agrega una línea de fuentes legible al final. */
+/** Quita las marcas [[id]]. La fuente no se muestra: Chiquiz la menciona solo si la clienta la pide. */
 export function conFuentes(texto: string): { texto: string; usadas: Fragmento[] } {
   const usadas = fuentesCitadas(texto);
   const limpio = texto.replace(/\s*\[\[[^\]]+\]\]/g, '').trim();
-  if (!usadas.length) return { texto: limpio, usadas };
-  const titulos = [...new Set(usadas.map(cita))];
-  return { texto: `${limpio}\n\n_Fuente: ${titulos.join('; ')}_`, usadas };
+  return { texto: limpio, usadas };
 }

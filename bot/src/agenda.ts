@@ -100,3 +100,37 @@ export function deHora(hhmm: string): number {
   if (!m) throw new Error(`Hora inválida: ${hhmm}`);
   return Number(m[1]) * 60 + Number(m[2]);
 }
+
+export interface FechaLibre {
+  fecha: string;
+  /** Primer y último horario en que puede empezar una fiesta ese día. */
+  primerInicio: number;
+  ultimoInicio: number;
+}
+
+/** Suma días a una fecha AAAA-MM-DD sin depender de la zona horaria. */
+export function sumarDias(fecha: string, dias: number): string {
+  const d = new Date(`${fecha}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + dias);
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Las `cuantas` fechas más cercanas, desde `desde` inclusive, en las que cabe una fiesta.
+ * Revisa como máximo `maxDias` días para no hacer demasiadas consultas al calendario.
+ */
+export async function fechasCercanas(
+  leerDia: (fecha: string) => Promise<Dia>,
+  desde: string,
+  cuantas = 2,
+  maxDias = 45,
+  r: Reglas = REGLAS,
+): Promise<FechaLibre[]> {
+  const libres: FechaLibre[] = [];
+  for (let i = 0; i < maxDias && libres.length < cuantas; i++) {
+    const fecha = sumarDias(desde, i);
+    const horarios = horariosLibres(await leerDia(fecha), r);
+    if (horarios.length) libres.push({ fecha, primerInicio: horarios[0], ultimoInicio: horarios[horarios.length - 1] });
+  }
+  return libres;
+}
