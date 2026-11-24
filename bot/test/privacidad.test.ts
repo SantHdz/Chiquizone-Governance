@@ -15,6 +15,6 @@ describe('aviso de privacidad', () => {
 describe('presentación', () => {
   it('Chiquiz se presenta y aclara que es inteligencia artificial', () => {
     expect(AVISO_IA).toMatch(/^¡Hola! Te atiende Chiquiz/);
-    expect(AVISO_IA).toContain('inteligencia artificial');
+    expect(AVISO_IA).toContain('asistente virtual');
   });
 });
