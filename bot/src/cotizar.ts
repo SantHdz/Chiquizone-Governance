@@ -145,12 +145,12 @@ export function catalogo(): string {
           : `${c.nombre} $${c.precio}${c.detalle ? ` (${c.detalle.replace(/\.$/, '')})` : ''}`,
       );
       const k = comboDe(p.id);
-      const combo = k ? ` Combo ${k.nombre}: ${trae(k).toLowerCase()} por $${k.precio} (ahorra $${ahorro(k)}).` : '';
-      return lista.length ? `- Con ${p.nombre}: ${lista.join('; ')}.${combo}` : '';
+      const combo = k ? ` Combo ${k.nombre}: ${trae(k).toLowerCase()} por $${k.precio} más el paquete (ahorra $${ahorro(k)} contra comprarlos por separado).` : '';
+      return lista.length ? `- Se suman al precio de ${p.nombre}: ${lista.join('; ')}.${combo}` : '';
     })
     .filter(Boolean)
     .join('\n');
-  return extrasTexto ? `${paquetesTexto}\n\nComplementos opcionales (precios en MXN):\n${extrasTexto}` : paquetesTexto;
+  return extrasTexto ? `${paquetesTexto}\n\nComplementos opcionales: se pagan además del paquete, nunca lo incluyen (precios en MXN):\n${extrasTexto}` : paquetesTexto;
 }
 
 /** Precios oficiales de complementos y combos, para la guardia de salida. */
