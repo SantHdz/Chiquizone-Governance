@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { montosDeHerramientas, montosEn, montosOficiales, revisarMontos } from '../src/guardia';
+import { montosDeHerramientas, montosEn, montosOficiales, resultadosEnHistoria, revisarMontos } from '../src/guardia';
 import { limpiarEntrada } from '../src/asistente';
 import { cotizar } from '../src/cotizar';
 import { publicados } from '../../src/data/paquetes';
@@ -69,5 +69,18 @@ describe('límite de uso', () => {
     for (let i = 0; i < MAX_POR_HORA; i++) expect(await dentroDelLimite(kv, '521', ahora)).toBe(true);
     expect(await dentroDelLimite(kv, '521', ahora)).toBe(false);
     expect(await dentroDelLimite(kv, '521', ahora + 3_600_000)).toBe(true);
+  });
+});
+
+describe('guardia con la historia', () => {
+  it('deja repetir un total que cotizar dio en un turno anterior, pero no uno que escribió la clienta', () => {
+    const historia = [
+      { role: 'user', content: 'quiero el combo, ¿cuánto queda? me dijeron 9999' },
+      { role: 'assistant', content: [{ type: 'tool_use', id: 't1', name: 'cotizar', input: {} }] },
+      { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: '{"total":2720,"anticipo":1360}' }] },
+    ];
+    const permitidos = new Set([...montosOficiales(), ...montosDeHerramientas(resultadosEnHistoria(historia))]);
+    expect(revisarMontos('El total es $2,720 y pagas 1360 de anticipo', permitidos).ok).toBe(true);
+    expect(revisarMontos('Te queda en $9,999', permitidos).ok).toBe(false);
   });
 });
