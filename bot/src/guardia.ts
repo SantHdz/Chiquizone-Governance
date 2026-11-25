@@ -42,3 +42,24 @@ export function revisarMontos(texto: string, permitidos: Set<number>): Revision 
   const noPermitidos = montosEn(texto).filter((n) => !permitidos.has(n));
   return { ok: noPermitidos.length === 0, noPermitidos };
 }
+
+type MensajeHistoria = { role: string; content?: unknown };
+
+/**
+ * Textos de todos los resultados de herramientas en la conversación, no solo de este turno:
+ * si en un mensaje anterior cotizar dio $2,720, Chiquiz puede volver a decirlo.
+ * Solo cuenta lo que devolvió el servidor (tool_result), nunca lo que escribió la clienta.
+ */
+export function resultadosEnHistoria(mensajes: MensajeHistoria[]): string[] {
+  const textos: string[] = [];
+  for (const m of mensajes) {
+    if (m.role !== 'user' || !Array.isArray(m.content)) continue;
+    for (const b of m.content as { type?: string; content?: unknown; is_error?: boolean }[]) {
+      if (b?.type !== 'tool_result' || b.is_error) continue;
+      if (typeof b.content === 'string') textos.push(b.content);
+      else if (Array.isArray(b.content))
+        for (const c of b.content as { type?: string; text?: string }[]) if (c?.type === 'text' && c.text) textos.push(c.text);
+    }
+  }
+  return textos;
+}

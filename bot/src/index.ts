@@ -18,7 +18,7 @@ import { rutaAdmin, type EnvAdmin } from './admin';
 import { identificar, marcarApartado, registrar } from './db';
 import { liberarVencidos, type Liberado } from './apartado';
 import { apartar, negociar } from './acciones';
-import { montosDeHerramientas, montosOficiales, revisarMontos } from './guardia';
+import { montosDeHerramientas, montosOficiales, resultadosEnHistoria, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
 import { PRIVACIDAD_HTML } from './privacidad';
 
@@ -100,7 +100,9 @@ async function procesar(evento: Evento, env: Env) {
   await guardarConversacion(kv, evento.de, r.mensajes);
 
   // Guardia de salida: un monto que no salió del servidor no se envía.
-  const permitidos = new Set([...montosOficiales(), ...montosDeHerramientas(r.resultados)]);
+  // Cuenta lo que dieron las herramientas en toda la conversación, no solo en este turno.
+  const deHerramientas = montosDeHerramientas([...r.resultados, ...resultadosEnHistoria(r.mensajes)]);
+  const permitidos = new Set([...montosOficiales(), ...deHerramientas]);
   const revision = revisarMontos(r.respuesta, permitidos);
   let { texto: respuesta, usadas } = conFuentes(r.respuesta);
   let bloqueado: string | undefined;
