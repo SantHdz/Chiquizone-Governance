@@ -42,12 +42,18 @@ export async function guardarConversacion(kv: KVNamespace, telefono: string, men
 }
 
 /** Mientras haya pausa, el asistente no contesta: la conversación es de Sant. */
+/**
+ * Un mismo celular de México llega como 521XXXXXXXXXX en los mensajes y puede llegar como
+ * 52XXXXXXXXXX en los ecos de la app; la pausa usa siempre la forma corta para que coincidan.
+ */
+export const clavePausa = (telefono: string) => `pausa:${telefono.replace(/^521(\d{10})$/, '52$1')}`;
+
 export async function pausar(kv: KVNamespace, telefono: string, motivo: string) {
-  await kv.put(`pausa:${telefono}`, motivo, { expirationTtl: TTL_PAUSA });
+  await kv.put(clavePausa(telefono), motivo, { expirationTtl: TTL_PAUSA });
 }
 
 export async function enPausa(kv: KVNamespace, telefono: string): Promise<boolean> {
-  return (await kv.get(`pausa:${telefono}`)) !== null;
+  return (await kv.get(clavePausa(telefono))) !== null;
 }
 
 /** Meta reintenta webhooks; cada mensaje se procesa una sola vez. */
