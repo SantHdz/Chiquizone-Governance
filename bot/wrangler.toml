@@ -11,6 +11,9 @@ preview_urls = false
 # Calendario "Montajes Chiquizone" de hola@chiquizone.com (Sant, 2026-11-03).
 GOOGLE_CALENDAR_ID = "c_63130522674bd17871ef3eebad2e1c635e9b371016938f035bcb4d0747c1c8a4@group.calendar.google.com"
 GRAPH_VERSION = "v23.0"
+# App "Chiquiz by Chiquizone" y configuración de Embedded Signup para /conectar (coexistencia con la app WhatsApp Business).
+META_APP_ID = "3611455509020679"
+META_CONFIG_ID = ""
 # Cuenta de servicio y delegación de dominio autorizada por Sant (2026-11-03, alcance calendar.events).
 GOOGLE_SA_EMAIL = "asistente@chiquizone-asistente.iam.gserviceaccount.com"
 GOOGLE_SUBJECT = "hola@chiquizone.com"

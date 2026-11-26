@@ -21,11 +21,12 @@ import { apartar, negociar } from './acciones';
 import { montosDeHerramientas, montosOficiales, resultadosEnHistoria, revisarMontos } from './guardia';
 import { dentroDelLimite } from './limite';
 import { PRIVACIDAD_HTML } from './privacidad';
+import { paginaConectar, type EnvConectar } from './conectar';
 
 /** Transparencia: la primera vez se aclara que es un asistente de IA. */
 export const AVISO_IA = '¡Hola! Te atiende Chiquiz, la asistente virtual de Chiquizone 🎉🎈 Te ayudaré en todo el proceso.';
 
-export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin {
+export interface Env extends EnvWhatsApp, EnvCalendario, EnvBusqueda, EnvAdmin, EnvConectar {
   WA_VERIFY_TOKEN: string;
   /** Número personal de Sant para avisos (opcional). */
   AVISOS_WA?: string;
@@ -152,6 +153,9 @@ export default {
     if (url.pathname.startsWith('/admin/')) return rutaAdmin(req, env, url.pathname);
     if (url.pathname === '/privacidad' && req.method === 'GET') {
       return new Response(PRIVACIDAD_HTML, { headers: { 'content-type': 'text/html; charset=utf-8' } });
+    }
+    if (url.pathname === '/conectar' && req.method === 'GET') {
+      return new Response(paginaConectar(env), { headers: { 'content-type': 'text/html; charset=utf-8' } });
     }
     if (url.pathname !== '/webhook') return new Response('Chiquizone', { status: 404 });
 
